@@ -60,38 +60,32 @@ export const circularCategories: CategoryCircleInfo[] = [
   {
     name: 'Feng Shui Decor',
     slug: 'Feng Shui Decor',
-    image:
-      'https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
   },
   {
     name: 'Feng Shui Jewelry',
     slug: 'Feng Shui Jewelry',
-    image:
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
   },
   {
     name: 'Feng Shui Candles',
     slug: 'Feng Shui Candles',
-    image:
-      'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
   },
   {
     name: 'Feng Shui Books',
     slug: 'Feng Shui Books',
-    image:
-      'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
   },
   {
     name: 'Crystals & Trees',
     slug: 'Crystals & Trees',
-    image:
-      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80',
   },
   {
     name: 'Zen & Meditation',
     slug: 'Zen & Meditation',
-    image:
-      'https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=500&q=80',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=500&q=80',
   },
 ];
 
@@ -99,38 +93,32 @@ export const summerCollections: CategoryCircleInfo[] = [
   {
     name: 'Wealth & Prosperity',
     slug: 'Feng Shui Decor',
-    image:
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
   },
   {
     name: 'Health & Longevity',
-    slug: 'Feng Shui Decor',
-    image:
-      'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
   },
   {
     name: 'Love & Harmony',
     slug: 'Feng Shui Jewelry',
-    image:
-      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/57158477/r/il/5dae6a/6913075322/il_fullxfull.6913075322_m25z.jpg',
   },
   {
     name: 'Protection & Shielding',
-    slug: 'Feng Shui Decor',
-    image:
-      'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
   },
   {
     name: 'Zen Meditation Space',
-    slug: 'Zen & Meditation',
-    image:
-      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
+    slug: 'Feng Shui Candles',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
   },
   {
     name: 'Career & Success',
     slug: 'Feng Shui Decor',
-    image:
-      'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/61064616/r/il/209d99/7042851538/il_1080xN.7042851538_matq.jpg',
   },
 ];
 
@@ -138,12 +126,12 @@ export const birthdayHeroCards = [
   {
     title: 'Feng Shui Wealth Corner Starter Kits',
     slug: 'Feng Shui Decor',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
   },
   {
     title: 'Cinnabar & Obsidian Talismans',
     slug: 'Feng Shui Jewelry',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
   },
   {
     title: 'Natural Citrine & Amethyst Money Trees',
@@ -154,121 +142,126 @@ export const birthdayHeroCards = [
 
 export const birthdayProductPicks = [
   {
-    id: 'b1',
-    title: '2026 Red String Zodiac Luck Bracelet with Cinnabar',
-    price: 850,
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80',
+    id: 'j4',
+    title: 'Temple Blessed 2027 Tai Sui Protection Bracelet',
+    price: 1464,
+    originalPrice: 2090,
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
   },
   {
-    id: 'b2',
-    title: 'Handcrafted Solid Brass Dragon Turtle with Ingot',
-    price: 3200,
-    originalPrice: 4200,
-    image: 'https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=500&q=80',
+    id: 'd1',
+    title: 'Taoist Master Blessed Five Emperor Coins',
+    price: 4008,
+    originalPrice: 5725,
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
   },
   {
-    id: 'b3',
-    title: 'Natural Citrine Crystal Bonsai Tree on Real Wood Base',
-    price: 2450,
-    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80',
+    id: 'j2',
+    title: 'S925 Pixiu Ring, Wealth Luck Amulet',
+    price: 3462,
+    originalPrice: 4945,
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
   },
   {
-    id: 'b4',
-    title: 'Traditional Convex Brass Bagua Mirror for Protection',
-    price: 1250,
-    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=500&q=80',
+    id: 'c2',
+    title: 'Fu Prosperity Prayer Candle | Good Fortune',
+    price: 1403,
+    originalPrice: 2004,
+    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
   },
   {
-    id: 'b5',
-    title: 'Authentic Tibetan Singing Bowl Healing Sound Kit',
-    price: 2990,
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=500&q=80',
+    id: 'c4',
+    title: 'Feng Shui Lucky Dragon Incense Burner',
+    price: 3159,
+    originalPrice: 4512,
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
   },
   {
-    id: 'b6',
-    title: '7 Chakra Natural Raw Healing Gemstones Hanging Set',
-    price: 1680,
-    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80',
+    id: 'c1',
+    title: 'Money Multiplying Poster, Wealth Building',
+    price: 2433,
+    originalPrice: 3475,
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
   },
 ];
 
 export const specialGiftCategories = [
   {
-    name: 'Wealth Corners',
-    slug: 'Feng Shui Decor',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80',
-  },
-  {
     name: 'Protection Mirrors & Charms',
-    slug: 'Feng Shui Decor',
-    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=300&q=80',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
   },
   {
     name: 'Abundance Candles',
     slug: 'Feng Shui Candles',
-    image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=300&q=80',
+    image: 'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_i4y2.jpg',
   },
   {
     name: 'Pixiu Luck Bracelets',
     slug: 'Feng Shui Jewelry',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=300&q=80',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
   },
   {
-    name: 'Meditation Bowls',
-    slug: 'Zen & Meditation',
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=300&q=80',
+    name: 'Cinnabar Protection',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
+  },
+  {
+    name: 'Wealth Coins & Charms',
+    slug: 'Feng Shui Decor',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
   },
 ];
 
 export const todaysDeals = [
   {
+    id: 'j4',
+    title: 'Temple Blessed 2027 Tai Sui Protection Bracelet',
+    price: 1464,
+    originalPrice: 2090,
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
+  },
+  {
+    id: 'j2',
+    title: 'S925 Pixiu Ring, Feng Shui Wealth Luck Amulet',
+    price: 3462,
+    originalPrice: 4945,
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
+  },
+  {
     id: 'd1',
-    title: 'Temple-Blessed 2026 Red String Zodiac Luck Bracelet with Cinnabar',
-    price: 699,
-    originalPrice: 1399,
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+    title: 'Taoist Master Blessed Five Emperor Coins: Feng Shui',
+    price: 4008,
+    originalPrice: 5725,
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
   },
   {
-    id: 'd2',
-    title: 'Natural Citrine Gemstone Bonsai Wealth Tree on Real Agate Base',
-    price: 2445,
-    originalPrice: 3705,
-    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
+    id: 'c1',
+    title: 'Money Multiplying Poster, Wealth Building Feng Shui',
+    price: 2433,
+    originalPrice: 3475,
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
   },
   {
-    id: 'd3',
-    title: 'Handcrafted Solid Brass Dragon Turtle with Baby & Wealth Ingot',
-    price: 2850,
-    originalPrice: 4200,
-    image: 'https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=600&q=80',
+    id: 'c2',
+    title: 'Fu Prosperity Prayer Candle | Chinese Good Fortune',
+    price: 1403,
+    originalPrice: 2004,
+    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
   },
   {
-    id: 'd4',
-    title: 'Raw Black Obsidian Pixiu Prosperity & Energy Shielding Bracelet',
-    price: 902,
-    originalPrice: 1503,
-    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80',
+    id: 'c4',
+    title: 'Feng Shui Lucky Dragon Incense Burner, Vintage',
+    price: 3159,
+    originalPrice: 4512,
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
   },
   {
-    id: 'd5',
-    title: '328 Golden Abundance & Infinite Wealth Framed Art Canvas Print',
-    price: 1499,
-    originalPrice: 2499,
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'd6',
-    title: 'Authentic Hand-Hammered Tibetan Singing Bowl Sound Healing Kit',
-    price: 1850,
-    originalPrice: 2800,
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'd7',
-    title: 'Solid Brass Traditional Convex Bagua Mirror for Door Protection',
-    price: 950,
-    originalPrice: 1600,
-    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+    id: 'j3',
+    title: 'Brass Bagua Pendant Necklace | Feng Shui I Ching',
+    price: 2175,
+    originalPrice: 3107,
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
   },
 ];
 
@@ -276,37 +269,37 @@ export const fashionGuideData = {
   title: "Miracle feng shui's Guide to Energy & Harmony",
   subtitle: "From sacred brass talismans to handcrafted healing crystals, everything you need to balance your home and spirit.",
   sweatshirts: {
-    title: 'Embroidered Yin Yang Organic Meditation Robe',
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
-    slug: 'Zen & Meditation',
+    title: 'Blackwood Feng Shui Amulet Necklace: Tree of Life',
+    image: 'https://i.etsystatic.com/28306871/r/il/791365/7159126948/il_fullxfull.7159126948_ebgf.jpg',
+    slug: 'Feng Shui Jewelry',
   },
   mensOvershirt: {
-    title: 'Hand-Carved Green Jade Pi Yao Wealth Talisman',
-    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80',
+    title: 'S925 Pixiu Ring, Feng Shui Wealth Luck Amulet',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
     slug: 'Feng Shui Jewelry',
   },
   toteBag: {
-    title: 'Tibetan Singing Bowl Meditation & Sound Cleansing',
-    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+    title: 'Feng Shui Lucky Dragon Incense Burner, Vintage',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
     videoUrl: '/videos/fashion-craft-1.mp4',
-    slug: 'Zen & Meditation',
+    slug: 'Feng Shui Candles',
   },
   linenBlouse: {
-    title: 'Natural Raw Citrine Wealth Cluster Crystal on Wood',
-    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
-    slug: 'Crystals & Trees',
+    title: 'Taoist Master Blessed Five Emperor Coins',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+    slug: 'Feng Shui Decor',
   },
   metallicHeart: {
-    title: 'Seven Chakra Orgonite Energy Pyramid',
-    image: 'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=600&q=80',
+    title: 'Feng Shui 2026 28 Hums Safety Talisman Keychain',
+    image: 'https://i.etsystatic.com/18528884/r/il/4255ed/7574072434/il_fullxfull.7574072434_90u9.jpg',
     videoUrl: '/videos/fashion-craft-2.mp4',
-    slug: 'Feng Shui Decor',
+    slug: 'Feng Shui Jewelry',
   },
   spiralEarrings: {
-    title: 'Hand-Forged Brass Bagua & Windchime Protection',
-    image: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80',
+    title: 'Brass Bagua Pendant Necklace | Feng Shui I Ching',
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
     videoUrl: '/videos/fashion-craft-3.mp4',
-    slug: 'Feng Shui Decor',
+    slug: 'Feng Shui Jewelry',
   },
 };
 
@@ -315,14 +308,14 @@ export const blogPosts = [
     id: 'blog-1',
     category: 'Shopping Guides',
     title: 'How to activate your home\'s southeast wealth corner with Feng Shui',
-    summary: 'Discover the exact placements for water elements, citrine crystals, and dragon turtles to amplify your home\'s prosperity.',
+    summary: 'Discover the exact placements for water elements, citrine crystals, and dragon censers to amplify your home\'s prosperity.',
     slug: '/shop?category=Feng%20Shui%20Decor',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
     collage: [
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=400&q=80',
+      'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+      'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
+      'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
+      'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
     ],
   },
   {
@@ -331,7 +324,7 @@ export const blogPosts = [
     title: 'The power of Pixiu & Cinnabar: Attracting prosperity and protection in 2026',
     summary: 'Learn the ancient art of wearing sacred red string cinnabar beads and how the Pixiu talisman guards your financial harmony.',
     slug: '/shop?category=Feng%20Shui%20Jewelry',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
   },
   {
     id: 'blog-3',
@@ -340,16 +333,14 @@ export const blogPosts = [
     summary: 'Get to know the artistry behind authentic Tibetan singing bowls, hand-carved jade statues, and artisan crystal bonsai trees.',
     slug: '/shop?category=Zen%20%26%20Meditation',
     hasOrangeBar: true,
-    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
     collage: [
-      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80',
+      'https://i.etsystatic.com/28306871/r/il/791365/7159126948/il_fullxfull.7159126948_ebgf.jpg',
+      'https://i.etsystatic.com/57158477/r/il/5dae6a/6913075322/il_fullxfull.6913075322_m25z.jpg',
+      'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_i4y2.jpg',
     ],
   },
 ];
-
-
 
 export const products: Product[] = [
   {
