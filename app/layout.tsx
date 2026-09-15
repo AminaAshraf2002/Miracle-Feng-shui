@@ -5,6 +5,7 @@ import { CartProvider } from '@/context/CartContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { GuestNotificationToast } from '@/components/GuestNotificationToast';
+import { ScrollToTop } from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: 'Miracle feng shui - Shop for handmade, vintage, custom, and unique gifts for everyone',
@@ -43,6 +44,7 @@ export default function RootLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
           <GuestNotificationToast />
+          <ScrollToTop />
         </CartProvider>
       </body>
     </html>

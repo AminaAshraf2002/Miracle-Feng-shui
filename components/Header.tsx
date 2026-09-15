@@ -147,7 +147,7 @@ export function Header() {
                   className="w-full h-full object-cover scale-105"
                 />
               </div>
-              <span className="font-serif text-[20px] sm:text-[24px] md:text-[28px] font-semibold text-[#F1641E] sm:text-[#222222] tracking-tight leading-none">
+              <span className="font-serif text-[20px] sm:text-[24px] md:text-[28px] font-semibold text-[#222222] tracking-tight leading-none">
                 <span className="sm:hidden">Miracle</span>
                 <span className="hidden sm:inline">Miracle feng shui</span>
               </span>
