@@ -323,12 +323,12 @@ export default function MiracleFengShuiHomePage() {
                       />
                     </button>
 
-                    {/* Bottom Price Pill */}
-                    <div className="absolute bottom-2 left-2 z-10 bg-white/95 backdrop-blur-xs text-etsy-dark text-[11px] sm:text-[12px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1 pointer-events-none">
-                      <span>₹ {pick.price.toLocaleString('en-IN')}</span>
+                    {/* Bottom Price Pill - guaranteed single row on all mobile screens */}
+                    <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 z-10 bg-white/95 backdrop-blur-xs text-etsy-dark text-[10px] xs:text-[11px] sm:text-[12px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1 whitespace-nowrap max-w-[calc(100%-12px)] pointer-events-none">
+                      <span className="shrink-0">₹{pick.price.toLocaleString('en-IN')}</span>
                       {pick.originalPrice && (
-                        <span className="text-[10px] text-gray-400 line-through font-normal">
-                          ₹ {pick.originalPrice.toLocaleString('en-IN')}
+                        <span className="text-[8.5px] xs:text-[9.5px] sm:text-[10px] text-gray-400 line-through font-normal shrink-0">
+                          ₹{pick.originalPrice.toLocaleString('en-IN')}
                         </span>
                       )}
                     </div>
