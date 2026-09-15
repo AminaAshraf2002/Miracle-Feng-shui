@@ -70,7 +70,7 @@ export const circularCategories: CategoryCircleInfo[] = [
   {
     name: 'Feng Shui Candles',
     slug: 'Feng Shui Candles',
-    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
+    image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Feng Shui Books',
@@ -93,7 +93,7 @@ export const summerCollections: CategoryCircleInfo[] = [
   {
     name: 'Wealth & Prosperity',
     slug: 'Feng Shui Decor',
-    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
+    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Health & Longevity',
@@ -103,7 +103,7 @@ export const summerCollections: CategoryCircleInfo[] = [
   {
     name: 'Love & Harmony',
     slug: 'Feng Shui Jewelry',
-    image: 'https://i.etsystatic.com/57158477/r/il/5dae6a/6913075322/il_fullxfull.6913075322_m25z.jpg',
+    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Protection & Shielding',
@@ -113,12 +113,12 @@ export const summerCollections: CategoryCircleInfo[] = [
   {
     name: 'Zen Meditation Space',
     slug: 'Feng Shui Candles',
-    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Career & Success',
     slug: 'Feng Shui Decor',
-    image: 'https://i.etsystatic.com/61064616/r/il/209d99/7042851538/il_1080xN.7042851538_matq.jpg',
+    image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
@@ -167,21 +167,21 @@ export const birthdayProductPicks = [
     title: 'Fu Prosperity Prayer Candle | Good Fortune',
     price: 1403,
     originalPrice: 2004,
-    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
+    image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'c4',
     title: 'Feng Shui Lucky Dragon Incense Burner',
     price: 3159,
     originalPrice: 4512,
-    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
   },
   {
     id: 'c1',
     title: 'Money Multiplying Poster, Wealth Building',
     price: 2433,
     originalPrice: 3475,
-    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_qiy1.jpg',
   },
 ];
 
@@ -194,7 +194,7 @@ export const specialGiftCategories = [
   {
     name: 'Abundance Candles',
     slug: 'Feng Shui Candles',
-    image: 'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_i4y2.jpg',
+    image: 'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_rp73.jpg',
   },
   {
     name: 'Pixiu Luck Bracelets',
@@ -210,6 +210,11 @@ export const specialGiftCategories = [
     name: 'Wealth Coins & Charms',
     slug: 'Feng Shui Decor',
     image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+  },
+  {
+    name: 'Tibetan Sound Bowls',
+    slug: 'Zen & Meditation',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=500&q=80',
   },
 ];
 
@@ -240,21 +245,21 @@ export const todaysDeals = [
     title: 'Money Multiplying Poster, Wealth Building Feng Shui',
     price: 2433,
     originalPrice: 3475,
-    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_qiy1.jpg',
   },
   {
     id: 'c2',
     title: 'Fu Prosperity Prayer Candle | Chinese Good Fortune',
     price: 1403,
     originalPrice: 2004,
-    image: 'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
+    image: 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'c4',
     title: 'Feng Shui Lucky Dragon Incense Burner, Vintage',
     price: 3159,
     originalPrice: 4512,
-    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
   },
   {
     id: 'j3',
@@ -280,7 +285,7 @@ export const fashionGuideData = {
   },
   toteBag: {
     title: 'Feng Shui Lucky Dragon Incense Burner, Vintage',
-    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
     videoUrl: '/videos/fashion-craft-1.mp4',
     slug: 'Feng Shui Candles',
   },
@@ -291,7 +296,7 @@ export const fashionGuideData = {
   },
   metallicHeart: {
     title: 'Feng Shui 2026 28 Hums Safety Talisman Keychain',
-    image: 'https://i.etsystatic.com/18528884/r/il/4255ed/7574072434/il_fullxfull.7574072434_90u9.jpg',
+    image: 'https://i.etsystatic.com/18528884/r/il/4255ed/7574072434/il_fullxfull.7574072434_8ebu.jpg',
     videoUrl: '/videos/fashion-craft-2.mp4',
     slug: 'Feng Shui Jewelry',
   },
@@ -310,11 +315,11 @@ export const blogPosts = [
     title: 'How to activate your home\'s southeast wealth corner with Feng Shui',
     summary: 'Discover the exact placements for water elements, citrine crystals, and dragon censers to amplify your home\'s prosperity.',
     slug: '/shop?category=Feng%20Shui%20Decor',
-    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_8j2s.jpg',
+    image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_qiy1.jpg',
     collage: [
       'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
-      'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s31k.jpg',
-      'https://i.etsystatic.com/22910392/r/il/bae559/5610740112/il_1080xN.5610740112_boc4.jpg',
+      'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
+      'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=800&q=80',
       'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
     ],
   },
@@ -336,8 +341,8 @@ export const blogPosts = [
     image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
     collage: [
       'https://i.etsystatic.com/28306871/r/il/791365/7159126948/il_fullxfull.7159126948_ebgf.jpg',
-      'https://i.etsystatic.com/57158477/r/il/5dae6a/6913075322/il_fullxfull.6913075322_m25z.jpg',
-      'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_i4y2.jpg',
+      'https://i.etsystatic.com/57158477/r/il/5dae6a/6913075322/il_fullxfull.6913075322_qfbf.jpg',
+      'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_rp73.jpg',
     ],
   },
 ];
@@ -447,7 +452,7 @@ export const products: Product[] = [
     "category": "Feng Shui Jewelry",
     "images": [
       "https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg",
-      "https://images.unsplash.com/photo-1611591475152-478d130ee79e?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80"
     ],
     "description": "Consecrated at Taoist temple for Tai Sui protection. Woven red silk cord with natural cinnabar and protective talisman beads to safeguard your health and luck.",
     "itemDetails": [
@@ -507,7 +512,7 @@ export const products: Product[] = [
     "reviewCount": 420,
     "category": "Feng Shui Jewelry",
     "images": [
-      "https://images.unsplash.com/photo-1611591475152-478d130ee79e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80"
     ],
     "description": "Masterpiece luxury Feng Shui bracelet featuring 24K pure solid gold Yuanbao ingot, untreated imperial cinnabar beads, and handcrafted ceremonial Chinese knots.",
@@ -658,7 +663,7 @@ export const products: Product[] = [
     "reviewCount": 1680,
     "category": "Feng Shui Jewelry",
     "images": [
-      "https://images.unsplash.com/photo-1611591475152-478d130ee79e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80"
     ],
     "description": "Purified and consecrated at Mount Putuo Buddhist Sanctuary. High-density vermillion cinnabar carved Pixiu attached to a braided auspicious red keyring.",

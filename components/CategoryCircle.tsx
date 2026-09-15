@@ -14,6 +14,12 @@ export function CategoryCircle({ category }: { category: CategoryCircleInfo }) {
           alt={category.name}
           className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
           loading="lazy"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (!target.src.includes('photo-1518895949257')) {
+              target.src = 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80';
+            }
+          }}
         />
       </div>
       <span className="text-[13.5px] sm:text-[14.5px] md:text-[15px] font-semibold text-etsy-dark mt-2.5 sm:mt-3 leading-snug block line-clamp-1">

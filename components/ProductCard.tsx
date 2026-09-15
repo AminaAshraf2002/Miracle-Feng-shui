@@ -37,6 +37,12 @@ export function ProductCard({ product }: ProductCardProps) {
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (!target.src.includes('photo-1518895949257')) {
+              target.src = 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80';
+            }
+          }}
         />
 
         {/* Overlay Badges (Clean, minimal, no tacky icons) */}
