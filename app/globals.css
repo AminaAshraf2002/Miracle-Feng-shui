@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-etsy-orange: #F1641E;
+  --color-etsy-orange-dark: #D75200;
+  --color-etsy-orange-light: #FDEEE9;
+  --color-etsy-dark: #222222;
+  --color-etsy-gray: #595959;
+  --color-etsy-light-gray: #E1E3DF;
+  --color-etsy-border: #DEDEDE;
+  --color-etsy-bg-soft: #F8F6F2;
+  --color-etsy-footer: #2F466C;
+  --color-etsy-footer-dark: #1E2B37;
+  --color-etsy-peach: #FDEBD2;
+  --color-etsy-mint: #EBF7F5;
+  --color-etsy-lavender: #F3E8EE;
+  --color-etsy-green: #1B7837;
+
+  --font-serif: 'ABCOtto', 'Charter', 'Charter Bitstream', 'Cambria', 'Noto Serif Light', 'Droid Serif', Georgia, serif;
+  --font-sans: 'ABCDiatype', -apple-system, 'Helvetica Neue', 'Droid Sans', Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: var(--color-etsy-dark);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--color-etsy-dark);
+  margin: 0;
+}
+
+.font-editorial,
+.font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--color-etsy-orange);
+  color: #FFFFFF;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-etsy-dark);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.etsy-container {
+  width: 100%;
+  max-width: 1380px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+@media (max-width: 768px) {
+  .etsy-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .etsy-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
