@@ -124,15 +124,15 @@ export default function MiracleFengShuiHomePage() {
                 />
               </div>
 
-              {/* Slide 1: Brand Meditation Logo Graphic */}
+              {/* Slide 1: Taoist Master Blessed Five Emperor Coins */}
               <div
                 className={`absolute inset-0 w-full h-full flex items-center justify-center p-2 sm:p-5 md:p-6 transition-opacity duration-1000 ease-in-out ${
                   activeSlide === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
                 }`}
               >
                 <img
-                  src="/images/miracle.jpeg"
-                  alt="Miracle Feng Shui Emblem"
+                  src="https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg"
+                  alt="Taoist Master Blessed Five Emperor Coins"
                   className="w-full h-full object-cover rounded-lg"
                 />
               </div>
