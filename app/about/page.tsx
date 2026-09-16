@@ -226,7 +226,7 @@ export default function AboutPage() {
             <div className="lg:col-span-7 order-1 lg:order-2">
               <h1
                 style={{ color: '#140D1F' }}
-                className="text-4xl sm:text-5xl lg:text-[52px] font-serif font-normal tracking-tight leading-[1.14] mb-6"
+                className="text-[28px] sm:text-[36px] lg:text-[42px] font-serif font-normal tracking-tight leading-[1.18] mb-5"
               >
                 Keep Spiritual Living <br className="hidden sm:inline" />
                 <span className="text-[#3A1F62] font-semibold">Authentic & Sacred</span>
@@ -738,15 +738,16 @@ export default function AboutPage() {
               <div className="pt-4">
                 <Link
                   href="/shop"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#140D1F] hover:bg-black text-white text-xs font-bold transition-all shadow-sm"
+                  style={{ color: '#FFFFFF' }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#140D1F] hover:bg-black !text-white text-xs font-bold transition-all shadow-sm w-full sm:w-auto"
                 >
-                  <span>Support Artisan Craftsmanship</span>
-                  <i className="fa-solid fa-arrow-right text-[10px]" />
+                  <span style={{ color: '#FFFFFF' }}>Support Artisan Craftsmanship</span>
+                  <i className="fa-solid fa-arrow-right text-[10px]" style={{ color: '#FFFFFF' }} />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-2 gap-4">
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-4">
                 <div className="rounded-2xl bg-white border border-[#E8E4DA] p-5 shadow-xs">
                   <div className="w-10 h-10 rounded-xl bg-purple-100 text-[#3A1F62] flex items-center justify-center text-lg mb-3">
@@ -768,7 +769,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="space-y-4 mt-6">
+              <div className="space-y-4 sm:mt-6">
                 <div className="rounded-2xl bg-white border border-[#E8E4DA] p-5 shadow-xs">
                   <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg mb-3">
                     <i className="fa-solid fa-hand-holding-dollar" />
