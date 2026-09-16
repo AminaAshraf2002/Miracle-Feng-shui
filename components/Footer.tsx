@@ -2,9 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  // Completely hide public store footer on all admin routes
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <footer className="bg-[#F5F5F1] text-[#222222] border-t border-[#E1E3DF] mt-auto">
@@ -68,11 +75,6 @@ export function Footer() {
             <div>
               <h3 className="text-[14px] font-bold text-[#222222] mb-3">Sell</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
-                <li>
-                  <Link href="/admin" className="hover:underline font-semibold text-[#A84218]">
-                    Merchant Admin Panel
-                  </Link>
-                </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
                     Sell on Miracle feng shui

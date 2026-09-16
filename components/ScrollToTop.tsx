@@ -33,6 +33,10 @@ export function ScrollToTop() {
     });
   };
 
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <>
       {isVisible && (

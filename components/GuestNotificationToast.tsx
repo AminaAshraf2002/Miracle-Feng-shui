@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 
 export function GuestNotificationToast() {
+  const pathname = usePathname();
   const { guestToast, closeGuestToast, userLoggedIn } = useCart();
 
   // Auto-dismiss toast after 7 seconds
@@ -16,7 +18,7 @@ export function GuestNotificationToast() {
     }
   }, [guestToast, closeGuestToast]);
 
-  if (!guestToast?.open || userLoggedIn) return null;
+  if (pathname?.startsWith('/admin') || !guestToast?.open || userLoggedIn) return null;
 
   const triggerAuth = (mode: 'signin' | 'register') => {
     if (typeof window !== 'undefined') {

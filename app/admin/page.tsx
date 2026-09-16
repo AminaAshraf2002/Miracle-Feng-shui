@@ -28,10 +28,16 @@ export default function AdminDashboardPage() {
           <span className="text-amber-300 text-xs font-bold uppercase tracking-wider">
             Store Administration
           </span>
-          <h1 className="text-2xl sm:text-3xl font-bold mt-1 tracking-tight">
+          <h1
+            style={{ color: '#ffffff' }}
+            className="text-2xl sm:text-3xl font-bold mt-1 tracking-tight !text-white"
+          >
             Miracle Feng Shui Dashboard
           </h1>
-          <p className="text-gray-300 text-sm mt-1 max-w-xl">
+          <p
+            style={{ color: '#e5e7eb' }}
+            className="text-gray-200 text-sm mt-1 max-w-xl"
+          >
             Manage your catalog, reorder homepage sections on the fly, and fulfill customer blessing orders.
           </p>
         </div>

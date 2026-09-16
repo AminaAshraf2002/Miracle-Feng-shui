@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function AdminLayout({
   children,
@@ -10,7 +10,64 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [adminUser, setAdminUser] = useState('admin@miraclefengshui.com');
+
+  const isLoginPage = pathname === '/admin/login';
+
+  // Check Admin Authentication
+  useEffect(() => {
+    if (isLoginPage) {
+      setIsAuthenticated(true);
+      return;
+    }
+
+    try {
+      const auth = localStorage.getItem('mfs_admin_auth');
+      const user = localStorage.getItem('mfs_admin_user');
+      if (auth === 'true') {
+        setIsAuthenticated(true);
+        if (user) setAdminUser(user);
+      } else {
+        setIsAuthenticated(false);
+        router.replace('/admin/login');
+      }
+    } catch {
+      setIsAuthenticated(false);
+      router.replace('/admin/login');
+    }
+  }, [pathname, isLoginPage, router]);
+
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem('mfs_admin_auth');
+      localStorage.removeItem('mfs_admin_user');
+    } catch {
+      // ignore
+    }
+    router.replace('/admin/login');
+  };
+
+  // If on login page, render login directly without admin frame
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  // Loading state while checking authentication
+  if (isAuthenticated === null || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#130B1C] flex flex-col items-center justify-center text-white">
+        <div className="w-12 h-12 rounded-2xl bg-[#A84218] flex items-center justify-center mb-4 animate-pulse">
+          <i className="fa-solid fa-yin-yang text-2xl" />
+        </div>
+        <p className="text-sm font-semibold text-gray-300">
+          Verifying administrative privileges...
+        </p>
+      </div>
+    );
+  }
 
   const navItems = [
     {
@@ -52,7 +109,7 @@ export default function AdminLayout({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10"
+              className="lg:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               <i className="fa-solid fa-bars text-lg" />
@@ -63,31 +120,45 @@ export default function AdminLayout({
                 <i className="fa-solid fa-yin-yang text-lg" />
               </div>
               <div>
-                <span className="font-bold text-base sm:text-lg tracking-tight block leading-tight">
+                <span
+                  style={{ color: '#ffffff' }}
+                  className="font-bold text-base sm:text-lg tracking-tight block leading-tight text-white"
+                >
                   Miracle Admin
                 </span>
                 <span className="text-[10.5px] text-amber-300 font-medium tracking-wider uppercase">
-                  Store Management
+                  STORE MANAGEMENT
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Quick Actions & Storefront Link */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          {/* Right Header Actions */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5">
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full transition-all border border-white/15 no-underline"
+              className="hidden sm:inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full transition-all border border-white/15 no-underline"
             >
               <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
-              <span className="hidden sm:inline">View Live Storefront</span>
-              <span className="sm:hidden">Store</span>
+              <span>View Storefront</span>
             </Link>
 
-            <div className="w-8 h-8 rounded-full bg-[#A84218] flex items-center justify-center text-white font-bold text-xs shadow-inner">
-              A
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10 text-xs text-gray-300">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-medium text-white">{adminUser}</span>
             </div>
+
+            {/* Sign Out Button */}
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-1.5 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer border border-rose-500/40 shadow-xs"
+              title="Sign out of Admin"
+            >
+              <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
+              <span className="hidden xs:inline">Sign Out</span>
+            </button>
           </div>
         </div>
       </header>
@@ -119,7 +190,7 @@ export default function AdminLayout({
                         active ? 'text-amber-300' : 'text-gray-400'
                       }`}
                     />
-                    <span>{item.name}</span>
+                    <span style={{ color: active ? '#ffffff' : undefined }}>{item.name}</span>
                   </div>
                   {item.badge && (
                     <span
@@ -143,7 +214,7 @@ export default function AdminLayout({
             </div>
 
             <Link
-              href="/admin/products?action=new"
+              href="/admin/products"
               className="flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm text-[#A84218] hover:bg-orange-50 font-medium no-underline transition-colors"
             >
               <i className="fa-solid fa-plus-circle text-base" />
@@ -165,11 +236,11 @@ export default function AdminLayout({
           <div className="lg:hidden fixed inset-0 z-50 bg-black/50 flex">
             <div className="w-72 bg-white h-full p-5 flex flex-col shadow-2xl">
               <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-                <span className="font-bold text-lg text-[#2A1D38]">Menu</span>
+                <span className="font-bold text-lg text-[#2A1D38]">Admin Menu</span>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 text-gray-500 hover:text-black"
+                  className="p-2 text-gray-500 hover:text-black cursor-pointer"
                 >
                   <i className="fa-solid fa-xmark text-lg" />
                 </button>
@@ -191,7 +262,7 @@ export default function AdminLayout({
                     >
                       <div className="flex items-center gap-3">
                         <i className={`fa-solid ${item.icon}`} />
-                        <span>{item.name}</span>
+                        <span style={{ color: active ? '#ffffff' : undefined }}>{item.name}</span>
                       </div>
                       {item.badge && (
                         <span className="text-[10px] bg-amber-300 text-black px-2 py-0.5 rounded-full font-bold">
@@ -203,15 +274,24 @@ export default function AdminLayout({
                 })}
               </div>
 
-              <div className="mt-auto pt-4 border-t border-gray-100">
+              <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
                 <Link
                   href="/"
                   target="_blank"
-                  className="w-full flex items-center justify-center gap-2 bg-[#A84218] text-white py-2.5 rounded-xl font-semibold text-sm no-underline shadow-sm"
+                  className="w-full flex items-center justify-center gap-2 bg-[#2A1D38] text-white py-2.5 rounded-xl font-semibold text-sm no-underline shadow-sm"
                 >
                   <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
                   <span>Open Storefront</span>
                 </Link>
+
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="w-full flex items-center justify-center gap-2 bg-rose-50 text-rose-600 py-2 rounded-xl font-semibold text-xs border border-rose-200 cursor-pointer"
+                >
+                  <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
+                  <span>Sign Out</span>
+                </button>
               </div>
             </div>
             <div

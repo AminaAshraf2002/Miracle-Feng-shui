@@ -777,18 +777,6 @@ export default function MiracleFengShuiHomePage() {
 
   return (
     <div className="pb-12 bg-white relative">
-      {/* Floating Admin Panel Shortcut */}
-      <div className="fixed bottom-5 left-5 z-40">
-        <Link
-          href="/admin"
-          className="bg-[#1E132A] hover:bg-[#2A1D38] text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-2xl border border-amber-400/40 flex items-center gap-2.5 transition-all hover:scale-105 no-underline backdrop-blur-md"
-        >
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <i className="fa-solid fa-gear text-amber-300 text-xs" />
-          <span>Admin Panel</span>
-        </Link>
-      </div>
-
       {/* Render Homepage Sections in Dynamic Order */}
       {sections.map((section) => {
         if (!section.enabled) return null;
