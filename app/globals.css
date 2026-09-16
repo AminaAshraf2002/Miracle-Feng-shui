@@ -44,7 +44,7 @@ h3,
 h4 {
   font-family: var(--font-sans);
   font-weight: 700;
-  color: var(--color-etsy-dark);
+  color: inherit;
   margin: 0;
 }
 
