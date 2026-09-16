@@ -151,7 +151,7 @@ export function Header() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search"
-                    className="w-full h-10 pl-3.5 pr-9 rounded-full border-2 border-[#222222] focus:outline-none focus:border-black text-[14px] text-[#222222] placeholder-gray-500 bg-white shadow-2xs"
+                    className="w-full h-10 pl-3.5 pr-9 rounded-full border-2 border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[14px] text-[#222222] placeholder-gray-500 bg-white shadow-2xs"
                     autoFocus
                   />
                   {query && (
@@ -204,7 +204,7 @@ export function Header() {
                     className="w-full h-full object-cover scale-105"
                   />
                 </div>
-                <span className="font-serif text-[17px] sm:text-[22px] md:text-[26px] font-bold text-[#F1641E] sm:text-[#222222] tracking-tight leading-none">
+                <span className="font-serif text-[17px] sm:text-[22px] md:text-[26px] font-bold text-[#3A1F62] tracking-tight leading-none">
                   <span className="sm:hidden">Miracle</span>
                   <span className="hidden sm:inline">Miracle feng shui</span>
                 </span>
@@ -245,7 +245,7 @@ export function Header() {
                     }
                   }}
                   placeholder="Search"
-                  className="w-full h-8 sm:h-10 md:h-11 pl-3 sm:pl-4 pr-8 sm:pr-11 rounded-full border border-gray-400/80 md:border-2 md:border-[#222222] focus:outline-none focus:border-black text-[12px] sm:text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs cursor-pointer md:cursor-text"
+                  className="w-full h-8 sm:h-10 md:h-11 pl-3 sm:pl-4 pr-8 sm:pr-11 rounded-full border border-gray-400/80 md:border-2 md:border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[12px] sm:text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs cursor-pointer md:cursor-text"
                 />
                 {query && (
                   <button
@@ -257,11 +257,11 @@ export function Header() {
                     <i className="fa-solid fa-xmark text-[11px]" />
                   </button>
                 )}
-                {/* Etsy-Style Orange Circular Search Button */}
+                {/* Etsy-Style Circular Search Button with Logo Purple Background */}
                 <button
                   type="submit"
                   aria-label="Submit search"
-                  className="absolute right-0.5 sm:right-1 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-xs"
+                  className="absolute right-0.5 sm:right-1 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-xs"
                 >
                   <i className="fa-solid fa-magnifying-glass text-[11px] sm:text-[12px]" />
                 </button>
