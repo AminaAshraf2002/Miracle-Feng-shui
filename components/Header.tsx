@@ -18,6 +18,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
+  const [mobileSearchActive, setMobileSearchActive] = useState(false);
   const [showRegionModal, setShowRegionModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -132,7 +133,53 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-white border-b border-[#E0D7E8]">
         {/* Top Header Row */}
         <div className="etsy-container py-2 sm:py-2.5">
-          <div className="flex items-center justify-between gap-1 sm:gap-2.5 md:gap-4 w-full">
+          {/* Mobile Enlarged Search Bar (Active State when tapped/typing, exactly like Etsy) */}
+          {mobileSearchActive && (
+            <div className="md:hidden flex items-center gap-2.5 py-0.5 w-full animate-in fade-in duration-150">
+              <form
+                onSubmit={(e) => {
+                  handleSearch(e);
+                  setMobileSearchActive(false);
+                }}
+                role="search"
+                className="flex-1 min-w-0 relative"
+              >
+                <div className="relative flex items-center">
+                  <input
+                    ref={mobileSearchInputRef}
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search"
+                    className="w-full h-10 pl-3.5 pr-9 rounded-full border-2 border-[#222222] focus:outline-none focus:border-black text-[14px] text-[#222222] placeholder-gray-500 bg-white shadow-2xs"
+                    autoFocus
+                  />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 text-xs cursor-pointer"
+                      aria-label="Clear search text"
+                    >
+                      <i className="fa-solid fa-xmark text-sm" />
+                    </button>
+                  )}
+                </div>
+              </form>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileSearchActive(false);
+                }}
+                className="text-[14px] font-semibold text-[#222222] hover:text-black shrink-0 px-1 py-1 cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+
+          {/* Standard Header Row (Compact on mobile, full on desktop. Hidden on mobile while searching) */}
+          <div className={`${mobileSearchActive ? 'hidden md:flex' : 'flex'} items-center justify-between gap-1 sm:gap-2.5 md:gap-4 w-full`}>
             {/* Left: Mobile Menu Button + Brand Logo */}
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               {/* Mobile Menu Button */}
@@ -185,8 +232,20 @@ export function Header() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => {
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                      setMobileSearchActive(true);
+                      setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
+                    }
+                  }}
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                      setMobileSearchActive(true);
+                      setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
+                    }
+                  }}
                   placeholder="Search"
-                  className="w-full h-8 sm:h-10 md:h-11 pl-3 sm:pl-4 pr-8 sm:pr-11 rounded-full border border-gray-400/80 md:border-2 md:border-[#222222] focus:outline-none focus:border-black text-[12px] sm:text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
+                  className="w-full h-8 sm:h-10 md:h-11 pl-3 sm:pl-4 pr-8 sm:pr-11 rounded-full border border-gray-400/80 md:border-2 md:border-[#222222] focus:outline-none focus:border-black text-[12px] sm:text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs cursor-pointer md:cursor-text"
                 />
                 {query && (
                   <button
