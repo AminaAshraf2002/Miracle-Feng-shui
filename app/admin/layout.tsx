@@ -60,14 +60,14 @@ export default function AdminLayout({
   if (isAuthenticated === null || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#140D1F] flex flex-col items-center justify-center text-white font-outfit">
-        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-400/50 mb-3 animate-pulse shadow-md">
+        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-orange-500/50 mb-3 animate-pulse shadow-md">
           <img
             src="/images/miracle.jpeg"
             alt="Miracle Feng Shui"
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-xs font-medium text-amber-200/90 tracking-wide">
+        <p className="text-xs font-medium text-orange-200/90 tracking-wide">
           Verifying credentials...
         </p>
       </div>
@@ -117,7 +117,7 @@ export default function AdminLayout({
             <i className="fa-solid fa-bars text-base" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full overflow-hidden border border-amber-400/40 bg-white shrink-0">
+            <div className="w-7 h-7 rounded-full overflow-hidden border border-orange-500/40 bg-white shrink-0">
               <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-xs tracking-tight text-white">Miracle Admin</span>
@@ -144,7 +144,7 @@ export default function AdminLayout({
           type="button"
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="absolute -right-3 top-7 w-6 h-6 rounded-full bg-white text-[#140D1F] shadow-md border border-gray-200 flex items-center justify-center text-[10px] cursor-pointer hover:bg-amber-50 hover:scale-105 transition-all z-50"
+          className="absolute -right-3 top-7 w-6 h-6 rounded-full bg-white text-[#140D1F] shadow-md border border-gray-200 flex items-center justify-center text-[10px] cursor-pointer hover:bg-orange-50 hover:text-orange-600 hover:scale-105 transition-all z-50"
         >
           <i
             className={`fa-solid ${
@@ -160,7 +160,7 @@ export default function AdminLayout({
               sidebarCollapsed ? 'justify-center pb-4' : 'gap-3 pb-5'
             } border-b border-white/10`}
           >
-            <div className="w-9 h-9 rounded-xl overflow-hidden border-2 border-amber-400/40 shadow-sm shrink-0 bg-white">
+            <div className="w-9 h-9 rounded-xl overflow-hidden border-2 border-orange-500/50 shadow-sm shrink-0 bg-white">
               <img
                 src="/images/miracle.jpeg"
                 alt="Miracle Feng Shui"
@@ -172,7 +172,7 @@ export default function AdminLayout({
                 <span className="font-cinzel font-bold text-xs text-white tracking-wider block leading-snug truncate">
                   Miracle Feng Shui
                 </span>
-                <span className="text-[9px] text-amber-300 font-semibold tracking-wider uppercase block">
+                <span className="text-[9px] text-orange-400 font-semibold tracking-wider uppercase block">
                   COMMAND CENTER
                 </span>
               </div>
@@ -188,24 +188,34 @@ export default function AdminLayout({
                   key={item.href}
                   href={item.href}
                   title={sidebarCollapsed ? item.name : undefined}
+                  style={{
+                    backgroundColor: active ? '#ffffff' : 'transparent',
+                    color: active ? '#140D1F' : 'rgba(255,255,255,0.85)',
+                  }}
                   className={`flex items-center ${
                     sidebarCollapsed ? 'justify-center px-0 py-2.5' : 'justify-between px-3.5 py-2.5'
                   } rounded-xl text-xs font-semibold transition-all no-underline ${
                     active
-                      ? 'bg-white text-[#140D1F] shadow-sm font-bold'
-                      : 'text-white/75 hover:text-white hover:bg-white/10'
+                      ? 'shadow-sm font-bold'
+                      : 'hover:!text-white hover:bg-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <i
-                      className={`fa-solid ${item.icon} text-sm w-4 text-center ${
-                        active ? 'text-[#140D1F]' : 'text-white/70'
-                      }`}
+                      className={`fa-solid ${item.icon} text-sm w-4 text-center`}
+                      style={{ color: active ? '#140D1F' : 'rgba(255,255,255,0.7)' }}
                     />
-                    {!sidebarCollapsed && <span>{item.name}</span>}
+                    {!sidebarCollapsed && (
+                      <span
+                        style={{ color: active ? '#140D1F' : '#ffffff' }}
+                        className={active ? '!text-[#140D1F] font-bold text-xs' : '!text-white/85 font-medium text-xs'}
+                      >
+                        {item.name}
+                      </span>
+                    )}
                   </div>
                   {!sidebarCollapsed && active && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    <span className="w-2 h-2 rounded-full bg-[#F1641E] shrink-0" />
                   )}
                 </Link>
               );
@@ -217,7 +227,7 @@ export default function AdminLayout({
         <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
           {!sidebarCollapsed && (
             <div className="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
-              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center mx-auto mb-1 text-[10px]">
+              <div className="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center mx-auto mb-1 text-[10px]">
                 <i className="fa-solid fa-bolt" />
               </div>
               <span className="text-[10.5px] font-bold text-white block uppercase tracking-wider">
@@ -263,7 +273,7 @@ export default function AdminLayout({
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl overflow-hidden border border-amber-400/40 bg-white">
+                  <div className="w-8 h-8 rounded-xl overflow-hidden border border-orange-500/40 bg-white">
                     <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
                   </div>
                   <span className="font-bold text-sm text-white">Miracle Admin</span>
@@ -285,17 +295,29 @@ export default function AdminLayout({
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
+                      style={{
+                        backgroundColor: active ? '#ffffff' : 'transparent',
+                        color: active ? '#140D1F' : 'rgba(255,255,255,0.85)',
+                      }}
                       className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold no-underline ${
                         active
-                          ? 'bg-white text-[#140D1F] shadow-xs font-bold'
-                          : 'text-white/80 hover:bg-white/10'
+                          ? 'shadow-xs font-bold'
+                          : 'hover:bg-white/10'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <i className={`fa-solid ${item.icon} text-xs`} />
-                        <span>{item.name}</span>
+                        <i
+                          className={`fa-solid ${item.icon} text-xs`}
+                          style={{ color: active ? '#140D1F' : 'rgba(255,255,255,0.7)' }}
+                        />
+                        <span
+                          style={{ color: active ? '#140D1F' : '#ffffff' }}
+                          className={active ? '!text-[#140D1F] font-bold' : '!text-white'}
+                        >
+                          {item.name}
+                        </span>
                       </div>
-                      {active && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />}
+                      {active && <span className="w-2 h-2 rounded-full bg-[#F1641E]" />}
                     </Link>
                   );
                 })}
