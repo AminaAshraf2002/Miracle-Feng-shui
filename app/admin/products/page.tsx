@@ -115,7 +115,7 @@ export default function AdminProductsPage() {
     <div className="flex flex-col gap-6">
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-yellow-400/30">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-white/20">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
@@ -297,7 +297,7 @@ export default function AdminProductsPage() {
                           }
                           className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border transition-colors cursor-pointer ${
                             prod.etsyPick
-                              ? 'bg-[#FEF9C3] text-yellow-800 border-yellow-300'
+                              ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]/60'
                               : 'bg-white text-gray-400 border-gray-200 hover:border-gray-400'
                           }`}
                         >

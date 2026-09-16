@@ -89,7 +89,7 @@ export default function AdminDashboardPage() {
   };
 
   const statusPastels: Record<OrderStatus, { bg: string; text: string }> = {
-    Pending: { bg: 'bg-[#FEF9C3]', text: 'text-[#A16207]' },
+    Pending: { bg: 'bg-[#FFF7ED]', text: 'text-[#C2410C]' },
     Processing: { bg: 'bg-[#EBF2FE]', text: 'text-[#1D4ED8]' },
     Shipped: { bg: 'bg-[#F3EEFC]', text: 'text-[#6D28D9]' },
     Delivered: { bg: 'bg-[#E6F4F1]', text: 'text-[#0F766E]' },
@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full relative z-20">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[10.5px] uppercase tracking-wider text-yellow-300 font-bold">
+            <span className="text-[10.5px] uppercase tracking-wider text-orange-200/90 font-semibold">
               Miracle Command Sanctuary
             </span>
           </div>
@@ -134,12 +134,12 @@ export default function AdminDashboardPage() {
             <div ref={searchContainerRef} className="relative">
               <form
                 onSubmit={handleSearchSubmit}
-                className="flex items-center bg-black/45 hover:bg-black/55 focus-within:bg-black/65 focus-within:ring-2 focus-within:ring-yellow-400 transition-all border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/60 w-52 sm:w-64 shadow-2xs backdrop-blur-md"
+                className="flex items-center bg-black/45 hover:bg-black/55 focus-within:bg-black/65 focus-within:ring-2 focus-within:ring-white/30 transition-all border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white placeholder-white/60 w-52 sm:w-64 shadow-2xs backdrop-blur-md"
               >
                 <button
                   type="submit"
                   aria-label="Search catalog"
-                  className="text-yellow-400 hover:text-yellow-300 mr-2 cursor-pointer bg-transparent border-none p-0 flex items-center"
+                  className="text-white/80 hover:text-white mr-2 cursor-pointer bg-transparent border-none p-0 flex items-center"
                 >
                   <i className="fa-solid fa-magnifying-glass text-xs" />
                 </button>
@@ -190,7 +190,7 @@ export default function AdminDashboardPage() {
                   {/* Matching Products */}
                   {matchingProducts.length > 0 && (
                     <div className="mt-2.5">
-                      <div className="text-[10.5px] font-bold text-yellow-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                      <div className="text-[10.5px] font-bold text-[#C2410C] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                         <i className="fa-solid fa-boxes-stacked text-[10px]" />
                         <span>Products ({matchingProducts.length})</span>
                       </div>
@@ -203,7 +203,7 @@ export default function AdminDashboardPage() {
                               setShowSearchDropdown(false);
                               router.push(`/admin/products?q=${encodeURIComponent(prod.name)}`);
                             }}
-                            className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-yellow-50 text-left transition-colors cursor-pointer w-full"
+                            className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-orange-50/60 text-left transition-colors cursor-pointer w-full"
                           >
                             <img
                               src={prod.images[0]}
@@ -218,7 +218,7 @@ export default function AdminDashboardPage() {
                                 {prod.category} &bull; ₹{prod.price}
                               </span>
                             </div>
-                            <span className="text-[10.5px] font-bold text-yellow-700 shrink-0">
+                            <span className="text-[10.5px] font-bold text-[#C2410C] shrink-0">
                               Edit &rarr;
                             </span>
                           </button>
@@ -271,7 +271,7 @@ export default function AdminDashboardPage() {
                     <button
                       type="button"
                       onClick={handleSearchSubmit}
-                      className="text-xs font-bold text-yellow-700 hover:text-yellow-800 cursor-pointer bg-transparent border-none"
+                      className="text-xs font-bold text-[#C2410C] hover:text-orange-800 cursor-pointer bg-transparent border-none"
                     >
                       Search &ldquo;{bannerSearchQuery}&rdquo; in Products Catalog &rarr;
                     </button>
@@ -286,8 +286,8 @@ export default function AdminDashboardPage() {
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-rose-400 ring-2 ring-[#170E22]" />
             </div>
 
-            {/* User Profile Avatar in Pastel Gold / Yellow */}
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-300 to-yellow-500 text-gray-950 font-bold flex items-center justify-center text-xs shadow-xs border border-white/40">
+            {/* User Profile Avatar */}
+            <div className="w-8 h-8 rounded-full bg-[#3A1F62] text-white font-bold flex items-center justify-center text-xs shadow-xs border border-white/30">
               A
             </div>
           </div>
@@ -310,16 +310,16 @@ export default function AdminDashboardPage() {
               Monitor store catalog, fulfill customer orders, and orchestrate homepage sections.
             </p>
 
-            {/* Compact Date & Time Pill with Pastel Yellow Accent */}
+            {/* Compact Date & Time Pill with Minimalist Accent */}
             <div className="mt-3 inline-flex items-center gap-2 bg-black/35 text-white/90 text-[11px] px-3 py-1 rounded-full border border-white/10 font-medium backdrop-blur-xs">
-              <i className="fa-regular fa-clock text-[11px] text-yellow-400" />
+              <i className="fa-regular fa-clock text-[11px] text-white/70" />
               <span>{currentDateTime || 'Monday, Sep 16, 2026'}</span>
             </div>
           </div>
 
-          {/* Right Floating Card Illustration with Pastel Yellow Accent */}
+          {/* Right Floating Card Illustration */}
           <div className="hidden md:flex items-center gap-3 bg-white/10 backdrop-blur-xs border border-white/15 rounded-xl p-3 shadow-xs shrink-0">
-            <div className="w-10 h-10 rounded-lg bg-yellow-400/20 text-yellow-300 flex items-center justify-center text-lg shadow-xs border border-yellow-400/40">
+            <div className="w-10 h-10 rounded-lg bg-white/10 text-white/90 flex items-center justify-center text-lg shadow-xs border border-white/15">
               <i className="fa-solid fa-circle-check" />
             </div>
             <div>
@@ -336,7 +336,7 @@ export default function AdminDashboardPage() {
         {/* All Admin Pages Direct Banner Navigation Bar */}
         <div className="mt-4 pt-3 border-t border-white/15 relative z-10">
           <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1">
-            <span className="text-[10px] uppercase tracking-wider text-yellow-300 font-bold mr-1 shrink-0 hidden sm:inline-block">
+            <span className="text-[10px] uppercase tracking-wider text-white/60 font-semibold mr-1 shrink-0 hidden sm:inline-block">
               Pages:
             </span>
             {bannerPages.map((pg) => (
@@ -346,20 +346,20 @@ export default function AdminDashboardPage() {
                 target={pg.isExternal ? '_blank' : undefined}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all no-underline ${
                   pg.active
-                    ? 'bg-[#3A1F62] text-white shadow-sm font-bold border border-purple-400/40'
+                    ? 'bg-[#3A1F62] text-white shadow-sm font-bold border border-white/25'
                     : 'bg-black/35 hover:bg-white/15 text-white/90 border border-white/10 hover:border-white/25'
                 }`}
               >
                 <i
                   className={`fa-solid ${pg.icon} text-[11px] ${
-                    pg.active ? 'text-yellow-300' : 'text-yellow-400'
+                    pg.active ? 'text-white' : 'text-white/75'
                   }`}
                 />
                 <span>{pg.name}</span>
                 {pg.count && (
                   <span
                     className={`text-[9.5px] px-1.5 py-0.2 rounded-full font-bold ${
-                      pg.active ? 'bg-white/25 text-white' : 'bg-white/15 text-yellow-200'
+                      pg.active ? 'bg-white/25 text-white' : 'bg-white/15 text-gray-200'
                     }`}
                   >
                     {pg.count}
@@ -376,11 +376,11 @@ export default function AdminDashboardPage() {
 
       {/* Compact KPI Cards Grid with Minimalist Pastel Circles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Total Sales (Pastel Yellow) */}
+        {/* Total Sales (Pastel Peach / Soft Amber) */}
         <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#FEF9C3] text-[#A16207] flex items-center justify-center text-sm shrink-0 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-sm shrink-0 shadow-2xs">
                 <i className="fa-solid fa-indian-rupee-sign" />
               </div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -392,7 +392,7 @@ export default function AdminDashboardPage() {
             <div className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               ₹{totalRevenue.toLocaleString('en-IN')}
             </div>
-            <span className="text-[10.5px] font-semibold text-yellow-800 bg-[#FEF9C3] px-1.5 py-0.5 rounded-md border border-yellow-200/70 flex items-center gap-1">
+            <span className="text-[10.5px] font-semibold text-[#C2410C] bg-[#FFF7ED] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/70 flex items-center gap-1">
               <i className="fa-solid fa-arrow-trend-up text-[9px]" />
               <span>18%</span>
             </span>
@@ -488,9 +488,9 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {/* Card 1: Pastel Yellow */}
+              {/* Card 1: Pastel Peach */}
               <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-3 rounded-xl border border-gray-200/60 flex flex-col items-center text-center">
-                <div className="w-9 h-9 rounded-xl bg-[#FEF9C3] text-[#A16207] flex items-center justify-center text-base mb-1.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-xl bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-base mb-1.5 shadow-2xs">
                   <i className="fa-solid fa-star" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -649,10 +649,10 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              {/* Alert 2: Pastel Yellow */}
+              {/* Alert 2: Pastel Peach */}
               <div className="p-2.5 bg-gray-50/70 rounded-xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-[#FEF9C3] text-[#A16207] flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-xs shrink-0">
                     <i className="fa-solid fa-shield-halved" />
                   </div>
                   <div>
@@ -664,7 +664,7 @@ export default function AdminDashboardPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-[9.5px] font-bold text-yellow-800 bg-[#FEF9C3] px-1.5 py-0.5 rounded-md border border-yellow-200/60">
+                <span className="text-[9.5px] font-bold text-[#C2410C] bg-[#FFF7ED] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/60">
                   Optimal
                 </span>
               </div>
@@ -694,9 +694,9 @@ export default function AdminDashboardPage() {
             <div className="mt-4 pt-3 border-t border-gray-100 flex flex-col gap-2">
               <Link
                 href="/admin/products"
-                className="w-full py-2 bg-gradient-to-r from-[#170E22] via-[#241334] to-[#150C20] hover:opacity-95 text-white text-xs font-bold rounded-xl text-center transition-opacity no-underline shadow-xs flex items-center justify-center gap-1.5 border border-yellow-400/30"
+                className="w-full py-2 bg-gradient-to-r from-[#170E22] via-[#241334] to-[#150C20] hover:opacity-95 text-white text-xs font-bold rounded-xl text-center transition-opacity no-underline shadow-xs flex items-center justify-center gap-1.5 border border-white/15"
               >
-                <i className="fa-solid fa-plus text-[10px] text-yellow-400" />
+                <i className="fa-solid fa-plus text-[10px] text-orange-200/90" />
                 <span>Add New Product</span>
               </Link>
 
