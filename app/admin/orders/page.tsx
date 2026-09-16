@@ -21,7 +21,7 @@ export default function AdminOrdersPage() {
   ];
 
   const statusBadgeStyle: Record<OrderStatus, string> = {
-    Pending: 'bg-amber-50 text-amber-700 border-amber-200',
+    Pending: 'bg-orange-50 text-orange-700 border-orange-200',
     Processing: 'bg-blue-50 text-blue-700 border-blue-200',
     Shipped: 'bg-purple-50 text-purple-700 border-purple-200',
     Delivered: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -51,7 +51,7 @@ export default function AdminOrdersPage() {
     <div className="flex flex-col gap-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-amber-500/30">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-orange-500/30">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
@@ -84,7 +84,7 @@ export default function AdminOrdersPage() {
               onClick={() => setSelectedStatus(st)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 selectedStatus === st
-                  ? 'bg-[#170E22] text-white shadow-xs border border-amber-500/30'
+                  ? 'bg-[#170E22] text-white shadow-xs border border-orange-500/30'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -226,7 +226,7 @@ export default function AdminOrdersPage() {
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-orange-600">
                   Order Breakdown
                 </span>
                 <h3 className="font-bold text-gray-900 text-lg">
@@ -297,7 +297,7 @@ export default function AdminOrdersPage() {
               <button
                 type="button"
                 onClick={() => setViewingOrder(null)}
-                className="px-5 py-2 text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white rounded-xl shadow-xs transition-colors cursor-pointer border border-amber-500/20"
+                className="px-5 py-2 text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white rounded-xl shadow-xs transition-colors cursor-pointer border border-orange-500/20"
               >
                 Close
               </button>
