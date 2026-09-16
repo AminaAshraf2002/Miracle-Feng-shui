@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { CartProvider } from '@/context/CartContext';
+import { StoreProvider } from '@/context/StoreContext';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { GuestNotificationToast } from '@/components/GuestNotificationToast';
@@ -39,13 +40,15 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-screen flex flex-col bg-white text-etsy-dark antialiased"
       >
-        <CartProvider>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-          <GuestNotificationToast />
-          <ScrollToTop />
-        </CartProvider>
+        <StoreProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+            <GuestNotificationToast />
+            <ScrollToTop />
+          </CartProvider>
+        </StoreProvider>
       </body>
     </html>
   );

@@ -283,6 +283,15 @@ export function Header() {
                           <i className="fa-regular fa-user text-[14px] text-gray-400 w-4 text-center shrink-0" />
                           <span className="font-medium text-gray-800">Edit profile</span>
                         </button>
+
+                        <Link
+                          href="/admin"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl hover:bg-purple-50 text-[#2A1D38] font-semibold transition-colors no-underline"
+                        >
+                          <i className="fa-solid fa-screwdriver-wrench text-[14px] text-[#A84218] w-4 text-center shrink-0" />
+                          <span>Admin Panel</span>
+                        </Link>
                       </div>
 
                       {/* Sign Out */}
@@ -488,6 +497,14 @@ export function Header() {
                 >
                   <i className="fa-solid fa-bag-shopping text-[15px] text-gray-500 w-5 text-center" />
                   <span>Cart ({count})</span>
+                </Link>
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-purple-50 text-[#2A1D38] font-bold text-[14px] mt-2 no-underline"
+                >
+                  <i className="fa-solid fa-screwdriver-wrench text-[15px] text-[#A84218] w-5 text-center" />
+                  <span>Admin Panel</span>
                 </Link>
               </div>
             </div>

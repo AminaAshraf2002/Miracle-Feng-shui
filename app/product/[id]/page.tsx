@@ -3,8 +3,9 @@
 import React, { useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { products, sampleReviews } from '@/lib/placeholder-data';
+import { sampleReviews } from '@/lib/placeholder-data';
 import { useCart } from '@/context/CartContext';
+import { useStore } from '@/context/StoreContext';
 
 export default function ProductDetailPage({
   params,
@@ -15,6 +16,7 @@ export default function ProductDetailPage({
   const { id } = resolvedParams;
   const router = useRouter();
   const { addItem, addFavorite, removeFavorite, isFavorite } = useCart();
+  const { products } = useStore();
 
   const product = products.find((p) => p.id === id) || products[0];
 

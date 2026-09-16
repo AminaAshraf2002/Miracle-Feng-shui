@@ -2,12 +2,14 @@
 
 import React, { Suspense, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { products, categories } from '@/lib/placeholder-data';
+import { categories } from '@/lib/placeholder-data';
 import { ProductCard } from '@/components/ProductCard';
+import { useStore } from '@/context/StoreContext';
 
 function EtsyShopContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { products } = useStore();
 
   const currentCategory = searchParams.get('category') || 'All';
   const searchQuery = searchParams.get('q') || '';

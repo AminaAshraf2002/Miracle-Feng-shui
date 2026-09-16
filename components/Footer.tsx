@@ -69,6 +69,11 @@ export function Footer() {
               <h3 className="text-[14px] font-bold text-[#222222] mb-3">Sell</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
+                  <Link href="/admin" className="hover:underline font-semibold text-[#A84218]">
+                    Merchant Admin Panel
+                  </Link>
+                </li>
+                <li>
                   <Link href="/shop" className="hover:underline">
                     Sell on Miracle feng shui
                   </Link>
