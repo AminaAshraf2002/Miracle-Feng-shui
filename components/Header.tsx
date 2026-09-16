@@ -84,6 +84,18 @@ export function Header() {
     };
   }, []);
 
+  // Lock body scroll while mobile search overlay is active to prevent page scrolling/bleed
+  React.useEffect(() => {
+    if (mobileSearchActive) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileSearchActive]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -133,78 +145,115 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-white border-b border-[#E0D7E8]">
         {/* Top Header Row */}
         <div className="etsy-container py-2 sm:py-2.5">
-          {/* Mobile Enlarged Search Bar (Active State when tapped/typing, exactly like Etsy) */}
+          {/* Mobile Full-Screen Fixed Search Overlay (Zero overlap with page content below) */}
           {mobileSearchActive && (
-            <div className="md:hidden flex items-center gap-2.5 py-0.5 w-full animate-in fade-in duration-150">
-              <form
-                onSubmit={(e) => {
-                  handleSearch(e);
-                  setMobileSearchActive(false);
-                }}
-                role="search"
-                className="flex-1 min-w-0 relative"
-              >
-                <div className="relative flex items-center">
-                  <input
-                    ref={mobileSearchInputRef}
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search"
-                    className="w-full h-10 pl-3.5 pr-9 rounded-full border-2 border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[14px] text-[#222222] placeholder-gray-500 bg-white shadow-2xs"
-                    autoFocus
-                  />
-                  {query && (
+            <div className="fixed inset-0 z-[9999] bg-white md:hidden flex flex-col animate-in fade-in duration-150">
+              {/* Fixed Top Search Bar */}
+              <div className="px-3.5 py-2.5 border-b border-gray-200 bg-white flex items-center gap-2.5 shadow-2xs">
+                <form
+                  onSubmit={(e) => {
+                    handleSearch(e);
+                    setMobileSearchActive(false);
+                  }}
+                  role="search"
+                  className="flex-1 min-w-0 relative"
+                >
+                  <div className="relative flex items-center">
+                    <i className="fa-solid fa-magnifying-glass text-[#3A1F62] absolute left-3.5 top-1/2 -translate-y-1/2 text-sm pointer-events-none" />
+                    <input
+                      ref={mobileSearchInputRef}
+                      type="text"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search for anything..."
+                      className="w-full h-10 pl-9 pr-9 rounded-full border border-gray-300 focus:border-[#3A1F62] focus:ring-1 focus:ring-[#3A1F62]/20 focus:outline-none text-[14.5px] text-[#222222] placeholder-gray-400 bg-white shadow-xs"
+                      autoFocus
+                    />
+                    {query && (
+                      <button
+                        type="button"
+                        onClick={() => setQuery('')}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 text-xs cursor-pointer"
+                        aria-label="Clear search text"
+                      >
+                        <i className="fa-solid fa-xmark text-sm" />
+                      </button>
+                    )}
+                  </div>
+                </form>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileSearchActive(false);
+                  }}
+                  className="text-[14.5px] font-bold text-[#222222] hover:text-black shrink-0 px-2 py-1 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+
+              {/* Suggestions / Popular Searches Container */}
+              <div className="flex-1 bg-white p-4 overflow-y-auto">
+                <p className="text-[11px] uppercase tracking-wider font-bold text-gray-400 mb-3">
+                  Popular Searches
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Crystal Tree',
+                    'Buddha Statue',
+                    'Pixiu Bracelet',
+                    'Wind Chime',
+                    'Evil Eye',
+                    'Wealth Coin',
+                    'Sandalwood',
+                    'Tibetan Singing Bowl',
+                  ].map((term) => (
                     <button
+                      key={term}
                       type="button"
-                      onClick={() => setQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 text-xs cursor-pointer"
-                      aria-label="Clear search text"
+                      onClick={() => {
+                        setQuery(term);
+                        router.push(`/shop?q=${encodeURIComponent(term)}`);
+                        setMobileSearchActive(false);
+                      }}
+                      className="px-3.5 py-1.5 rounded-full bg-[#FAF9F6] hover:bg-[#F3EEFC] text-gray-700 hover:text-[#3A1F62] text-xs font-medium border border-gray-200/80 transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
-                      <i className="fa-solid fa-xmark text-sm" />
+                      <i className="fa-solid fa-magnifying-glass text-[10px] text-gray-400" />
+                      <span>{term}</span>
                     </button>
-                  )}
+                  ))}
                 </div>
-              </form>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileSearchActive(false);
-                }}
-                className="text-[14px] font-semibold text-[#222222] hover:text-black shrink-0 px-1 py-1 cursor-pointer"
-              >
-                Cancel
-              </button>
+              </div>
             </div>
           )}
 
-          {/* Standard Header Row (Compact on mobile, full on desktop. Hidden on mobile while searching) */}
-          <div className={`${mobileSearchActive ? 'hidden md:flex' : 'flex'} items-center justify-between gap-1 sm:gap-2.5 md:gap-4 w-full`}>
+          {/* Standard Header Row */}
+          <div className="flex items-center justify-between gap-1 sm:gap-2.5 md:gap-4 w-full">
             {/* Left: Mobile Menu Button + Brand Logo */}
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               {/* Mobile Menu Button */}
               <button
                 type="button"
                 aria-label="Toggle navigation menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-1 sm:p-1.5 -ml-1 rounded-full hover:bg-etsy-bg-soft text-etsy-dark shrink-0 cursor-pointer"
+                className="lg:hidden p-1.5 -ml-1 rounded-full hover:bg-etsy-bg-soft text-etsy-dark shrink-0 cursor-pointer"
               >
                 {mobileMenuOpen ? <i className="fa-solid fa-xmark text-[18px]" /> : <i className="fa-solid fa-bars text-[18px]" />}
               </button>
 
-              {/* Logo: Round avatar + Brand Name (Static inline, matching Etsy) */}
+              {/* Logo: Round avatar + Brand Name (Increased sizes for mobile) */}
               <Link
                 href="/"
-                className="flex items-center gap-1 sm:gap-2 shrink-0 select-none hover:opacity-90 transition-opacity"
+                className="flex items-center gap-2 sm:gap-2.5 shrink-0 select-none hover:opacity-90 transition-opacity"
               >
-                <div className="w-[28px] h-[28px] sm:w-[38px] sm:h-[38px] md:w-[46px] md:h-[46px] rounded-full overflow-hidden shadow-2xs shrink-0 border border-black/10">
+                <div className="w-[38px] h-[38px] sm:w-[44px] sm:h-[44px] md:w-[48px] md:h-[48px] rounded-full overflow-hidden shadow-2xs shrink-0 border border-black/10">
                   <img
                     src="/images/miracle.jpeg"
                     alt="Miracle feng shui"
                     className="w-full h-full object-cover scale-105"
                   />
                 </div>
-                <span className="font-serif text-[18px] sm:text-[22px] md:text-[26px] font-bold text-[#222222] tracking-tight leading-none">
+                <span className="font-serif text-[22px] sm:text-[25px] md:text-[28px] font-bold text-[#222222] tracking-tight leading-none">
                   <span className="sm:hidden">Miracle</span>
                   <span className="hidden sm:inline">Miracle feng shui</span>
                 </span>

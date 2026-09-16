@@ -21,7 +21,7 @@ export default function AdminHomepageManager() {
   const getSectionIcon = (id: HomeSectionId) => {
     switch (id) {
       case 'hero':
-        return 'fa-star text-orange-500';
+        return 'fa-star text-yellow-500';
       case 'featured_interests':
         return 'fa-circle-nodes text-blue-500';
       case 'auspicious_collections':
@@ -31,7 +31,7 @@ export default function AdminHomepageManager() {
       case 'special_gifts':
         return 'fa-hand-holding-heart text-pink-500';
       case 'todays_deals':
-        return 'fa-bolt text-orange-500';
+        return 'fa-bolt text-amber-500';
       case 'fashion_guide':
         return 'fa-video text-teal-500';
       case 'sacred_knowledge':
@@ -45,7 +45,7 @@ export default function AdminHomepageManager() {
     <div className="flex flex-col gap-6">
       {/* Toast */}
       {saveToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-orange-500/30 animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-yellow-400/30 animate-bounce">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">Homepage section updated successfully!</span>
         </div>
@@ -80,9 +80,9 @@ export default function AdminHomepageManager() {
           <Link
             href="/"
             target="_blank"
-            className="bg-[#170E22] hover:bg-[#241334] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2 border border-orange-500/30"
+            className="bg-[#170E22] hover:bg-[#241334] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2 border border-yellow-400/30"
           >
-            <i className="fa-solid fa-eye text-orange-400" />
+            <i className="fa-solid fa-eye text-yellow-400" />
             <span>View Changes Live</span>
           </Link>
         </div>
@@ -197,7 +197,7 @@ export default function AdminHomepageManager() {
                 <button
                   type="button"
                   onClick={() => setEditingSection(section)}
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-orange-500/30"
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-yellow-400/30"
                 >
                   <i className="fa-solid fa-pen text-[11px]" />
                   <span>Edit Content</span>
