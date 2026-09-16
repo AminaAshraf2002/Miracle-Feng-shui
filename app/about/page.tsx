@@ -113,36 +113,17 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-white text-[#222222]">
-      {/* Sticky Secondary Subnav with Original Brand Logo */}
+      {/* Sticky Secondary Subnav (Clean navigation row without duplicate logo/name) */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E8E4DA] transition-all duration-200">
-        <div className="etsy-container flex items-center justify-between h-14">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/about"
-              className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
-            >
-              {/* Original Brand Logo */}
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shadow-2xs shrink-0 border border-black/10">
-                <img
-                  src="/images/miracle.jpeg"
-                  alt="Miracle feng shui"
-                  className="w-full h-full object-cover scale-105"
-                />
-              </div>
-              <span className="font-serif font-bold text-[18px] sm:text-[20px] tracking-tight text-[#222222]">
-                Miracle feng shui
-              </span>
-            </Link>
-          </div>
-
-          <nav className="flex items-center gap-1 sm:gap-4 text-xs font-semibold text-gray-600 overflow-x-auto no-scrollbar py-1">
+        <div className="etsy-container flex items-center justify-between h-13">
+          <nav className="flex items-center gap-1.5 sm:gap-4 text-[13px] font-semibold text-gray-600 overflow-x-auto no-scrollbar py-1">
             <button
               type="button"
               onClick={() => {
                 setActiveSubnav('about');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 activeSubnav === 'about'
                   ? 'bg-[#F3EEFC] text-[#3A1F62] font-bold'
                   : 'hover:bg-gray-100 hover:text-gray-900'
@@ -156,7 +137,7 @@ export default function AboutPage() {
                 setActiveSubnav('how-it-works');
                 document.getElementById('how-it-works-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 activeSubnav === 'how-it-works'
                   ? 'bg-[#F3EEFC] text-[#3A1F62] font-bold'
                   : 'hover:bg-gray-100 hover:text-gray-900'
@@ -170,7 +151,7 @@ export default function AboutPage() {
                 setActiveSubnav('artisans');
                 document.getElementById('artisan-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 activeSubnav === 'artisans'
                   ? 'bg-[#F3EEFC] text-[#3A1F62] font-bold'
                   : 'hover:bg-gray-100 hover:text-gray-900'
@@ -184,7 +165,7 @@ export default function AboutPage() {
                 setActiveSubnav('faq');
                 document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
+              className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 activeSubnav === 'faq'
                   ? 'bg-[#F3EEFC] text-[#3A1F62] font-bold'
                   : 'hover:bg-gray-100 hover:text-gray-900'
@@ -192,16 +173,19 @@ export default function AboutPage() {
             >
               Curious Minds
             </button>
-            <Link
-              href="/shop"
-              className="ml-2 hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white text-xs font-bold transition-all shadow-xs"
-            >
-              <span>Explore Collection</span>
-              <i className="fa-solid fa-arrow-right text-[10px]" />
-            </Link>
           </nav>
+
+          <Link
+            href="/shop"
+            style={{ color: '#FFFFFF' }}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-xs font-bold transition-all shadow-xs shrink-0"
+          >
+            <span>Explore Collection</span>
+            <i className="fa-solid fa-arrow-right text-[10px]" />
+          </Link>
         </div>
       </div>
+
 
       {/* SECTION 1: HERO STATEMENT SLIDE (Custom Miracle Feng Shui Master Craftsmanship Imagery) */}
       <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-[#E8E4DA] bg-white">
@@ -304,17 +288,19 @@ export default function AboutPage() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
                   href="/shop"
-                  className="px-7 py-3 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white text-sm font-bold transition-all shadow-sm active:scale-95 flex items-center gap-2"
+                  style={{ color: '#FFFFFF' }}
+                  className="px-7 py-3 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-sm font-bold transition-all shadow-sm active:scale-95 flex items-center gap-2"
                 >
-                  <span>Explore Handcrafted Sanctum</span>
-                  <i className="fa-solid fa-arrow-right text-xs" />
+                  <span style={{ color: '#FFFFFF' }}>Explore Handcrafted Sanctum</span>
+                  <i className="fa-solid fa-arrow-right text-xs" style={{ color: '#FFFFFF' }} />
                 </Link>
                 <button
                   type="button"
                   onClick={() => setActivePanel('values')}
-                  className="px-6 py-3 rounded-full bg-white hover:bg-gray-50 text-[#140D1F] border border-gray-300 text-sm font-bold transition-all active:scale-95 cursor-pointer"
+                  style={{ color: '#FFFFFF' }}
+                  className="px-6 py-3 rounded-full bg-[#140D1F] hover:bg-black !text-white text-sm font-bold transition-all active:scale-95 cursor-pointer shadow-xs"
                 >
-                  Read Guiding Principles
+                  <span style={{ color: '#FFFFFF' }}>Read Guiding Principles</span>
                 </button>
               </div>
             </div>
@@ -556,10 +542,10 @@ export default function AboutPage() {
                 <div>
                   <Link
                     href="/shop"
-                    style={{ color: '#FFFFFF', borderColor: '#FFFFFF' }}
-                    className="inline-block px-6 py-2.5 rounded-full border border-white hover:bg-white hover:!text-[#2F2E41] text-sm font-semibold transition-all shadow-xs"
+                    style={{ color: '#FFFFFF' }}
+                    className="inline-block px-6 py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-sm font-semibold transition-all shadow-xs"
                   >
-                    Become a seller
+                    <span style={{ color: '#FFFFFF' }}>Become a seller</span>
                   </Link>
                 </div>
               </div>
@@ -581,10 +567,10 @@ export default function AboutPage() {
                 <div>
                   <Link
                     href="/shop"
-                    style={{ color: '#FFFFFF', borderColor: '#FFFFFF' }}
-                    className="inline-block px-6 py-2.5 rounded-full border border-white hover:bg-white hover:!text-[#2F2E41] text-sm font-semibold transition-all shadow-xs"
+                    style={{ color: '#FFFFFF' }}
+                    className="inline-block px-6 py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-sm font-semibold transition-all shadow-xs"
                   >
-                    Start shopping
+                    <span style={{ color: '#FFFFFF' }}>Start shopping</span>
                   </Link>
                 </div>
               </div>
@@ -920,15 +906,17 @@ export default function AboutPage() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/shop"
-              className="px-8 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold text-sm transition-all shadow-lg hover:shadow-xl active:scale-95"
+              style={{ color: '#FFFFFF' }}
+              className="px-8 py-3.5 rounded-full bg-[#E05A47] hover:bg-[#C2410C] !text-white font-bold text-sm transition-all shadow-lg hover:shadow-xl active:scale-95"
             >
-              Start Exploring
+              <span style={{ color: '#FFFFFF' }}>Start Exploring</span>
             </Link>
             <Link
               href="/shop?category=Feng%20Shui%20Decor"
-              className="px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-all active:scale-95"
+              style={{ color: '#FFFFFF' }}
+              className="px-8 py-3.5 rounded-full bg-white/15 hover:bg-white/25 !text-white font-bold text-sm border border-white/30 transition-all active:scale-95"
             >
-              Browse Blessed Gifts
+              <span style={{ color: '#FFFFFF' }}>Browse Blessed Gifts</span>
             </Link>
           </div>
         </div>
