@@ -204,7 +204,7 @@ export function Header() {
                     className="w-full h-full object-cover scale-105"
                   />
                 </div>
-                <span className="font-serif text-[17px] sm:text-[22px] md:text-[26px] font-bold text-[#3A1F62] tracking-tight leading-none">
+                <span className="font-serif text-[18px] sm:text-[22px] md:text-[26px] font-bold text-[#222222] tracking-tight leading-none">
                   <span className="sm:hidden">Miracle</span>
                   <span className="hidden sm:inline">Miracle feng shui</span>
                 </span>
@@ -221,55 +221,56 @@ export function Header() {
               </button>
             </div>
 
-            {/* Middle: Inline Search Bar (Visible on BOTH Mobile & Desktop, matching Etsy) */}
+            {/* Middle: Desktop Search Bar (Hidden on mobile by default per user request) */}
             <form
               onSubmit={handleSearch}
               role="search"
-              className="flex-1 min-w-0 max-w-3xl mx-1 sm:mx-2 relative"
+              className="hidden md:block flex-1 min-w-0 max-w-3xl mx-3 relative"
             >
               <div className="relative flex items-center">
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  onFocus={() => {
-                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-                      setMobileSearchActive(true);
-                      setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
-                    }
-                  }}
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-                      setMobileSearchActive(true);
-                      setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
-                    }
-                  }}
                   placeholder="Search"
-                  className="w-full h-8 sm:h-10 md:h-11 pl-3 sm:pl-4 pr-8 sm:pr-11 rounded-full border border-gray-400/80 md:border-2 md:border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[12px] sm:text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs cursor-pointer md:cursor-text"
+                  className="w-full h-10 md:h-11 pl-4 pr-12 rounded-full border border-gray-400 md:border-2 md:border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
                 />
                 {query && (
                   <button
                     type="button"
                     onClick={() => setQuery('')}
-                    className="absolute right-8 sm:right-10 text-gray-400 hover:text-gray-600 p-0.5 text-xs cursor-pointer"
+                    className="absolute right-11 text-gray-400 hover:text-gray-600 p-0.5 text-xs cursor-pointer"
                     aria-label="Clear search text"
                   >
                     <i className="fa-solid fa-xmark text-[11px]" />
                   </button>
                 )}
-                {/* Etsy-Style Circular Search Button with Logo Purple Background */}
+                {/* Search Button with Logo Purple Background */}
                 <button
                   type="submit"
                   aria-label="Submit search"
-                  className="absolute right-0.5 sm:right-1 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-xs"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer shadow-xs"
                 >
-                  <i className="fa-solid fa-magnifying-glass text-[11px] sm:text-[12px]" />
+                  <i className="fa-solid fa-magnifying-glass text-[12px]" />
                 </button>
               </div>
             </form>
 
-            {/* Right Actions: Indian Flag 🇮🇳 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
-            <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+            {/* Right Actions: Mobile Search Icon 🔍 | Indian Flag 🇮🇳 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              {/* Mobile Search Icon Trigger Button (Shows only search icon on mobile by default) */}
+              <button
+                type="button"
+                aria-label="Open search"
+                onClick={() => {
+                  setMobileSearchActive(true);
+                  setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
+                }}
+                className="md:hidden w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center cursor-pointer transition-colors shrink-0"
+              >
+                <i className="fa-solid fa-magnifying-glass text-[17px] text-[#3A1F62]" />
+              </button>
+
               {/* Region Button with Tooltip (Indian Flag) */}
               <div
                 className="relative"
