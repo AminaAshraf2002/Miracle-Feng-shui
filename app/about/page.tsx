@@ -63,7 +63,8 @@ export default function AboutPage() {
   // Scroll listener to update sticky animation on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.innerHeight * 0.45;
+      const isMobile = window.innerWidth < 1024;
+      const offset = window.innerHeight * (isMobile ? 0.65 : 0.45);
       const getTop = (el: HTMLElement | null) =>
         el ? el.getBoundingClientRect().top : Infinity;
 
@@ -107,7 +108,15 @@ export default function AboutPage() {
     const targets = [step1Ref, step2Ref, step3Ref];
     const target = targets[index]?.current;
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const isMobile = window.innerWidth < 1024;
+      if (isMobile) {
+        const rect = target.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetY = scrollTop + rect.top - 280;
+        window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   };
 
@@ -284,23 +293,23 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              {/* Action Buttons (One Row on both Mobile & Desktop) */}
+              <div className="mt-6 sm:mt-8 flex flex-row flex-nowrap items-center gap-2.5 sm:gap-4 w-full max-w-md">
                 <Link
                   href="/shop"
                   style={{ color: '#FFFFFF' }}
-                  className="px-7 py-3 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-sm font-bold transition-all shadow-sm active:scale-95 flex items-center gap-2"
+                  className="flex-1 min-w-0 text-center py-3 px-2 sm:px-6 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-xs sm:text-sm font-bold transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 whitespace-nowrap"
                 >
-                  <span style={{ color: '#FFFFFF' }}>Explore Handcrafted Sanctum</span>
-                  <i className="fa-solid fa-arrow-right text-xs" style={{ color: '#FFFFFF' }} />
+                  <span style={{ color: '#FFFFFF' }}>Explore Sanctum</span>
+                  <i className="fa-solid fa-arrow-right text-[10px] sm:text-xs" style={{ color: '#FFFFFF' }} />
                 </Link>
                 <button
                   type="button"
                   onClick={() => setActivePanel('values')}
                   style={{ color: '#FFFFFF' }}
-                  className="px-6 py-3 rounded-full bg-[#140D1F] hover:bg-black !text-white text-sm font-bold transition-all active:scale-95 cursor-pointer shadow-xs"
+                  className="flex-1 min-w-0 text-center py-3 px-2 sm:px-6 rounded-full bg-[#140D1F] hover:bg-black !text-white text-xs sm:text-sm font-bold transition-all active:scale-95 cursor-pointer shadow-xs whitespace-nowrap flex items-center justify-center"
                 >
-                  <span style={{ color: '#FFFFFF' }}>Read Guiding Principles</span>
+                  <span style={{ color: '#FFFFFF' }}>Guiding Principles</span>
                 </button>
               </div>
             </div>
@@ -504,38 +513,135 @@ export default function AboutPage() {
         className="relative py-16 sm:py-24"
       >
         <div className="etsy-container">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start relative">
+          {/* Section Intro */}
+          <div ref={step0Ref} className="pt-4 sm:pt-8 mb-6 sm:mb-12 max-w-2xl">
+            <h2
+              style={{ color: '#FFFFFF' }}
+              className="text-2xl sm:text-4xl md:text-5xl font-serif font-normal tracking-tight leading-[1.18] mb-4 !text-white"
+            >
+              How Miracle Feng Shui Works
+            </h2>
+            <p
+              style={{ color: '#F1F5F9' }}
+              className="text-sm sm:text-base md:text-lg leading-relaxed font-normal"
+            >
+              Our global marketplace is a vibrant community of authentic artisans connecting over sacred handcrafted goods. The platform empowers master carvers to preserve ancestral art and helps seekers discover genuine spiritual harmony.
+            </p>
+          </div>
+
+          {/* Dual layout: Sticky on both Mobile & Desktop */}
+          <div className="relative lg:grid lg:grid-cols-12 lg:gap-16 lg:items-start">
             
-            {/* Left Column: Scrolling Content Blocks with 100% Guaranteed Bright Visible Text */}
-            <div className="lg:col-span-7 space-y-28 sm:space-y-36">
-              
-              {/* Step 0: Intro Section */}
-              <div ref={step0Ref} className="pt-4 sm:pt-8 min-h-[36vh] flex flex-col justify-center">
-                <h2
-                  style={{ color: '#FFFFFF' }}
-                  className="text-3xl sm:text-4xl md:text-5xl font-serif font-normal tracking-tight leading-[1.18] mb-6 !text-white"
-                >
-                  How Miracle Feng Shui Works
-                </h2>
-                <p
-                  style={{ color: '#F1F5F9' }}
-                  className="text-base sm:text-lg leading-relaxed max-w-xl font-normal"
-                >
-                  Our global marketplace is a vibrant community of authentic artisans connecting over sacred handcrafted goods. The platform empowers master carvers to preserve ancestral art and helps seekers discover genuine spiritual harmony.
-                </p>
+            {/* Sticky 3-Circle Cluster (Sticky on BOTH Mobile & Desktop) */}
+            <div className="sticky top-13 sm:top-14 lg:top-[20vh] z-30 lg:col-span-5 lg:order-2 py-3 sm:py-4 lg:py-0 flex flex-col items-center justify-center bg-[#2F2E41]/95 backdrop-blur-md lg:bg-transparent rounded-2xl lg:rounded-none border-b border-white/10 lg:border-b-0 shadow-lg lg:shadow-none mb-6 lg:mb-0">
+              <div className="relative w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[390px] aspect-[4/3] sm:aspect-square flex items-center justify-center mx-auto">
+                {/* Background Silhouette Disk */}
+                <div className="absolute inset-1 sm:inset-2 rounded-full bg-[#242335] opacity-90 transition-transform duration-700 pointer-events-none" />
+
+                {/* 3 Circular Badges in Triangular Composition with fluid sliding & scaling */}
+                <div className="relative w-full h-full">
+                  {/* Circle 1: TOP (Craft / Master Carved) */}
+                  <div
+                    onClick={() => scrollToStep(0)}
+                    className={`absolute left-1/2 -translate-x-1/2 top-1 sm:top-3 w-24 h-24 sm:w-34 sm:h-34 lg:w-40 lg:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
+                      activeStep === 0
+                        ? 'scale-110 sm:scale-115 ring-4 ring-amber-400 z-20 shadow-2xl brightness-105 -translate-y-1'
+                        : 'scale-90 opacity-70 z-10 hover:opacity-100 hover:scale-95'
+                    }`}
+                  >
+                    <img
+                      src="/images/artisan_carving_jade.jpg"
+                      alt="Artisan Carving Jade"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex items-end justify-center pb-1 sm:pb-2">
+                      <span className="text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-300 drop-shadow-sm">
+                        Master Carved
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Circle 2: BOTTOM LEFT (Bless / Consecrated) */}
+                  <div
+                    onClick={() => scrollToStep(1)}
+                    className={`absolute left-1 sm:left-2 bottom-1 sm:bottom-3 w-24 h-24 sm:w-34 sm:h-34 lg:w-40 lg:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
+                      activeStep === 1
+                        ? 'scale-110 sm:scale-115 ring-4 ring-purple-400 z-20 shadow-2xl brightness-105 -translate-y-1'
+                        : 'scale-90 opacity-70 z-10 hover:opacity-100 hover:scale-95'
+                    }`}
+                  >
+                    <img
+                      src="/images/consecration_singing_bowl.jpg"
+                      alt="Singing Bowl Consecration"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex items-end justify-center pb-1 sm:pb-2">
+                      <span className="text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider text-purple-200 drop-shadow-sm">
+                        Consecrated
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Circle 3: BOTTOM RIGHT (Protect / Delivery) */}
+                  <div
+                    onClick={() => scrollToStep(2)}
+                    className={`absolute right-1 sm:right-2 bottom-1 sm:bottom-3 w-24 h-24 sm:w-34 sm:h-34 lg:w-40 lg:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
+                      activeStep === 2
+                        ? 'scale-110 sm:scale-115 ring-4 ring-emerald-400 z-20 shadow-2xl brightness-105 -translate-y-1'
+                        : 'scale-90 opacity-70 z-10 hover:opacity-100 hover:scale-95'
+                    }`}
+                  >
+                    <img
+                      src="/images/sacred_talisman_delivery.jpg"
+                      alt="Sacred Talisman Delivery"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex items-end justify-center pb-1 sm:pb-2">
+                      <span className="text-[8.5px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-300 drop-shadow-sm">
+                        Protected Delivery
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
+              {/* Mobile Quick Step Indicator Pills with dynamic color match */}
+              <div className="lg:hidden flex items-center justify-center gap-2 mt-2 pb-1 w-full">
+                {[
+                  { idx: 0, label: '01. Craft', activeColor: 'bg-amber-400 text-[#140D1F]' },
+                  { idx: 1, label: '02. Bless', activeColor: 'bg-purple-300 text-[#140D1F]' },
+                  { idx: 2, label: '03. Protect', activeColor: 'bg-emerald-400 text-[#140D1F]' },
+                ].map((item) => (
+                  <button
+                    key={item.idx}
+                    type="button"
+                    onClick={() => scrollToStep(item.idx)}
+                    className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                      activeStep === item.idx
+                        ? `${item.activeColor} scale-105 shadow-md`
+                        : 'bg-white/15 text-gray-200 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Left Column: Scrolling Content Blocks */}
+            <div className="lg:col-span-7 lg:order-1 space-y-16 sm:space-y-28 lg:space-y-36 pt-4 lg:pt-0">
+              
               {/* Step 1: Craft Extraordinarily */}
-              <div ref={step1Ref} className="min-h-[45vh] flex flex-col justify-center">
+              <div ref={step1Ref} className="min-h-[35vh] sm:min-h-[45vh] flex flex-col justify-center">
                 <h3
                   style={{ color: '#FFFFFF' }}
-                  className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-tight mb-4 !text-white"
+                  className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight leading-tight mb-3 !text-white"
                 >
                   Sell extraordinarily
                 </h3>
                 <p
                   style={{ color: '#F1F5F9' }}
-                  className="text-base sm:text-lg leading-relaxed max-w-xl mb-6 font-normal"
+                  className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl mb-5 font-normal"
                 >
                   With low fees, powerful tools, and support and education, we help creative artisans and lapidaries start, manage, and scale their businesses. Want to become a Miracle Feng Shui artisan seller? All it takes is $0.20 to get started.
                 </p>
@@ -543,7 +649,7 @@ export default function AboutPage() {
                   <Link
                     href="/shop"
                     style={{ color: '#FFFFFF' }}
-                    className="inline-block px-6 py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-sm font-semibold transition-all shadow-xs"
+                    className="inline-block px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-xs sm:text-sm font-semibold transition-all shadow-xs whitespace-nowrap"
                   >
                     <span style={{ color: '#FFFFFF' }}>Become a seller</span>
                   </Link>
@@ -551,16 +657,16 @@ export default function AboutPage() {
               </div>
 
               {/* Step 2: Buy Extraordinary */}
-              <div ref={step2Ref} className="min-h-[45vh] flex flex-col justify-center">
+              <div ref={step2Ref} className="min-h-[35vh] sm:min-h-[45vh] flex flex-col justify-center">
                 <h3
                   style={{ color: '#FFFFFF' }}
-                  className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-tight mb-4 !text-white"
+                  className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight leading-tight mb-3 !text-white"
                 >
                   Buy extraordinary
                 </h3>
                 <p
                   style={{ color: '#F1F5F9' }}
-                  className="text-base sm:text-lg leading-relaxed max-w-xl mb-6 font-normal"
+                  className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl mb-5 font-normal"
                 >
                   From natural unheated crystals to personalized zodiac talismans, our curation helps seekers explore genuine one-of-a-kind artifacts. Our Journal and Curated Selections showcase auspicious blessings discovered in the marketplace by our master practitioners.
                 </p>
@@ -568,7 +674,7 @@ export default function AboutPage() {
                   <Link
                     href="/shop"
                     style={{ color: '#FFFFFF' }}
-                    className="inline-block px-6 py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-sm font-semibold transition-all shadow-xs"
+                    className="inline-block px-5 sm:px-6 py-2 sm:py-2.5 rounded-full border border-white bg-white/10 hover:bg-white/20 !text-white text-xs sm:text-sm font-semibold transition-all shadow-xs whitespace-nowrap"
                   >
                     <span style={{ color: '#FFFFFF' }}>Start shopping</span>
                   </Link>
@@ -576,16 +682,16 @@ export default function AboutPage() {
               </div>
 
               {/* Step 3: Shop Securely */}
-              <div ref={step3Ref} className="min-h-[45vh] pb-12 flex flex-col justify-center">
+              <div ref={step3Ref} className="min-h-[35vh] sm:min-h-[45vh] pb-8 sm:pb-12 flex flex-col justify-center">
                 <h3
                   style={{ color: '#FFFFFF' }}
-                  className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-tight mb-4 !text-white"
+                  className="text-2xl sm:text-3xl lg:text-4xl font-serif font-normal tracking-tight leading-tight mb-3 !text-white"
                 >
                   Shop securely
                 </h3>
                 <p
                   style={{ color: '#F1F5F9' }}
-                  className="text-base sm:text-lg leading-relaxed max-w-xl font-normal"
+                  className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl font-normal"
                 >
                   We provide the technology behind the Miracle Feng Shui marketplace, ensuring certified mineral authenticity, encrypted transactions, and insured delivery. Keeping your sacred sanctuary protected and joyful is our priority, and we&apos;re always{' '}
                   <Link
@@ -599,84 +705,6 @@ export default function AboutPage() {
                 </p>
               </div>
 
-            </div>
-
-            {/* Right Column: Sticky Authentic Feng Shui 3-Circle Cluster (Using Photographic Artisan Assets) */}
-            <div className="lg:col-span-5 lg:sticky lg:top-[20vh] flex items-center justify-center py-8 lg:py-0">
-              <div className="relative w-full max-w-[390px] aspect-square flex items-center justify-center">
-                
-                {/* Background Silhouette Disk */}
-                <div className="absolute inset-2 rounded-full bg-[#242335] opacity-90 transition-transform duration-700 pointer-events-none" />
-
-                {/* 3 Circular Badges in Triangular Composition */}
-                <div className="relative w-full h-full">
-
-                  {/* Circle 1: TOP (Authentic Master Carving Jade) */}
-                  <div
-                    onClick={() => scrollToStep(0)}
-                    className={`absolute left-1/2 -translate-x-1/2 top-3 w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
-                      activeStep === 0
-                        ? 'scale-110 ring-4 ring-amber-400 z-20 shadow-2xl brightness-105'
-                        : 'scale-95 opacity-75 z-10 hover:opacity-100 hover:scale-100'
-                    }`}
-                  >
-                    <img
-                      src="/images/artisan_carving_jade.jpg"
-                      alt="Artisan Carving Jade"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 drop-shadow-sm">
-                        Master Carved
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Circle 2: BOTTOM LEFT (Sacred Tibetan Singing Bowl Consecration) */}
-                  <div
-                    onClick={() => scrollToStep(1)}
-                    className={`absolute left-2 bottom-3 w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
-                      activeStep === 1
-                        ? 'scale-110 ring-4 ring-purple-400 z-20 shadow-2xl brightness-105'
-                        : 'scale-95 opacity-75 z-10 hover:opacity-100 hover:scale-100'
-                    }`}
-                  >
-                    <img
-                      src="/images/consecration_singing_bowl.jpg"
-                      alt="Singing Bowl Consecration"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-purple-200 drop-shadow-sm">
-                        Consecrated
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Circle 3: BOTTOM RIGHT (Sacred Talisman Delivery in Embroidered Silk) */}
-                  <div
-                    onClick={() => scrollToStep(2)}
-                    className={`absolute right-2 bottom-3 w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden transition-all duration-500 cursor-pointer shadow-xl ${
-                      activeStep === 2
-                        ? 'scale-110 ring-4 ring-emerald-400 z-20 shadow-2xl brightness-105'
-                        : 'scale-95 opacity-75 z-10 hover:opacity-100 hover:scale-100'
-                    }`}
-                  >
-                    <img
-                      src="/images/sacred_talisman_delivery.jpg"
-                      alt="Sacred Talisman Delivery"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-center pb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 drop-shadow-sm">
-                        Protected Delivery
-                      </span>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
             </div>
 
           </div>
@@ -904,18 +932,18 @@ export default function AboutPage() {
           >
             Every home deserves serenity, prosperity, and authentic energetic balance. Experience the genuine difference of consecrated, artisan-carved talismans.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 w-full max-w-md mx-auto px-2">
             <Link
               href="/shop"
               style={{ color: '#FFFFFF' }}
-              className="px-8 py-3.5 rounded-full bg-[#E05A47] hover:bg-[#C2410C] !text-white font-bold text-sm transition-all shadow-lg hover:shadow-xl active:scale-95"
+              className="flex-1 min-w-0 text-center py-3 px-2.5 sm:px-6 rounded-full bg-[#E05A47] hover:bg-[#C2410C] !text-white font-bold text-xs sm:text-sm transition-all shadow-lg hover:shadow-xl active:scale-95 whitespace-nowrap flex items-center justify-center"
             >
               <span style={{ color: '#FFFFFF' }}>Start Exploring</span>
             </Link>
             <Link
               href="/shop?category=Feng%20Shui%20Decor"
               style={{ color: '#FFFFFF' }}
-              className="px-8 py-3.5 rounded-full bg-white/15 hover:bg-white/25 !text-white font-bold text-sm border border-white/30 transition-all active:scale-95"
+              className="flex-1 min-w-0 text-center py-3 px-2.5 sm:px-6 rounded-full bg-white/15 hover:bg-white/25 !text-white font-bold text-xs sm:text-sm border border-white/30 transition-all active:scale-95 whitespace-nowrap flex items-center justify-center"
             >
               <span style={{ color: '#FFFFFF' }}>Browse Blessed Gifts</span>
             </Link>
