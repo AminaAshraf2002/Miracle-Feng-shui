@@ -16,6 +16,8 @@ export function Header() {
   const { count, userLoggedIn, setUserLoggedIn } = useCart();
   const [query, setQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const [showRegionModal, setShowRegionModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -130,77 +132,151 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-white border-b border-[#E0D7E8]">
         {/* Top Header Row */}
         <div className="etsy-container py-2 sm:py-2.5 relative">
-          <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-5">
-            {/* Mobile Menu Button */}
-            <button
-              type="button"
-              aria-label="Toggle navigation menu"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 -ml-1 rounded-full hover:bg-etsy-bg-soft text-etsy-dark shrink-0"
-            >
-              {mobileMenuOpen ? <i className="fa-solid fa-xmark text-[19px]" /> : <i className="fa-solid fa-bars text-[19px]" />}
-            </button>
+          {/* Mobile Enlarged Search Bar (Takes over entire mobile header when active) */}
+          {mobileSearchOpen ? (
+            <div className="md:hidden flex items-center gap-2 py-1 w-full animate-in fade-in zoom-in-95 duration-150">
+              <button
+                type="button"
+                aria-label="Back to navigation"
+                onClick={() => {
+                  setMobileSearchOpen(false);
+                }}
+                className="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-700 hover:text-black shrink-0 cursor-pointer transition-colors"
+              >
+                <i className="fa-solid fa-arrow-left text-[16px]" />
+              </button>
 
-            {/* Logo with round shape miracle.jpeg */}
-            <Link
-              href="/"
-              className="absolute md:static left-[calc(50%-22px)] top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 z-10 flex items-center gap-2 sm:gap-3 shrink-0 select-none hover:opacity-90 transition-opacity group"
-            >
-              <div className="w-[38px] h-[38px] sm:w-[46px] sm:h-[46px] md:w-[54px] md:h-[54px] rounded-full overflow-hidden shadow-xs shrink-0 border border-black/10">
-                <img
-                  src="/images/miracle.jpeg"
-                  alt="Miracle feng shui"
-                  className="w-full h-full object-cover scale-105"
-                />
-              </div>
-              <span className="font-serif text-[20px] sm:text-[24px] md:text-[28px] font-semibold text-[#222222] tracking-tight leading-none">
-                <span className="sm:hidden">Miracle</span>
-                <span className="hidden sm:inline">Miracle feng shui</span>
-              </span>
-            </Link>
-
-            {/* Categories Trigger Button (Desktop Only) */}
-            <button
-              type="button"
-              onClick={() => router.push('/shop')}
-              className="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-full hover:bg-etsy-bg-soft text-[14px] font-semibold text-etsy-dark shrink-0 transition-colors"
-            >
-              <i className="fa-solid fa-bars text-[14px]" />
-              <span>Categories</span>
-            </button>
-
-            {/* Search Bar (Desktop & Tablet only - Hidden on mobile as requested) */}
-            <form
-              onSubmit={handleSearch}
-              role="search"
-              className="hidden md:block flex-grow min-w-0 max-w-3xl relative"
-            >
-              <div className="relative flex items-center">
+              <form
+                onSubmit={(e) => {
+                  handleSearch(e);
+                  setMobileSearchOpen(false);
+                }}
+                className="flex-1 flex items-center relative min-w-0"
+              >
                 <input
+                  ref={mobileSearchInputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search"
-                  className="w-full h-11 pl-4 pr-12 rounded-full border-2 border-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E] text-[15px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
+                  placeholder="Search crystals, bracelets, cures..."
+                  className="w-full h-10 pl-3.5 pr-20 rounded-full border-2 border-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E] text-[14px] text-[#222222] placeholder-gray-400 bg-white transition-all shadow-xs"
+                  autoFocus
                 />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    className="absolute right-10 text-gray-400 hover:text-gray-700 p-1 text-xs"
+                    aria-label="Clear search text"
+                  >
+                    <i className="fa-solid fa-xmark text-sm" />
+                  </button>
+                )}
                 <button
                   type="submit"
                   aria-label="Submit search"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0"
                 >
-                  <i className="fa-solid fa-magnifying-glass text-[13px]" />
+                  <i className="fa-solid fa-magnifying-glass text-[12px]" />
                 </button>
-              </div>
-            </form>
+              </form>
 
-            {/* Right Actions: Indian Flag 🇮🇳 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              {/* Region Button with Tooltip (Indian Flag) */}
-              <div
-                className="relative"
-                onMouseEnter={() => setHoveredIcon('region')}
-                onMouseLeave={() => setHoveredIcon(null)}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileSearchOpen(false);
+                  setQuery('');
+                }}
+                className="text-xs font-semibold text-gray-600 hover:text-black px-1.5 py-1 shrink-0 cursor-pointer transition-colors"
               >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-5">
+              {/* Mobile Menu Button */}
+              <button
+                type="button"
+                aria-label="Toggle navigation menu"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-1.5 -ml-1 rounded-full hover:bg-etsy-bg-soft text-etsy-dark shrink-0"
+              >
+                {mobileMenuOpen ? <i className="fa-solid fa-xmark text-[19px]" /> : <i className="fa-solid fa-bars text-[19px]" />}
+              </button>
+
+              {/* Logo with round shape miracle.jpeg */}
+              <Link
+                href="/"
+                className="absolute md:static left-[calc(50%-22px)] top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 z-10 flex items-center gap-2 sm:gap-3 shrink-0 select-none hover:opacity-90 transition-opacity group"
+              >
+                <div className="w-[38px] h-[38px] sm:w-[46px] sm:h-[46px] md:w-[54px] md:h-[54px] rounded-full overflow-hidden shadow-xs shrink-0 border border-black/10">
+                  <img
+                    src="/images/miracle.jpeg"
+                    alt="Miracle feng shui"
+                    className="w-full h-full object-cover scale-105"
+                  />
+                </div>
+                <span className="font-serif text-[20px] sm:text-[24px] md:text-[28px] font-semibold text-[#222222] tracking-tight leading-none">
+                  <span className="sm:hidden">Miracle</span>
+                  <span className="hidden sm:inline">Miracle feng shui</span>
+                </span>
+              </Link>
+
+              {/* Categories Trigger Button (Desktop Only) */}
+              <button
+                type="button"
+                onClick={() => router.push('/shop')}
+                className="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-full hover:bg-etsy-bg-soft text-[14px] font-semibold text-etsy-dark shrink-0 transition-colors"
+              >
+                <i className="fa-solid fa-bars text-[14px]" />
+                <span>Categories</span>
+              </button>
+
+              {/* Search Bar (Desktop & Tablet only) */}
+              <form
+                onSubmit={handleSearch}
+                role="search"
+                className="hidden md:block flex-grow min-w-0 max-w-3xl relative"
+              >
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search"
+                    className="w-full h-11 pl-4 pr-12 rounded-full border-2 border-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E] text-[15px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Submit search"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0"
+                  >
+                    <i className="fa-solid fa-magnifying-glass text-[13px]" />
+                  </button>
+                </div>
+              </form>
+
+              {/* Right Actions: Mobile Search 🔍 | Indian Flag 🇮🇳 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
+              <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                {/* Mobile Search Icon Trigger */}
+                <button
+                  type="button"
+                  aria-label="Open search"
+                  onClick={() => {
+                    setMobileSearchOpen(true);
+                    setTimeout(() => mobileSearchInputRef.current?.focus(), 60);
+                  }}
+                  className="md:hidden w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center text-[#222222] transition-colors cursor-pointer"
+                >
+                  <i className="fa-solid fa-magnifying-glass text-[16px]" />
+                </button>
+
+                {/* Region Button with Tooltip (Indian Flag) */}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setHoveredIcon('region')}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                >
                 <button
                   type="button"
                   aria-label="Select region and currency"
@@ -371,7 +447,8 @@ export function Header() {
               </div>
             </div>
           </div>
-        </div>
+        )}
+      </div>
 
         {/* Secondary Categories Navigation Bar (Desktop & Tablet) */}
         <nav className="border-t border-[#E1E3DF] bg-white hidden md:block">
