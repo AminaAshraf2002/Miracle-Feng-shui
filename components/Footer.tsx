@@ -103,18 +103,23 @@ export function Footer() {
               <h3 className="text-[14px] font-bold text-[#222222] mb-3">About</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
-                  <Link href="/shop" className="hover:underline">
-                    Miracle feng shui, Inc.
+                  <Link href="/about" className="hover:underline font-medium">
+                    About Miracle feng shui
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy-policy" className="hover:underline">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:underline">
+                    Terms & Conditions
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Policies
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shop" className="hover:underline">
-                    Investors
+                    Impact & Artisan Heritage
                   </Link>
                 </li>
                 <li>
@@ -129,12 +134,7 @@ export function Footer() {
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Impact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shop" className="hover:underline">
-                    Legal imprint
+                    Legal Imprint
                   </Link>
                 </li>
               </ul>
@@ -365,10 +365,13 @@ export function Footer() {
           {/* Right: Copyright & Legal links */}
           <div className="flex flex-wrap items-center justify-center gap-4 text-[#222222]">
             <span>© {currentYear} Miracle feng shui, Inc.</span>
-            <Link href="/shop" className="hover:underline">
+            <Link href="/about" className="hover:underline font-medium">
+              About
+            </Link>
+            <Link href="/terms" className="hover:underline">
               Terms of Use
             </Link>
-            <Link href="/shop" className="hover:underline">
+            <Link href="/privacy-policy" className="hover:underline">
               Privacy
             </Link>
             <Link href="/shop" className="hover:underline">
@@ -376,9 +379,6 @@ export function Footer() {
             </Link>
             <Link href="/shop" className="hover:underline">
               Local Shops
-            </Link>
-            <Link href="/shop" className="hover:underline">
-              Regions
             </Link>
           </div>
         </div>

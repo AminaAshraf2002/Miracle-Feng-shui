@@ -106,13 +106,6 @@ export function Header() {
     }
   };
 
-  // Top popular products frequently searched by customers
-  const popularSearchedProducts = useMemo(() => {
-    return products
-      .filter((p) => p.bestseller || (p.rating && p.rating >= 4.8))
-      .slice(0, 7);
-  }, []);
-
   // Live matching products while typing in mobile search
   const mobileLiveMatches = useMemo(() => {
     if (!query.trim()) return [];
@@ -214,113 +207,46 @@ export function Header() {
                 </button>
               </div>
 
-              {/* Suggestions / Popular Searches & Most Searched Products Container */}
-              <div className="flex-1 bg-[#FAFAFA] p-3.5 sm:p-4 overflow-y-auto">
+              {/* Suggestions / Popular Searches Container */}
+              <div className="flex-1 bg-white p-4 overflow-y-auto">
                 {!query.trim() ? (
-                  <div className="flex flex-col gap-5">
+                  <div>
                     {/* Trending Keywords (Popular Searches) */}
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-2.5">
-                        <i className="fa-solid fa-arrow-trend-up text-xs text-[#3A1F62]" />
-                        <span className="text-[11px] uppercase tracking-wider font-bold text-gray-500">
-                          Popular Searches
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {[
-                          'Pixiu Wealth Bracelet',
-                          'Citrine Money Tree',
-                          'S925 Pixiu Ring',
-                          'Blackwood Amulet',
-                          'Tibetan Singing Bowl',
-                          'Laughing Buddha',
-                          '7 Chakra Gemstone Tree',
-                          'Tai Sui Protection',
-                          'Feng Shui Tortoise',
-                          'Evil Eye Wall Charm',
-                          'Chinese Wealth Coins',
-                          'Rose Quartz Tree',
-                        ].map((term) => (
-                          <button
-                            key={term}
-                            type="button"
-                            onClick={() => {
-                              setQuery(term);
-                              router.push(`/shop?q=${encodeURIComponent(term)}`);
-                              setMobileSearchActive(false);
-                            }}
-                            className="px-3 py-1.5 rounded-full bg-white hover:bg-[#F3EEFC] text-gray-700 hover:text-[#3A1F62] text-xs font-medium border border-gray-200 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
-                          >
-                            <i className="fa-solid fa-magnifying-glass text-[10px] text-gray-400" />
-                            <span>{term}</span>
-                          </button>
-                        ))}
-                      </div>
+                    <div className="flex items-center gap-1.5 mb-3">
+                      <i className="fa-solid fa-arrow-trend-up text-xs text-[#3A1F62]" />
+                      <span className="text-[11.5px] uppercase tracking-wider font-bold text-gray-500">
+                        Popular Searches
+                      </span>
                     </div>
-
-                    {/* Most Searched Products by Shoppers */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2.5 pb-1.5 border-b border-gray-200">
-                        <div className="flex items-center gap-1.5">
-                          <i className="fa-solid fa-fire text-xs text-amber-500" />
-                          <span className="text-[11px] uppercase tracking-wider font-bold text-gray-800">
-                            Most Searched Products
-                          </span>
-                        </div>
-                        <span className="text-[9.5px] font-bold text-[#3A1F62] bg-[#F3EEFC] border border-[#3A1F62]/20 px-2 py-0.5 rounded-full">
-                          Trending Now
-                        </span>
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        {popularSearchedProducts.map((prod) => (
-                          <div
-                            key={prod.id}
-                            onClick={() => {
-                              router.push(`/product/${prod.id}`);
-                              setMobileSearchActive(false);
-                            }}
-                            className="flex items-center gap-3 p-2 rounded-xl border border-gray-200/80 bg-white hover:border-[#3A1F62]/40 hover:bg-[#FAF8FD] transition-all cursor-pointer shadow-2xs active:scale-[0.99]"
-                          >
-                            <img
-                              src={prod.images[0]}
-                              alt={prod.name}
-                              className="w-14 h-14 rounded-lg object-cover bg-gray-100 shrink-0 border border-black/5"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-bold text-gray-900 truncate leading-snug">
-                                {prod.name}
-                              </p>
-                              <div className="flex items-center gap-2 mt-0.5">
-                                <span className="text-[10.5px] text-gray-400 truncate">
-                                  {prod.category}
-                                </span>
-                                <span className="text-[10px] text-amber-600 font-semibold flex items-center gap-0.5">
-                                  <i className="fa-solid fa-star text-[8.5px]" />
-                                  <span>{prod.rating}</span>
-                                  <span className="text-gray-400 font-normal">({prod.reviewCount})</span>
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs font-bold text-gray-900">
-                                  ₹{prod.price.toLocaleString('en-IN')}
-                                </span>
-                                {prod.originalPrice && (
-                                  <span className="text-[10.5px] text-gray-400 line-through">
-                                    ₹{prod.originalPrice.toLocaleString('en-IN')}
-                                  </span>
-                                )}
-                                {prod.bestseller && (
-                                  <span className="text-[9px] font-bold text-amber-800 bg-[#FEF9C3] px-1.5 py-0.2 rounded border border-yellow-300">
-                                    Popular
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <i className="fa-solid fa-chevron-right text-xs text-gray-300 shrink-0 pr-1" />
-                          </div>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        'Pixiu Wealth Bracelet',
+                        'Citrine Money Tree',
+                        'S925 Pixiu Ring',
+                        'Blackwood Amulet',
+                        'Tibetan Singing Bowl',
+                        'Laughing Buddha',
+                        '7 Chakra Gemstone Tree',
+                        'Tai Sui Protection',
+                        'Feng Shui Tortoise',
+                        'Evil Eye Wall Charm',
+                        'Chinese Wealth Coins',
+                        'Rose Quartz Tree',
+                      ].map((term) => (
+                        <button
+                          key={term}
+                          type="button"
+                          onClick={() => {
+                            setQuery(term);
+                            router.push(`/shop?q=${encodeURIComponent(term)}`);
+                            setMobileSearchActive(false);
+                          }}
+                          className="px-3.5 py-1.5 rounded-full bg-[#FAF9F6] hover:bg-[#F3EEFC] text-gray-700 hover:text-[#3A1F62] text-xs font-medium border border-gray-200/80 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                        >
+                          <i className="fa-solid fa-magnifying-glass text-[10px] text-gray-400" />
+                          <span>{term}</span>
+                        </button>
+                      ))}
                     </div>
                   </div>
                 ) : (
