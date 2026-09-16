@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface FaqSlide {
@@ -51,14 +51,47 @@ const faqSlides: FaqSlide[] = [
 export default function AboutPage() {
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const [currentFaqIndex, setCurrentFaqIndex] = useState(0);
-  const [activeHowStep, setActiveHowStep] = useState<'craft' | 'bless' | 'guide'>('craft');
+  const [activeStep, setActiveStep] = useState<number>(0);
   const [activeSubnav, setActiveSubnav] = useState('about');
 
-  // Auto-cycle FAQ every 7s if not manually clicked
+  // Step Refs for sticky scroll detection in the dark section
+  const step0Ref = useRef<HTMLDivElement>(null);
+  const step1Ref = useRef<HTMLDivElement>(null);
+  const step2Ref = useRef<HTMLDivElement>(null);
+  const step3Ref = useRef<HTMLDivElement>(null);
+
+  // Scroll listener / Intersection Observer to update sticky animation on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.innerHeight * 0.45;
+      const getTop = (el: HTMLElement | null) =>
+        el ? el.getBoundingClientRect().top : Infinity;
+
+      const top1 = getTop(step1Ref.current);
+      const top2 = getTop(step2Ref.current);
+      const top3 = getTop(step3Ref.current);
+
+      if (top3 <= offset) {
+        setActiveStep(2); // Shop securely
+      } else if (top2 <= offset) {
+        setActiveStep(1); // Buy extraordinary
+      } else if (top1 <= offset) {
+        setActiveStep(0); // Sell/Craft extraordinarily
+      } else {
+        setActiveStep(0); // Intro
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Auto-cycle FAQ every 8s if user hasn't clicked
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentFaqIndex((prev) => (prev + 1) % faqSlides.length);
-    }, 7000);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 
@@ -70,9 +103,17 @@ export default function AboutPage() {
     setCurrentFaqIndex((prev) => (prev + 1) % faqSlides.length);
   };
 
+  const scrollToStep = (index: number) => {
+    const targets = [step1Ref, step2Ref, step3Ref];
+    const target = targets[index]?.current;
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#222222]">
-      {/* Sticky Secondary Subnav (Etsy replica) */}
+    <div className="min-h-screen bg-white text-[#222222]">
+      {/* Sticky Secondary Subnav (Exact Etsy layout) */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E8E4DA] transition-all duration-200">
         <div className="etsy-container flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
@@ -157,160 +198,154 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* SECTION 1: HERO STATEMENT SLIDE (Exact Etsy "Keep Commerce Human" Replica) */}
-      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-[#E8E4DA] bg-[#FAF9F6]">
+      {/* SECTION 1: HERO STATEMENT SLIDE (Exact Etsy Screenshot 1 Replica) */}
+      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-[#E8E4DA] bg-white">
         <div className="etsy-container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: Interactive Animated Visual (Hands holding talisman with glowing aura) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left Column: Etsy-style Hand with Screen/Tablet Illustration (Screenshot 1 replica) */}
             <div className="lg:col-span-5 flex justify-center order-2 lg:order-1">
-              <div className="relative w-full max-w-[420px] aspect-[4/4.5] rounded-3xl bg-gradient-to-b from-[#FAF5FF] via-white to-[#FFF7ED] border border-[#E8E4DA] p-8 shadow-sm flex flex-col justify-between overflow-hidden group">
-                {/* Floating energy aura rings */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-purple-200/30 blur-2xl animate-pulse" />
-                <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-amber-200/20 blur-xl" />
+              <div className="relative w-full max-w-[420px] aspect-[4/4.2] flex items-center justify-center">
+                {/* SVG Exact Replica of Etsy's Hand touching Device Illustration in our brand colorway */}
+                <svg
+                  className="w-full h-full max-h-[380px] drop-shadow-sm select-none"
+                  viewBox="0 0 400 380"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Glowing subtle back aura */}
+                  <circle cx="210" cy="170" r="130" fill="#FBF7EE" />
+                  <circle cx="210" cy="170" r="90" fill="#F3EEFC" opacity="0.6" />
 
-                {/* Top badge */}
-                <div className="relative z-10 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#3A1F62] bg-[#F3EEFC] px-3 py-1 rounded-full border border-[#3A1F62]/10">
-                    <i className="fa-solid fa-sparkles text-[10px] text-amber-500" />
-                    Sacred Artisan Craft
-                  </span>
-                  <span className="text-xs font-semibold text-gray-500">Est. 1989</span>
-                </div>
+                  {/* Tablet / Screen Frame (Rich Crimson / Mystic Purple) */}
+                  <g className="transition-transform duration-500 hover:scale-[1.02] cursor-pointer">
+                    <rect
+                      x="70"
+                      y="70"
+                      width="250"
+                      height="170"
+                      rx="22"
+                      fill="#7C2D12"
+                      stroke="#571E0B"
+                      strokeWidth="4"
+                    />
+                    {/* Screen Inner Display (Warm Amber / Peach) */}
+                    <rect
+                      x="90"
+                      y="88"
+                      width="210"
+                      height="134"
+                      rx="12"
+                      fill="#EA580C"
+                    />
+                    {/* Inner Sanctuary / Shop Emblem */}
+                    <rect
+                      x="135"
+                      y="120"
+                      width="120"
+                      height="80"
+                      rx="8"
+                      fill="#9A3412"
+                    />
+                    {/* Roof / Awning Canopy */}
+                    <path
+                      d="M130 120H260L250 102H140L130 120Z"
+                      fill="#FEF3C7"
+                      stroke="#9A3412"
+                      strokeWidth="2"
+                    />
+                    {/* Store Pillars & Door */}
+                    <rect x="175" y="145" width="40" height="55" rx="4" fill="#FEF3C7" />
+                    {/* Camera / Indicator dot */}
+                    <circle cx="285" cy="155" r="4.5" fill="#FEF3C7" opacity="0.8" />
+                  </g>
 
-                {/* Animated Centre SVG Illustration: Artisans Handcrafting & Chi Awakening */}
-                <div className="relative z-10 my-auto py-6 flex flex-col items-center justify-center">
-                  <div className="relative w-44 h-44 flex items-center justify-center">
-                    {/* Glowing outer rotating wheel */}
-                    <svg
-                      className="absolute inset-0 w-full h-full text-[#3A1F62]/15 animate-spin"
-                      style={{ animationDuration: '30s' }}
-                      viewBox="0 0 100 100"
-                    >
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeDasharray="4 4"
-                        fill="none"
-                      />
-                    </svg>
+                  {/* Hand Reaching from Bottom with Spiritual Wrist Beads */}
+                  <g className="animate-float-gentle">
+                    {/* Wrist Red/Purple Bead Bangle */}
+                    <ellipse cx="178" cy="328" rx="38" ry="14" fill="#881337" />
+                    <circle cx="150" cy="328" r="8" fill="#9F1239" />
+                    <circle cx="165" cy="333" r="8.5" fill="#881337" />
+                    <circle cx="182" cy="334" r="8.5" fill="#9F1239" />
+                    <circle cx="198" cy="331" r="8" fill="#881337" />
+                    <circle cx="210" cy="325" r="7.5" fill="#BE123C" />
 
-                    {/* Central Sacred Lotus & Talisman */}
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-[#3A1F62] to-[#6A329F] shadow-xl flex items-center justify-center text-white transform group-hover:scale-105 transition-transform duration-500 relative">
-                      <div className="absolute inset-0 rounded-full border border-amber-300/40 animate-ping opacity-25" />
-                      <i className="fa-solid fa-gem text-4xl text-amber-300 drop-shadow-md animate-float-gentle" />
-                    </div>
+                    {/* Hand & Palm (Warm Terracotta/Flesh tone matching Etsy) */}
+                    <path
+                      d="M152 320C145 285 142 245 148 230C152 220 162 215 170 230C176 240 178 255 180 265L180 135C180 115 204 115 204 135L204 235C208 230 216 220 226 224C234 227 234 238 232 248C236 242 244 240 248 248C252 254 250 265 244 274C248 274 252 278 250 286C248 296 230 320 210 325Z"
+                      fill="#F6A892"
+                      stroke="#C8725C"
+                      strokeWidth="3.5"
+                      strokeLinejoin="round"
+                    />
 
-                    {/* Floating mini energy badges */}
-                    <div className="absolute -top-1 -right-1 bg-white border border-amber-200 shadow-md px-2.5 py-1 rounded-full flex items-center gap-1 text-[11px] font-bold text-amber-700 animate-bounce">
-                      <i className="fa-solid fa-certificate text-[10px] text-amber-500" />
-                      <span>100% Genuine</span>
-                    </div>
-
-                    <div className="absolute -bottom-2 -left-2 bg-white border border-purple-200 shadow-md px-2.5 py-1 rounded-full flex items-center gap-1 text-[11px] font-bold text-[#3A1F62]">
-                      <i className="fa-solid fa-hands-holding-sparkles text-[10px]" />
-                      <span>Consecrated</span>
-                    </div>
-                  </div>
-
-                  <p className="text-center font-serif text-[#140D1F] font-bold text-base mt-6">
-                    Hand-Carved & Blessed with Intention
-                  </p>
-                  <p className="text-center text-xs text-gray-500 max-w-[260px] mt-1">
-                    Every piece carries harmonious vibrations calibrated for home prosperity and peace.
-                  </p>
-                </div>
-
-                {/* Bottom quote pill */}
-                <div className="relative z-10 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-                  <span>Authentic Lineage</span>
-                  <span className="font-serif italic text-[#3A1F62]">Harmonize Your Life</span>
-                </div>
+                    {/* Touch Ripple Wave on Screen where index finger touches */}
+                    <circle cx="192" cy="132" r="14" fill="white" opacity="0.4" className="animate-ping" />
+                    <circle cx="192" cy="132" r="6" fill="white" opacity="0.8" />
+                  </g>
+                </svg>
               </div>
             </div>
 
-            {/* Right Column: Statement Content & Interactive Trigger Words */}
+            {/* Right Column: Statement Content & Interactive Links (Exact Etsy Typography) */}
             <div className="lg:col-span-7 order-1 lg:order-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#3A1F62] block mb-3">
-                Our Foundational Mission
-              </span>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-normal text-[#140D1F] tracking-tight leading-[1.15] mb-6">
-                Keep Spiritual Living <br className="hidden sm:inline" />
-                <span className="text-[#3A1F62] font-semibold">Authentic & Sacred.</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-serif font-normal text-[#222222] tracking-tight leading-[1.12] mb-6">
+                Keep Commerce Human
               </h1>
 
-              <div className="space-y-4 text-base sm:text-lg text-gray-700 leading-relaxed font-normal">
+              <div className="space-y-5 text-[15px] sm:text-[17px] text-[#222222] leading-relaxed font-normal">
                 <p>
-                  Miracle Feng Shui is the sanctuary for genuine energized artifacts, artisan talismans, and classical living wisdom. It is home to a{' '}
+                  Miracle Feng Shui is the global marketplace for unique and authentic sacred goods. It&apos;s home to a{' '}
                   <button
                     type="button"
                     onClick={() => setActivePanel('items')}
-                    className="text-[#3A1F62] font-bold underline decoration-[#3A1F62]/40 hover:decoration-[#3A1F62] transition-colors cursor-pointer inline-flex items-center gap-1"
+                    className="text-[#222222] font-semibold underline decoration-[#222222]/50 hover:decoration-[#222222] transition-colors cursor-pointer"
                   >
-                    <span>universe of special, sacred talismans</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
+                    universe of special, extraordinary items
                   </button>
-                  , from raw crystal formations to consecrated obsidian bracelets.
+                  , from natural unheated crystals to consecrated obsidian talismans.
                 </p>
 
                 <p>
-                  In a world of automated mass production and counterfeit resin, our mission is to keep human reverence and ancestral mastery at the heart of conscious living. That&apos;s why we built a sanctuary where sacred devotion thrives because it&apos;s powered by master craftspeople. We collaborate directly with a{' '}
+                  In a time of increasing automation, it&apos;s our mission to keep human connection at the heart of commerce. That&apos;s why we built a place where creativity lives and thrives because it&apos;s powered by people. We help our{' '}
                   <button
                     type="button"
                     onClick={() => setActivePanel('artisans')}
-                    className="text-[#3A1F62] font-bold underline decoration-[#3A1F62]/40 hover:decoration-[#3A1F62] transition-colors cursor-pointer inline-flex items-center gap-1"
+                    className="text-[#222222] font-semibold underline decoration-[#222222]/50 hover:decoration-[#222222] transition-colors cursor-pointer"
                   >
-                    <span>guild of hereditary artisans</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
+                    community of sellers
                   </button>{' '}
-                  who turn raw earth gifts into life-altering blessings.
-                </p>
-
-                <p>
-                  Our platform connects their generational art with{' '}
+                  turn their ideas into successful businesses. Our platform connects them with{' '}
                   <button
                     type="button"
                     onClick={() => setActivePanel('homes')}
-                    className="text-[#3A1F62] font-bold underline decoration-[#3A1F62]/40 hover:decoration-[#3A1F62] transition-colors cursor-pointer inline-flex items-center gap-1"
+                    className="text-[#222222] font-semibold underline decoration-[#222222]/50 hover:decoration-[#222222] transition-colors cursor-pointer"
                   >
-                    <span>millions of seekers & harmonized homes</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
+                    millions of buyers
                   </button>{' '}
-                  looking for an authentic alternative—something imbued with pure vibration, for life moments that deserve serenity and prosperity.
+                  looking for an alternative – something special with a human touch, for those moments in life that deserve imagination.
                 </p>
 
                 <p>
-                  As an ethical house, we strive to lead with{' '}
+                  As a company, we strive to lead with{' '}
                   <button
                     type="button"
                     onClick={() => setActivePanel('values')}
-                    className="text-[#3A1F62] font-bold underline decoration-[#3A1F62]/40 hover:decoration-[#3A1F62] transition-colors cursor-pointer inline-flex items-center gap-1"
+                    className="text-[#222222] font-semibold underline decoration-[#222222]/50 hover:decoration-[#222222] transition-colors cursor-pointer"
                   >
-                    <span>our sacred guiding principles</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
+                    our guiding principles
                   </button>{' '}
-                  and to spread ideals of conscious harmony whose positive ripples extend far beyond our sanctuary.
+                  and to help spread ideas of sustainability and responsibility whose impact can reach far beyond our own business.
                 </p>
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              {/* Action Button */}
+              <div className="mt-8 flex items-center gap-4">
                 <Link
                   href="/shop"
-                  className="px-6 py-3.5 rounded-full bg-[#3A1F62] hover:bg-[#2B154C] text-white text-sm font-bold transition-all shadow-sm hover:shadow-md active:scale-95 flex items-center gap-2"
+                  className="px-7 py-3 rounded-full bg-[#222222] hover:bg-black text-white text-sm font-bold transition-all shadow-sm active:scale-95"
                 >
-                  <span>Explore Handcrafted Sanctum</span>
-                  <i className="fa-solid fa-arrow-right text-xs" />
+                  Explore the Sanctuary
                 </Link>
-                <button
-                  type="button"
-                  onClick={() => setActivePanel('values')}
-                  className="px-6 py-3.5 rounded-full bg-white hover:bg-gray-50 text-[#140D1F] border border-gray-300 text-sm font-bold transition-all active:scale-95"
-                >
-                  Read Guiding Principles
-                </button>
               </div>
             </div>
           </div>
@@ -392,7 +427,7 @@ export default function AboutPage() {
                         Fair-Trade & Cultural Sustainability
                       </p>
                       <p className="leading-relaxed">
-                        We pay living wages well above standard market benchmarks and invest 5% of all proceeds directly into artisan apprentice funds.
+                        We pay living wages well above standard market benchmarks and invest directly into artisan apprentice guilds.
                       </p>
                     </div>
                   </div>
@@ -412,14 +447,12 @@ export default function AboutPage() {
                     <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
                       Whether you are welcoming prosperity into a new home, cleansing heavy office energy, or seeking peaceful meditation in your living space, Miracle Feng Shui empowers you with exact directional placement manuals and personalized guidance.
                     </p>
-                    <div className="space-y-3">
-                      <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-xs">
-                        <div className="flex items-center justify-between font-bold text-gray-900 mb-1">
-                          <span>Verified Patron Rating</span>
-                          <span className="text-amber-600">4.98 / 5.0 ★</span>
-                        </div>
-                        <p className="text-gray-500">Based on over 24,000+ verified customer reviews worldwide.</p>
+                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-xs">
+                      <div className="flex items-center justify-between font-bold text-gray-900 mb-1">
+                        <span>Verified Patron Rating</span>
+                        <span className="text-amber-600">4.98 / 5.0 ★</span>
                       </div>
+                      <p className="text-gray-500">Based on over 24,000+ verified customer reviews worldwide.</p>
                     </div>
                   </div>
                 )}
@@ -498,7 +531,7 @@ export default function AboutPage() {
                 <button
                   type="button"
                   onClick={() => setActivePanel(null)}
-                  className="w-full py-2.5 rounded-full text-xs font-semibold text-gray-500 hover:text-gray-900"
+                  className="w-full py-2.5 rounded-full text-xs font-semibold text-gray-500 hover:text-gray-900 cursor-pointer"
                 >
                   Close Window
                 </button>
@@ -508,134 +541,217 @@ export default function AboutPage() {
         )}
       </section>
 
-      {/* SECTION 2: HOW IT WORKS (Exact Etsy Dark/Thematic Layout) */}
-      <section id="how-it-works-section" className="bg-[#140D1F] text-white py-20 sm:py-28 relative overflow-hidden">
-        {/* Mystic ambient background glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#3A1F62]/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="etsy-container relative z-10">
-          <div className="max-w-2xl mb-14">
-            <span className="text-xs uppercase font-bold tracking-widest text-amber-400 block mb-3">
-              The Sacred Journey
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-normal text-white tracking-tight leading-tight">
-              How Miracle Feng Shui Works
-            </h2>
-            <p className="text-base sm:text-lg text-gray-300 mt-4 leading-relaxed font-light">
-              Our sanctuary bridges centuries-old Eastern geomancy with genuine artisan integrity. The platform empowers master carvers to share their calling and guides seekers in curating mindful, blessed spaces.
-            </p>
-          </div>
-
-          {/* 3 Step Pillars with Interactive Hover & Switcher */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div
-              onMouseEnter={() => setActiveHowStep('craft')}
-              className={`rounded-3xl p-8 transition-all duration-300 border flex flex-col justify-between ${
-                activeHowStep === 'craft'
-                  ? 'bg-[#211732] border-[#6A329F] shadow-2xl scale-[1.02]'
-                  : 'bg-[#1A1226]/80 border-white/10 hover:border-white/20'
-              }`}
-            >
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-amber-400/15 border border-amber-400/30 text-amber-300 flex items-center justify-center text-2xl mb-6">
-                  <i className="fa-solid fa-gem animate-pulse" />
-                </div>
-                <div className="text-[11px] uppercase tracking-wider text-amber-400 font-bold mb-1">
-                  Pillar 01
-                </div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">
-                  Ethical Extraction & Hand-Carving
-                </h3>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  We hand-select genuine natural crystals, Grade-A Burma jade, unheated citrine, and genuine black obsidian directly from ethical geological sources. Hereditary carvers shape each piece using traditional hand lapidary tools.
+      {/* SECTION 2: HOW ETSY WORKS (Exact Dark Slate Navy `#2F2E41` Sticky Scroll Section as shown in Screenshots 2, 3, 4, 5) */}
+      <section
+        id="how-it-works-section"
+        className="bg-[#2F2E41] text-white relative py-16 sm:py-24"
+      >
+        <div className="etsy-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start relative">
+            
+            {/* Left Column: Scrolling Content Blocks (Screenshots 2, 3, 4, 5) */}
+            <div className="lg:col-span-7 space-y-28 sm:space-y-36">
+              
+              {/* Step 0: Intro Section */}
+              <div ref={step0Ref} className="pt-4 sm:pt-8 min-h-[36vh] flex flex-col justify-center">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-normal text-white tracking-tight leading-[1.18] mb-6">
+                  How Miracle Feng Shui Works
+                </h2>
+                <p className="text-base sm:text-lg text-gray-200 leading-relaxed max-w-xl font-normal">
+                  Our global marketplace is a vibrant community of real people connecting over special goods. The platform empowers sellers to do what they love and helps buyers find what they love.
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <span className="text-xs text-gray-400">100% Genuine Certified</span>
-                <Link
-                  href="/shop"
-                  className="text-xs font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1.5"
-                >
-                  <span>Explore Minerals</span>
-                  <i className="fa-solid fa-arrow-right text-[10px]" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div
-              onMouseEnter={() => setActiveHowStep('bless')}
-              className={`rounded-3xl p-8 transition-all duration-300 border flex flex-col justify-between ${
-                activeHowStep === 'bless'
-                  ? 'bg-[#211732] border-[#6A329F] shadow-2xl scale-[1.02]'
-                  : 'bg-[#1A1226]/80 border-white/10 hover:border-white/20'
-              }`}
-            >
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-purple-400/15 border border-purple-400/30 text-purple-300 flex items-center justify-center text-2xl mb-6">
-                  <i className="fa-solid fa-bell-concierge animate-pulse" />
-                </div>
-                <div className="text-[11px] uppercase tracking-wider text-purple-400 font-bold mb-1">
-                  Pillar 02
-                </div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">
-                  Sound Bath Cleansing & Blessing
+              {/* Step 1: Sell Extraordinarily (Screenshot 3) */}
+              <div ref={step1Ref} className="min-h-[45vh] flex flex-col justify-center">
+                <h3 className="text-3xl sm:text-4xl font-serif font-normal text-white tracking-tight leading-tight mb-4">
+                  Sell extraordinarily
                 </h3>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  Prior to leaving our doors, each piece undergoes traditional sage smudging and harmonic sound frequency activation with 7-metal Tibetan singing bowls to cleanse stagnant memories and harmonize elemental frequencies.
+                <p className="text-base sm:text-lg text-gray-200 leading-relaxed max-w-xl mb-6">
+                  With low fees, powerful tools, and support and education, we help creative entrepreneurs start, manage, and scale their businesses. Want to become a Miracle Feng Shui seller? All it takes is $0.20 to get started.
+                </p>
+                <div>
+                  <Link
+                    href="/shop"
+                    className="inline-block px-6 py-2.5 rounded-full border border-white text-white hover:bg-white hover:text-[#2F2E41] text-sm font-semibold transition-all shadow-xs"
+                  >
+                    Become a seller
+                  </Link>
+                </div>
+              </div>
+
+              {/* Step 2: Buy Extraordinary (Screenshot 4) */}
+              <div ref={step2Ref} className="min-h-[45vh] flex flex-col justify-center">
+                <h3 className="text-3xl sm:text-4xl font-serif font-normal text-white tracking-tight leading-tight mb-4">
+                  Buy extraordinary
+                </h3>
+                <p className="text-base sm:text-lg text-gray-200 leading-relaxed max-w-xl mb-6">
+                  From the specific to the unexpected (or custom-made), our search tools help buyers explore all the special one-of-a-kind items offered by our sellers. Our Journal and Editors&apos; Picks curate exciting trends and ideas discovered in the marketplace by our own team.
+                </p>
+                <div>
+                  <Link
+                    href="/shop"
+                    className="inline-block px-6 py-2.5 rounded-full border border-white text-white hover:bg-white hover:text-[#2F2E41] text-sm font-semibold transition-all shadow-xs"
+                  >
+                    Start shopping
+                  </Link>
+                </div>
+              </div>
+
+              {/* Step 3: Shop Securely (Screenshot 5) */}
+              <div ref={step3Ref} className="min-h-[45vh] pb-12 flex flex-col justify-center">
+                <h3 className="text-3xl sm:text-4xl font-serif font-normal text-white tracking-tight leading-tight mb-4">
+                  Shop securely
+                </h3>
+                <p className="text-base sm:text-lg text-gray-200 leading-relaxed max-w-xl">
+                  We provide the technology behind the Miracle Feng Shui marketplace, helping buyers and sellers connect and exchange securely. Keeping those connections safe, fun, and secure is our priority, and we&apos;re always{' '}
+                  <Link href="/privacy-policy" className="underline hover:text-amber-300 transition-colors">
+                    here to help
+                  </Link>
+                  .
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <span className="text-xs text-gray-400">Ritual Consecration</span>
-                <Link
-                  href="/shop?category=Bracelets"
-                  className="text-xs font-bold text-purple-300 hover:text-purple-200 flex items-center gap-1.5"
-                >
-                  <span>View Blessed Cords</span>
-                  <i className="fa-solid fa-arrow-right text-[10px]" />
-                </Link>
+            </div>
+
+            {/* Right Column: Sticky 3-Circle Cluster Animated Figure (Screenshots 2, 3, 4, 5) */}
+            <div className="lg:col-span-5 lg:sticky lg:top-[22vh] flex items-center justify-center py-8 lg:py-0">
+              <div className="relative w-full max-w-[380px] aspect-square flex items-center justify-center">
+                
+                {/* Background Silhouette Disk (as seen behind the 3 circles in screenshots) */}
+                <div className="absolute inset-4 rounded-full bg-[#262535] opacity-90 transition-transform duration-700 pointer-events-none" />
+
+                {/* 3 Circular Badges in Triangular Arrangement */}
+                <div className="relative w-full h-full">
+
+                  {/* Circle 1: TOP (Rose/Coral Background `#D95B5B` - Hand holding hammer/chisel) */}
+                  <div
+                    onClick={() => scrollToStep(0)}
+                    className={`absolute left-1/2 -translate-x-1/2 top-4 w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-[#E05A47] flex items-center justify-center shadow-lg transition-all duration-500 cursor-pointer ${
+                      activeStep === 0
+                        ? 'scale-110 ring-4 ring-white/30 z-20 shadow-2xl brightness-105'
+                        : 'scale-95 opacity-80 z-10 hover:opacity-100 hover:scale-100'
+                    }`}
+                  >
+                    {/* SVG Illustration: Hand holding tool / hammer */}
+                    <svg className="w-24 h-24 select-none" viewBox="0 0 120 120" fill="none">
+                      {/* Wooden handle */}
+                      <rect x="35" y="45" width="8" height="42" rx="3" transform="rotate(-30 35 45)" fill="#D97706" />
+                      {/* Hammer Head */}
+                      <rect x="25" y="40" width="30" height="14" rx="2" transform="rotate(-30 25 40)" fill="#E11D48" />
+                      <rect x="23" y="38" width="8" height="18" rx="2" transform="rotate(-30 23 38)" fill="#BE123C" />
+                      {/* Hand with sleeve cuff */}
+                      <g className={activeStep === 0 ? 'animate-bounce' : ''} style={{ animationDuration: '2s' }}>
+                        {/* Sleeve cuff with yellow/red pattern */}
+                        <path d="M80 85L92 97" stroke="#FEF08A" strokeWidth="6" strokeLinecap="round" />
+                        <path d="M82 83L94 95" stroke="#991B1B" strokeWidth="4" strokeLinecap="round" />
+                        {/* Palm & fingers */}
+                        <path
+                          d="M48 58C52 52 64 56 68 64C72 70 74 80 84 88C86 90 84 94 80 94C72 94 62 82 56 78L48 70C44 66 45 61 48 58Z"
+                          fill="#F6A892"
+                          stroke="#C8725C"
+                          strokeWidth="2"
+                        />
+                        {/* Thumb gripping */}
+                        <path d="M52 54C55 52 60 56 58 60L52 66" stroke="#C8725C" strokeWidth="2.5" strokeLinecap="round" />
+                      </g>
+                    </svg>
+                  </div>
+
+                  {/* Circle 2: BOTTOM LEFT (Peach/Cream Background `#F8D3BE` - Two Hands Giving/Holding Gift) */}
+                  <div
+                    onClick={() => scrollToStep(1)}
+                    className={`absolute left-2 bottom-4 w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-[#F8D3BE] flex items-center justify-center shadow-lg transition-all duration-500 cursor-pointer ${
+                      activeStep === 1
+                        ? 'scale-110 ring-4 ring-white/30 z-20 shadow-2xl brightness-105'
+                        : 'scale-95 opacity-80 z-10 hover:opacity-100 hover:scale-100'
+                    }`}
+                  >
+                    {/* SVG Illustration: Hands offering parcel/gift */}
+                    <svg className="w-28 h-28 select-none" viewBox="0 0 130 130" fill="none">
+                      {/* Hands coming from bottom */}
+                      <g className={activeStep === 1 ? 'animate-pulse' : ''}>
+                        {/* Left Hand */}
+                        <g>
+                          <path d="M25 100L45 100" stroke="#E11D48" strokeWidth="7" strokeLinecap="round" />
+                          <path d="M27 98L43 98" stroke="#FDE047" strokeWidth="3" strokeLinecap="round" />
+                          <path
+                            d="M26 95C24 75 30 55 42 50C48 48 52 55 48 68L50 82C50 90 40 96 26 95Z"
+                            fill="#F6A892"
+                            stroke="#C8725C"
+                            strokeWidth="2"
+                          />
+                        </g>
+
+                        {/* Gift Envelope in center */}
+                        <g className="drop-shadow-xs">
+                          <rect x="42" y="60" width="46" height="32" rx="4" fill="#FFFFFF" stroke="#E11D48" strokeWidth="1.5" />
+                          <path d="M42 64L65 78L88 64" stroke="#E11D48" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                          <circle cx="65" cy="78" r="3.5" fill="#F59E0B" />
+                          {/* Bow tie */}
+                          <path d="M60 76C56 72 58 68 62 72L65 76L68 72C72 68 74 72 70 76Z" fill="#F59E0B" />
+                        </g>
+
+                        {/* Right Hand */}
+                        <g>
+                          <path d="M85 100L105 100" stroke="#E11D48" strokeWidth="7" strokeLinecap="round" />
+                          <path d="M87 98L103 98" stroke="#FDE047" strokeWidth="3" strokeLinecap="round" />
+                          <path
+                            d="M104 95C106 75 100 55 88 50C82 48 78 55 82 68L80 82C80 90 90 96 104 95Z"
+                            fill="#F6A892"
+                            stroke="#C8725C"
+                            strokeWidth="2"
+                          />
+                        </g>
+                      </g>
+                    </svg>
+                  </div>
+
+                  {/* Circle 3: BOTTOM RIGHT (Vibrant Orange Background `#F1641E` - Open Door with Sparkles/Surprise) */}
+                  <div
+                    onClick={() => scrollToStep(2)}
+                    className={`absolute right-2 bottom-4 w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-[#F1641E] flex items-center justify-center shadow-lg transition-all duration-500 cursor-pointer ${
+                      activeStep === 2
+                        ? 'scale-110 ring-4 ring-white/30 z-20 shadow-2xl brightness-105'
+                        : 'scale-95 opacity-80 z-10 hover:opacity-100 hover:scale-100'
+                    }`}
+                  >
+                    {/* SVG Illustration: Doorway opening with surprises (Screenshot 5) */}
+                    <svg className="w-28 h-28 select-none" viewBox="0 0 130 130" fill="none">
+                      {/* Doorway Silhouette */}
+                      <path
+                        d="M42 35C42 22 55 12 70 12C85 12 98 22 98 35V105H42V35Z"
+                        fill="#D97706"
+                        opacity="0.4"
+                      />
+                      {/* White Open Door */}
+                      <path
+                        d="M45 40C45 28 56 20 68 20C80 20 86 28 86 40V102H45V40Z"
+                        fill="#FFFFFF"
+                        stroke="#EA580C"
+                        strokeWidth="2"
+                      />
+                      {/* Door Handle */}
+                      <circle cx="80" cy="65" r="3" fill="#D97706" />
+
+                      {/* Sparkles / Magic bursts emerging from doorway */}
+                      <g className={activeStep === 2 ? 'animate-bounce' : ''}>
+                        {/* Star 1 */}
+                        <path d="M52 28L54 22L56 28L62 30L56 32L54 38L52 32L46 30Z" fill="#FEF08A" />
+                        {/* Star 2 */}
+                        <path d="M96 48L97.5 43L99 48L104 49.5L99 51L97.5 56L96 51L91 49.5Z" fill="#FEF08A" />
+                        {/* Star 3 */}
+                        <circle cx="94" cy="24" r="2.5" fill="#FFFFFF" />
+                        <circle cx="38" cy="54" r="2" fill="#FFFFFF" />
+                      </g>
+                    </svg>
+                  </div>
+
+                </div>
+
               </div>
             </div>
 
-            {/* Step 3 */}
-            <div
-              onMouseEnter={() => setActiveHowStep('guide')}
-              className={`rounded-3xl p-8 transition-all duration-300 border flex flex-col justify-between ${
-                activeHowStep === 'guide'
-                  ? 'bg-[#211732] border-[#6A329F] shadow-2xl scale-[1.02]'
-                  : 'bg-[#1A1226]/80 border-white/10 hover:border-white/20'
-              }`}
-            >
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-emerald-400/15 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-2xl mb-6">
-                  <i className="fa-solid fa-compass animate-pulse" />
-                </div>
-                <div className="text-[11px] uppercase tracking-wider text-emerald-400 font-bold mb-1">
-                  Pillar 03
-                </div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">
-                  Directional Placement & Care
-                </h3>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  Your talisman arrives securely nestled in an organic raw silk pouch, accompanied by our printed Classical Compass Guide detailing exact room coordinates (Gua sectors), cleansing lunar cycles, and maintenance advice.
-                </p>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <span className="text-xs text-gray-400">Lifelong Guidance</span>
-                <Link
-                  href="/shop?category=Trees"
-                  className="text-xs font-bold text-emerald-300 hover:text-emerald-200 flex items-center gap-1.5"
-                >
-                  <span>Placement Guide</span>
-                  <i className="fa-solid fa-arrow-right text-[10px]" />
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -708,7 +824,7 @@ export default function AboutPage() {
                   </div>
                   <h4 className="font-bold text-gray-900 text-sm mb-1">Sustainable Harvesting</h4>
                   <p className="text-xs text-gray-500 leading-relaxed">
-                    Zero dynamite blasting or destructive surface strip-mining. We preserve ecological purity.
+                    Zero dynamite blasting or destructive strip-mining. We preserve ecological balance.
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white border border-[#E8E4DA] p-5 shadow-xs">
