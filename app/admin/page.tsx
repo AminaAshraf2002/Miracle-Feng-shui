@@ -1,358 +1,340 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useStore, OrderStatus } from '@/context/StoreContext';
 
 export default function AdminDashboardPage() {
   const { products, orders, sections, updateOrderStatus } = useStore();
+  const [currentDateTime, setCurrentDateTime] = useState('');
+  const [greeting, setGreeting] = useState('Good Afternoon');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      if (hours < 12) setGreeting('Good Morning');
+      else if (hours < 18) setGreeting('Good Afternoon');
+      else setGreeting('Good Evening');
+
+      const dateStr = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      });
+      const timeStr = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      setCurrentDateTime(`${dateStr} | ${timeStr}`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Metrics
   const totalRevenue = orders.reduce((sum, ord) => sum + ord.totalAmount, 0);
   const pendingOrdersCount = orders.filter((o) => o.status === 'Pending').length;
   const activeSectionsCount = sections.filter((s) => s.enabled).length;
 
-  const statusColors: Record<OrderStatus, { bg: string; text: string; border: string; icon: string }> = {
-    Pending: {
-      bg: 'bg-amber-50',
-      text: 'text-amber-700',
-      border: 'border-amber-200',
-      icon: 'fa-regular fa-clock',
-    },
-    Processing: {
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
-      border: 'border-blue-200',
-      icon: 'fa-solid fa-circle-notch fa-spin',
-    },
-    Shipped: {
-      bg: 'bg-purple-50',
-      text: 'text-purple-700',
-      border: 'border-purple-200',
-      icon: 'fa-solid fa-truck-fast',
-    },
-    Delivered: {
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-700',
-      border: 'border-emerald-200',
-      icon: 'fa-solid fa-circle-check',
-    },
-    Cancelled: {
-      bg: 'bg-rose-50',
-      text: 'text-rose-700',
-      border: 'border-rose-200',
-      icon: 'fa-solid fa-ban',
-    },
+  const statusPastels: Record<OrderStatus, { bg: string; text: string }> = {
+    Pending: { bg: 'bg-[#FEF3C7]', text: 'text-[#B45309]' },
+    Processing: { bg: 'bg-[#EBF2FE]', text: 'text-[#1D4ED8]' },
+    Shipped: { bg: 'bg-[#F3EEFC]', text: 'text-[#6D28D9]' },
+    Delivered: { bg: 'bg-[#E6F4F1]', text: 'text-[#0F766E]' },
+    Cancelled: { bg: 'bg-[#FEE2E2]', text: 'text-[#B91C1C]' },
   };
 
   return (
-    <div className="flex flex-col gap-6 font-outfit antialiased">
-      {/* Eye-Catching Welcome Banner with Circular Miracle Feng Shui Logo & Cinzel Title */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[#170D24] via-[#2A153E] to-[#3B1942] rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-amber-500/25 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        {/* Subtle Ambient Glowing Orbs */}
-        <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-amber-500/15 blur-3xl pointer-events-none animate-aura-pulse" />
-        <div className="absolute -left-16 -bottom-16 w-72 h-72 rounded-full bg-purple-600/20 blur-3xl pointer-events-none animate-aura-pulse" />
-
-        <div className="flex items-center gap-5 relative z-10">
-          {/* Prominent Circular Logo with Gold Glow */}
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-amber-400/70 shadow-[0_0_25px_rgba(245,158,11,0.35)] shrink-0 bg-white ring-4 ring-white/10">
-            <img
-              src="/images/miracle.jpeg"
-              alt="Miracle Feng Shui"
-              className="w-full h-full object-cover"
-            />
+    <div className="flex flex-col gap-6 max-w-7xl mx-auto font-outfit antialiased">
+      {/* Top Welcome Banner Matching Reference Screenshot */}
+      <div className="bg-[#133E35] rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[200px]">
+        {/* Banner Top Row: Search & Profile Icons */}
+        <div className="flex items-center justify-between gap-4 w-full">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] uppercase tracking-wider text-white/70 font-semibold">
+              Miracle Command Center
+            </span>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-amber-300 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <i className="fa-solid fa-shield-halved text-[10px]" />
-                <span>Storefront Sanctuary Live</span>
-              </span>
+          <div className="flex items-center gap-3">
+            {/* Minimalist Search in Banner */}
+            <div className="hidden sm:flex items-center bg-white/10 hover:bg-white/15 transition-colors border border-white/15 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-white/50 w-52">
+              <i className="fa-solid fa-magnifying-glass text-[11px] text-white/60 mr-2" />
+              <input
+                type="text"
+                placeholder="Search catalog, orders..."
+                className="bg-transparent border-none outline-hidden text-xs text-white placeholder-white/50 w-full"
+              />
             </div>
-            <h1
-              style={{ color: '#ffffff' }}
-              className="text-2xl sm:text-3xl font-cinzel font-bold mt-1 tracking-wider !text-white leading-tight drop-shadow-md"
-            >
-              Miracle Feng Shui Portal
-            </h1>
-            <p
-              style={{ color: '#e5e7eb' }}
-              className="text-gray-200 text-xs sm:text-sm mt-1.5 max-w-xl font-light leading-relaxed"
-            >
-              Curate auspicious collections, reorder homepage sections with drag precision, and fulfill sacred blessing orders.
-            </p>
+
+            {/* Notification Bell */}
+            <div className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white/90 relative cursor-pointer">
+              <i className="fa-regular fa-bell text-sm" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-[#133E35]" />
+            </div>
+
+            {/* User Profile Avatar */}
+            <div className="flex items-center gap-2 pl-1">
+              <div className="w-9 h-9 rounded-full bg-white text-[#133E35] font-bold flex items-center justify-center text-xs shadow-xs">
+                A
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0 relative z-10">
-          <Link
-            href="/admin/homepage"
-            className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all border border-white/20 no-underline inline-flex items-center gap-2 shadow-sm hover:scale-[1.02] active:scale-98"
-          >
-            <i className="fa-solid fa-wand-magic-sparkles text-amber-300" />
-            <span>Customize Homepage</span>
-          </Link>
-          <Link
-            href="/admin/products"
-            className="bg-gradient-to-r from-[#A84218] to-[#D75200] hover:from-[#923812] hover:to-[#B84500] text-white font-bold text-xs sm:text-sm px-4.5 py-2.5 rounded-xl transition-all shadow-md no-underline inline-flex items-center gap-2 hover:scale-[1.02] active:scale-98 border border-amber-400/30"
-          >
-            <i className="fa-solid fa-circle-plus text-xs" />
-            <span>Add Product</span>
-          </Link>
+        {/* Banner Content & Floating Graphic */}
+        <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+              {greeting}, Admin!
+            </h1>
+            <p className="text-xs sm:text-sm text-white/80 mt-1 max-w-xl font-normal leading-relaxed">
+              Monitor store inventory, manage customer orders, and orchestrate homepage layout from your command center.
+            </p>
+
+            {/* Date & Time Pill matching reference */}
+            <div className="mt-4 inline-flex items-center gap-2 bg-black/20 text-white/90 text-[11.5px] px-3.5 py-1.5 rounded-full border border-white/10 font-medium">
+              <i className="fa-regular fa-clock text-xs text-white/70" />
+              <span>{currentDateTime || 'Monday, September 16, 2026'}</span>
+            </div>
+          </div>
+
+          {/* Right Floating Card Illustration matching reference */}
+          <div className="hidden md:flex items-center gap-3 bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-4 shadow-sm shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-[#34D399] text-2xl shadow-xs">
+              <i className="fa-solid fa-circle-check" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-white block uppercase tracking-wider">
+                Sanctuary Optimal
+              </span>
+              <span className="text-[11px] text-white/70 block">
+                Catalog &amp; database online
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* KPI / Metric Cards Grid with Rich Font Awesome Icons */}
+      {/* KPI Cards Grid with Minimalist Pastel Circles (Matching Reference) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {/* Total Sales */}
-        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-400" />
-          <div className="flex items-center justify-between text-gray-500">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <i className="fa-solid fa-indian-rupee-sign text-emerald-600 text-xs" />
-              <span>Total Sales</span>
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-              <i className="fa-solid fa-wallet text-sm" />
+        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#E6F4F1] text-[#133E35] flex items-center justify-center text-base shrink-0">
+                <i className="fa-solid fa-indian-rupee-sign" />
+              </div>
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Total Sales
+              </span>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-outfit">
+          <div className="mt-4 flex items-baseline justify-between">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               ₹{totalRevenue.toLocaleString('en-IN')}
             </div>
-            <div className="text-[11px] text-emerald-600 font-semibold mt-1.5 flex items-center gap-1.5">
-              <i className="fa-solid fa-arrow-trend-up text-xs" />
-              <span>+18.4% this cycle</span>
-            </div>
+            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 flex items-center gap-1">
+              <i className="fa-solid fa-arrow-trend-up text-[10px]" />
+              <span>18%</span>
+            </span>
           </div>
         </div>
 
         {/* Total Orders */}
-        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-500" />
-          <div className="flex items-center justify-between text-gray-500">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <i className="fa-solid fa-receipt text-blue-600 text-xs" />
-              <span>Customer Orders</span>
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-              <i className="fa-solid fa-receipt text-sm" />
+        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-base shrink-0">
+                <i className="fa-solid fa-bag-shopping" />
+              </div>
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Customer Orders
+              </span>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-outfit">
+          <div className="mt-4 flex items-baseline justify-between">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {orders.length}
             </div>
-            <div className="text-[11px] text-amber-600 font-semibold mt-1.5 flex items-center gap-1.5">
-              <i className="fa-solid fa-hourglass-half text-xs" />
-              <span>{pendingOrdersCount} pending fulfillment</span>
-            </div>
+            <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 flex items-center gap-1">
+              <i className="fa-solid fa-arrow-trend-up text-[10px]" />
+              <span>8%</span>
+            </span>
           </div>
         </div>
 
         {/* Active Products */}
-        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-purple-600 to-pink-500" />
-          <div className="flex items-center justify-between text-gray-500">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <i className="fa-solid fa-boxes-stacked text-purple-600 text-xs" />
-              <span>Catalog Items</span>
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-              <i className="fa-solid fa-boxes-stacked text-sm" />
+        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-base shrink-0">
+                <i className="fa-solid fa-cubes" />
+              </div>
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Catalog Items
+              </span>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-outfit">
+          <div className="mt-4 flex items-baseline justify-between">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {products.length}
             </div>
-            <div className="text-[11px] text-purple-600 font-semibold mt-1.5 flex items-center gap-1.5">
-              <i className="fa-solid fa-circle-check text-xs" />
-              <span>Full CRUD &amp; filter ready</span>
-            </div>
+            <span className="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100 flex items-center gap-1">
+              <i className="fa-solid fa-check text-[10px]" />
+              <span>Active</span>
+            </span>
           </div>
         </div>
 
         {/* Homepage Sections */}
-        <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all flex flex-col justify-between relative overflow-hidden group">
-          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-amber-500 to-orange-400" />
-          <div className="flex items-center justify-between text-gray-500">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <i className="fa-solid fa-sliders text-amber-600 text-xs" />
-              <span>Home Sections</span>
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-              <i className="fa-solid fa-wand-magic-sparkles text-sm" />
+        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-base shrink-0">
+                <i className="fa-solid fa-sliders" />
+              </div>
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Layout Sections
+              </span>
             </div>
           </div>
-          <div className="mt-4">
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-outfit">
+          <div className="mt-4 flex items-baseline justify-between">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {activeSectionsCount} / {sections.length}
             </div>
-            <div className="text-[11px] text-amber-700 font-semibold mt-1.5 flex items-center gap-1.5">
-              <i className="fa-solid fa-arrow-down-up-across-line text-xs" />
-              <span>Interactive Position Control</span>
-            </div>
+            <span className="text-[11px] font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100 flex items-center gap-1">
+              <i className="fa-solid fa-check text-[10px]" />
+              <span>Optimal</span>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Quick Action Hub with Rich Font Awesome Icons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link
-          href="/admin/products"
-          className="p-4.5 bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:border-amber-400 hover:shadow-md transition-all no-underline flex items-center gap-4 group"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#A84218] border border-orange-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-xs">
-            <i className="fa-solid fa-circle-plus" />
-          </div>
-          <div>
-            <span className="text-sm font-bold text-gray-900 block group-hover:text-[#A84218] transition-colors">
-              Add New Product
-            </span>
-            <span className="text-xs text-gray-500">Create item in catalog</span>
-          </div>
-        </Link>
-
-        <Link
-          href="/admin/homepage"
-          className="p-4.5 bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:border-purple-400 hover:shadow-md transition-all no-underline flex items-center gap-4 group"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 text-[#2A1D38] border border-purple-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-xs">
-            <i className="fa-solid fa-arrow-down-up-across-line" />
-          </div>
-          <div>
-            <span className="text-sm font-bold text-gray-900 block group-hover:text-[#2A1D38] transition-colors">
-              Homepage Layout
-            </span>
-            <span className="text-xs text-gray-500">Reorder &amp; edit text</span>
-          </div>
-        </Link>
-
-        <Link
-          href="/admin/orders"
-          className="p-4.5 bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all no-underline flex items-center gap-4 group"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-xs">
-            <i className="fa-solid fa-truck-fast" />
-          </div>
-          <div>
-            <span className="text-sm font-bold text-gray-900 block group-hover:text-blue-700 transition-colors">
-              Process Orders
-            </span>
-            <span className="text-xs text-gray-500">{pendingOrdersCount} awaiting dispatch</span>
-          </div>
-        </Link>
-
-        <Link
-          href="/"
-          target="_blank"
-          className="p-4.5 bg-white rounded-2xl border border-gray-200/80 shadow-2xs hover:border-emerald-400 hover:shadow-md transition-all no-underline flex items-center gap-4 group"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform shadow-xs">
-            <i className="fa-solid fa-earth-asia" />
-          </div>
-          <div>
-            <span className="text-sm font-bold text-gray-900 block group-hover:text-emerald-700 transition-colors">
-              Public Storefront
-            </span>
-            <span className="text-xs text-gray-500">Preview live changes</span>
-          </div>
-        </Link>
-      </div>
-
-      {/* Two Column Grid: Recent Orders & Catalog Highlights */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Recent Customer Orders */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-200/80 shadow-xs p-5 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i className="fa-solid fa-receipt text-amber-600 text-sm" />
-                <span>Recent Customer Orders</span>
+      {/* Main Grid: Active Sections / Orders (Left 2/3) and System Alerts (Right 1/3) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left 8 Cols: Active Sections Cards & Orders Table */}
+        <div className="lg:col-span-8 flex flex-col gap-6">
+          {/* Active Sections Grid (Matching Reference "Active Organisations") */}
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-bold text-gray-900">
+                Active Homepage Sections
               </h2>
-              <p className="text-xs text-gray-500 mt-0.5">Live order management &amp; status tracking</p>
+              <Link
+                href="/admin/homepage"
+                className="text-xs font-bold text-gray-500 hover:text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg uppercase tracking-wider transition-colors no-underline"
+              >
+                VIEW ALL
+              </Link>
             </div>
-            <Link
-              href="/admin/orders"
-              className="text-xs font-bold text-[#A84218] hover:text-[#8F3510] no-underline inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-orange-50 transition-colors"
-            >
-              <span>View All Orders</span>
-              <i className="fa-solid fa-arrow-right text-[10px]" />
-            </Link>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#E6F4F1] text-[#133E35] flex items-center justify-center text-lg mb-2 shadow-2xs">
+                  <i className="fa-solid fa-star" />
+                </div>
+                <span className="text-xs font-bold text-gray-800 truncate w-full">
+                  Hero Showcase
+                </span>
+                <span className="text-[10px] text-gray-400 font-semibold uppercase mt-0.5">
+                  ENABLED
+                </span>
+              </div>
+
+              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-lg mb-2 shadow-2xs">
+                  <i className="fa-solid fa-gem" />
+                </div>
+                <span className="text-xs font-bold text-gray-800 truncate w-full">
+                  Auspicious Finds
+                </span>
+                <span className="text-[10px] text-gray-400 font-semibold uppercase mt-0.5">
+                  ENABLED
+                </span>
+              </div>
+
+              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-lg mb-2 shadow-2xs">
+                  <i className="fa-solid fa-circle-nodes" />
+                </div>
+                <span className="text-xs font-bold text-gray-800 truncate w-full">
+                  Curated Interests
+                </span>
+                <span className="text-[10px] text-gray-400 font-semibold uppercase mt-0.5">
+                  ENABLED
+                </span>
+              </div>
+
+              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-lg mb-2 shadow-2xs">
+                  <i className="fa-solid fa-gift" />
+                </div>
+                <span className="text-xs font-bold text-gray-800 truncate w-full">
+                  Prosperity Gifts
+                </span>
+                <span className="text-[10px] text-gray-400 font-semibold uppercase mt-0.5">
+                  ENABLED
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50/80 text-gray-500 text-[11px] uppercase tracking-wider font-semibold">
-                <tr>
-                  <th className="py-2.5 px-3 rounded-l-xl">
-                    <span className="flex items-center gap-1">
-                      <i className="fa-solid fa-hashtag text-[10px] text-gray-400" />
-                      <span>Order</span>
-                    </span>
-                  </th>
-                  <th className="py-2.5 px-3">
-                    <span className="flex items-center gap-1">
-                      <i className="fa-solid fa-user text-[10px] text-gray-400" />
-                      <span>Customer</span>
-                    </span>
-                  </th>
-                  <th className="py-2.5 px-3">
-                    <span className="flex items-center gap-1">
-                      <i className="fa-solid fa-box text-[10px] text-gray-400" />
-                      <span>Items</span>
-                    </span>
-                  </th>
-                  <th className="py-2.5 px-3">
-                    <span className="flex items-center gap-1">
-                      <i className="fa-solid fa-money-bill-wave text-[10px] text-gray-400" />
-                      <span>Total</span>
-                    </span>
-                  </th>
-                  <th className="py-2.5 px-3">
-                    <span className="flex items-center gap-1">
-                      <i className="fa-solid fa-truck text-[10px] text-gray-400" />
-                      <span>Status</span>
-                    </span>
-                  </th>
-                  <th className="py-2.5 px-3 rounded-r-xl text-right">
-                    <span>Action</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {orders.slice(0, 5).map((order) => {
-                  const currentStatus = statusColors[order.status] || statusColors.Pending;
-                  return (
-                    <tr key={order.id} className="hover:bg-gray-50/80 transition-colors group">
-                      <td className="py-3 px-3 font-semibold text-gray-900 font-mono text-xs">
-                        {order.orderNumber}
-                      </td>
-                      <td className="py-3 px-3 text-gray-700">
-                        <div className="font-semibold text-xs text-gray-900">{order.customerName}</div>
-                        <div className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">
-                          <i className="fa-solid fa-location-dot text-[9px]" />
-                          <span>{order.city}</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 text-gray-600 text-xs">
-                        <span className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded-full font-medium text-[11px]">
-                          <i className="fa-solid fa-box-open text-[10px] text-gray-500" />
-                          <span>{order.items.length} item{order.items.length > 1 ? 's' : ''}</span>
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 font-bold text-gray-900 text-xs">
-                        ₹{order.totalAmount.toLocaleString('en-IN')}
-                      </td>
-                      <td className="py-3 px-3">
-                        <div className="relative inline-flex items-center">
+          {/* Recent Orders Table */}
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs flex flex-col">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">Recent Customer Orders</h2>
+                <p className="text-xs text-gray-400 mt-0.5">Live store checkout &amp; fulfillment updates</p>
+              </div>
+              <Link
+                href="/admin/orders"
+                className="text-xs font-bold text-[#133E35] hover:underline no-underline"
+              >
+                All Orders &rarr;
+              </Link>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-gray-50/70 text-gray-400 text-[11px] uppercase tracking-wider font-semibold">
+                  <tr>
+                    <th className="py-2.5 px-3 rounded-l-xl">Order #</th>
+                    <th className="py-2.5 px-3">Customer</th>
+                    <th className="py-2.5 px-3">Items</th>
+                    <th className="py-2.5 px-3">Total</th>
+                    <th className="py-2.5 px-3">Status</th>
+                    <th className="py-2.5 px-3 rounded-r-xl text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {orders.slice(0, 5).map((order) => {
+                    const pastel = statusPastels[order.status] || statusPastels.Pending;
+                    return (
+                      <tr key={order.id} className="hover:bg-gray-50/80 transition-colors">
+                        <td className="py-3 px-3 font-semibold text-gray-900 text-xs font-mono">
+                          {order.orderNumber}
+                        </td>
+                        <td className="py-3 px-3 text-gray-700 text-xs">
+                          <div className="font-bold text-gray-900">{order.customerName}</div>
+                          <div className="text-[10.5px] text-gray-400">{order.city}</div>
+                        </td>
+                        <td className="py-3 px-3 text-gray-600 text-xs">
+                          {order.items.length} item{order.items.length > 1 ? 's' : ''}
+                        </td>
+                        <td className="py-3 px-3 font-bold text-gray-900 text-xs">
+                          ₹{order.totalAmount.toLocaleString('en-IN')}
+                        </td>
+                        <td className="py-3 px-3">
                           <select
                             value={order.status}
                             onChange={(e) => updateOrderStatus(order.id, e.target.value as OrderStatus)}
-                            className={`text-xs font-bold pl-2.5 pr-6 py-1 rounded-full border cursor-pointer focus:outline-hidden appearance-none ${currentStatus.bg} ${currentStatus.text} ${currentStatus.border}`}
+                            className={`text-xs font-bold px-2.5 py-1 rounded-full border border-black/5 cursor-pointer focus:outline-hidden ${pastel.bg} ${pastel.text}`}
                           >
                             <option value="Pending">Pending</option>
                             <option value="Processing">Processing</option>
@@ -360,88 +342,115 @@ export default function AdminDashboardPage() {
                             <option value="Delivered">Delivered</option>
                             <option value="Cancelled">Cancelled</option>
                           </select>
-                          <i className="fa-solid fa-chevron-down absolute right-2 text-[9px] pointer-events-none opacity-60" />
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 text-right">
-                        <Link
-                          href="/admin/orders"
-                          className="text-xs text-gray-500 hover:text-black font-semibold no-underline inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <i className="fa-solid fa-eye text-[10px]" />
-                          <span>Details</span>
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <Link
+                            href="/admin/orders"
+                            className="text-xs text-gray-500 hover:text-black font-semibold no-underline"
+                          >
+                            Details
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        {/* Right 1 Col: Quick Product Highlights */}
-        <div className="bg-white rounded-3xl border border-gray-200/80 shadow-xs p-5 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
-                <i className="fa-solid fa-gem text-purple-600 text-sm" />
-                <span>Catalog Highlights</span>
-              </h2>
-              <p className="text-xs text-gray-500 mt-0.5">Live store items</p>
+        {/* Right 4 Cols: System Alerts (Matching Reference "System Alerts") & Shortcuts */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          {/* System Alerts Card */}
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs flex flex-col">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+              <h2 className="text-base font-bold text-gray-900">System Alerts</h2>
+              <div className="w-6 h-6 rounded-full bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-xs">
+                <i className="fa-solid fa-exclamation" />
+              </div>
             </div>
-            <Link
-              href="/admin/products"
-              className="text-xs font-bold text-[#A84218] hover:text-[#8F3510] no-underline inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-orange-50 transition-colors"
-            >
-              <span>Manage</span>
-              <i className="fa-solid fa-arrow-right text-[10px]" />
-            </Link>
-          </div>
 
-          <div className="flex flex-col gap-3">
-            {products.slice(0, 5).map((prod) => (
-              <div
-                key={prod.id}
-                className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200"
-              >
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200/80 shadow-2xs">
-                  <img
-                    src={prod.images[0]}
-                    alt={prod.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-xs font-bold text-gray-900 truncate">
-                    {prod.name}
-                  </h4>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs font-extrabold text-emerald-700">
-                      ₹{prod.price.toLocaleString('en-IN')}
+            <div className="flex flex-col gap-3">
+              {/* Alert 1 */}
+              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-sm shrink-0">
+                    <i className="fa-solid fa-bolt" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-900 block">
+                      Realtime Catalog Sync
                     </span>
-                    <span className="text-[10px] text-gray-500 truncate bg-gray-100 px-2 py-0.5 rounded-full">
-                      {prod.category}
+                    <span className="text-[10.5px] text-gray-400 block">
+                      Active storefront connection
                     </span>
                   </div>
                 </div>
-                {prod.bestseller && (
-                  <span className="text-[9.5px] bg-[#1E132A] text-amber-300 px-2 py-0.5 rounded-full font-bold shrink-0 flex items-center gap-1 shadow-2xs">
-                    <i className="fa-solid fa-star text-[8px]" />
-                    <span>Best</span>
-                  </span>
-                )}
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                  Live
+                </span>
               </div>
-            ))}
-          </div>
 
-          <Link
-            href="/admin/products"
-            className="mt-auto pt-4 text-center text-xs font-bold text-[#2A1D38] hover:text-[#A84218] no-underline block border-t border-gray-100 transition-colors"
-          >
-            <i className="fa-solid fa-plus-circle text-xs mr-1 text-[#A84218]" />
-            <span>Manage All {products.length} Products</span>
-          </Link>
+              {/* Alert 2 */}
+              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#FEF9C3] text-[#A16207] flex items-center justify-center text-sm shrink-0">
+                    <i className="fa-solid fa-shield-halved" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-900 block">
+                      Admin Security Guard
+                    </span>
+                    <span className="text-[10.5px] text-gray-400 block">
+                      URL session protected
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
+                  Optimal
+                </span>
+              </div>
+
+              {/* Alert 3 */}
+              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-sm shrink-0">
+                    <i className="fa-solid fa-box-open" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-gray-900 block">
+                      Product Inventory
+                    </span>
+                    <span className="text-[10.5px] text-gray-400 block">
+                      {products.length} live SKU records
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                  Normal
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Actions at bottom */}
+            <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
+              <Link
+                href="/admin/products"
+                className="w-full py-2.5 bg-[#133E35] hover:bg-[#0E2E27] text-white text-xs font-bold rounded-xl text-center transition-colors no-underline shadow-xs flex items-center justify-center gap-2"
+              >
+                <i className="fa-solid fa-plus text-[11px]" />
+                <span>Add New Product</span>
+              </Link>
+
+              <Link
+                href="/admin/homepage"
+                className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl text-center transition-colors no-underline"
+              >
+                Reorder Homepage Sections
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

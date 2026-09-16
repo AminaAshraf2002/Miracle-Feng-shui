@@ -58,16 +58,16 @@ export default function AdminLayout({
   // Loading state while checking authentication
   if (isAuthenticated === null || !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0E0817] flex flex-col items-center justify-center text-white">
-        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-400/50 mb-4 animate-pulse shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+      <div className="min-h-screen bg-[#133E35] flex flex-col items-center justify-center text-white font-outfit">
+        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/30 mb-4 animate-pulse shadow-md">
           <img
             src="/images/miracle.jpeg"
             alt="Miracle Feng Shui"
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-sm font-medium text-amber-200/90 tracking-wide">
-          Verifying administrative sanctuary access...
+        <p className="text-sm font-medium text-white/80 tracking-wide">
+          Verifying store administration credentials...
         </p>
       </div>
     );
@@ -75,23 +75,20 @@ export default function AdminLayout({
 
   const navItems = [
     {
-      name: 'Overview',
+      name: 'Dashboard',
       href: '/admin',
       icon: 'fa-gauge-high',
       exact: true,
-      badge: 'Live',
     },
     {
-      name: 'Homepage Builder',
+      name: 'Sections Layout',
       href: '/admin/homepage',
-      icon: 'fa-wand-magic-sparkles',
-      badge: 'Positions',
+      icon: 'fa-layer-group',
     },
     {
       name: 'Products Catalog',
       href: '/admin/products',
       icon: 'fa-boxes-stacked',
-      badge: 'CRUD',
     },
     {
       name: 'Customer Orders',
@@ -106,205 +103,149 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] text-[#1E1E1E] flex flex-col font-outfit antialiased">
-      {/* Top Admin Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[#160D23] text-white border-b border-[#2D1B44] shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Brand with Circular Logo & Mobile Hamburger */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 cursor-pointer transition-colors"
-              aria-label="Toggle navigation menu"
-            >
-              <i className="fa-solid fa-bars text-lg" />
-            </button>
-
-            <Link href="/admin" className="flex items-center gap-3 no-underline text-white group">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.25)] shrink-0 bg-white group-hover:scale-105 transition-transform">
-                <img
-                  src="/images/miracle.jpeg"
-                  alt="Miracle Feng Shui"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <span
-                  style={{ color: '#ffffff' }}
-                  className="font-cinzel font-bold text-base sm:text-lg tracking-wider block leading-tight text-white group-hover:text-amber-200 transition-colors"
-                >
-                  Miracle Feng Shui
-                </span>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] text-amber-300 font-semibold tracking-wider uppercase">
-                    Admin Portal
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          {/* Right Header Actions */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
-            <Link
-              href="/"
-              target="_blank"
-              className="hidden sm:inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full transition-all border border-white/15 no-underline shadow-2xs"
-            >
-              <i className="fa-solid fa-arrow-up-right-from-square text-xs text-amber-300" />
-              <span>View Storefront</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 bg-white/5 rounded-full border border-white/10 text-xs text-gray-300">
-              <i className="fa-solid fa-user-shield text-emerald-400 text-xs" />
-              <span className="font-medium text-white">{adminUser}</span>
+    <div className="min-h-screen bg-[#F4F7F6] text-[#111827] flex flex-col lg:flex-row font-outfit antialiased">
+      {/* Mobile Top Header */}
+      <div className="lg:hidden bg-[#133E35] text-white px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-40">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="p-2 -ml-1 text-white/80 hover:text-white rounded-lg cursor-pointer"
+            aria-label="Open navigation drawer"
+          >
+            <i className="fa-solid fa-bars text-lg" />
+          </button>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/30 bg-white shrink-0">
+              <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
             </div>
-
-            {/* Sign Out Button */}
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="inline-flex items-center gap-1.5 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-semibold px-3.5 py-1.5 rounded-full transition-all cursor-pointer border border-rose-500/40 shadow-xs hover:shadow-md active:scale-95"
-              title="Sign out of Admin"
-            >
-              <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
-              <span className="hidden xs:inline">Sign Out</span>
-            </button>
+            <span className="font-bold text-sm tracking-tight text-white">Miracle Admin</span>
           </div>
         </div>
-      </header>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="text-xs text-white/80 hover:text-rose-200 cursor-pointer flex items-center gap-1.5"
+        >
+          <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
+          <span>Exit</span>
+        </button>
+      </div>
 
-      {/* Main Admin Body */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col lg:flex-row gap-6">
-        {/* Desktop Sidebar Navigation */}
-        <aside className="hidden lg:block w-64 shrink-0">
-          <div className="sticky top-24 bg-white rounded-2xl p-4 shadow-sm border border-gray-200/80 flex flex-col gap-1.5">
-            {/* Branded Store Profile Card with Logo */}
-            <div className="p-3 mb-2 rounded-xl bg-gradient-to-br from-[#1C1029] via-[#2A173E] to-[#1C1029] text-white flex items-center gap-3 border border-amber-500/20 shadow-xs">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-amber-400/50 shadow-xs shrink-0 bg-white">
-                <img
-                  src="/images/miracle.jpeg"
-                  alt="Miracle Feng Shui"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="min-w-0">
-                <span className="font-cinzel font-bold text-sm text-white block truncate tracking-wide leading-tight">
-                  Miracle Feng Shui
-                </span>
-                <span className="text-[10px] text-amber-300 font-medium flex items-center gap-1 mt-0.5">
-                  <i className="fa-solid fa-shield-halved text-[9px]" />
-                  <span>Store Manager</span>
-                </span>
-              </div>
+      {/* Full-Height Desktop Sidebar (Matching Reference Design) */}
+      <aside className="hidden lg:flex w-64 xl:w-72 bg-[#133E35] text-white flex-col justify-between p-6 shrink-0 min-h-screen sticky top-0 h-screen select-none">
+        <div>
+          {/* Top Brand with Circular Logo */}
+          <div className="flex items-center gap-3.5 pb-6 border-b border-white/10">
+            <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-white/25 shadow-md shrink-0 bg-white">
+              <img
+                src="/images/miracle.jpeg"
+                alt="Miracle Feng Shui"
+                className="w-full h-full object-cover"
+              />
             </div>
-
-            <div className="px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-gray-400">
-              Navigation
+            <div className="min-w-0">
+              <span className="font-bold text-base text-white tracking-tight block leading-snug">
+                Miracle Feng Shui
+              </span>
+              <span className="text-[10.5px] text-white/60 font-semibold tracking-wider uppercase block">
+                STORE COMMAND CENTER
+              </span>
             </div>
+          </div>
 
+          {/* Navigation Links (Solid White Active Pill matching reference) */}
+          <nav className="flex flex-col gap-2 mt-6">
             {navItems.map((item) => {
               const active = isActive(item);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all no-underline ${
                     active
-                      ? 'bg-gradient-to-r from-[#231533] to-[#361E4F] text-white shadow-sm font-semibold border-l-4 border-amber-400'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? 'bg-white text-[#133E35] shadow-sm font-bold'
+                      : 'text-white/75 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3.5">
                     <i
-                      className={`fa-solid ${item.icon} w-5 text-center ${
-                        active ? 'text-amber-300' : 'text-gray-400'
+                      className={`fa-solid ${item.icon} text-base w-5 text-center ${
+                        active ? 'text-[#133E35]' : 'text-white/70'
                       }`}
                     />
-                    <span style={{ color: active ? '#ffffff' : undefined }}>{item.name}</span>
+                    <span>{item.name}</span>
                   </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[9.5px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                        active
-                          ? 'bg-amber-400 text-black shadow-2xs'
-                          : 'bg-gray-100 text-gray-500'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+                  {active && (
+                    <span className="w-2 h-2 rounded-full bg-[#133E35]" />
                   )}
                 </Link>
               );
             })}
+          </nav>
+        </div>
 
-            <hr className="my-2.5 border-gray-100" />
-
-            <div className="px-3 py-1 text-[10.5px] font-bold uppercase tracking-wider text-gray-400">
-              Quick Actions
+        {/* Bottom Sidebar Widget & Actions */}
+        <div className="pt-6 border-t border-white/10 flex flex-col gap-3.5">
+          {/* Store Status Card */}
+          <div className="bg-white/10 rounded-2xl p-4 border border-white/10 text-center">
+            <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center mx-auto mb-2 text-xs">
+              <i className="fa-solid fa-bolt" />
             </div>
-
+            <span className="text-xs font-bold text-white block tracking-wide uppercase">
+              STORE CONNECTED
+            </span>
+            <span className="text-[11px] text-white/70 block mt-0.5">
+              Live catalog &amp; layout synced
+            </span>
             <Link
-              href="/admin/products"
-              className="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm text-[#A84218] hover:bg-orange-50 font-semibold no-underline transition-colors"
+              href="/"
+              target="_blank"
+              className="mt-3 block w-full py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-xl transition-colors no-underline"
             >
-              <i className="fa-solid fa-circle-plus text-base" />
-              <span>Add New Product</span>
+              Open Storefront &rarr;
             </Link>
-
-            <Link
-              href="/admin/homepage"
-              className="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm text-[#2A1D38] hover:bg-purple-50 font-semibold no-underline transition-colors"
-            >
-              <i className="fa-solid fa-arrows-up-down text-base" />
-              <span>Reorder Homepage</span>
-            </Link>
-
-            {/* Catalog Engine Live Status Card */}
-            <div className="mt-3 p-3 bg-gradient-to-b from-amber-50/70 to-orange-50/40 rounded-xl border border-amber-200/60 text-xs">
-              <div className="flex items-center justify-between text-gray-700 mb-1">
-                <span className="font-bold text-[11px] text-[#1A1124] flex items-center gap-1">
-                  <i className="fa-solid fa-bolt text-amber-600 text-[10px]" />
-                  <span>Storefront Status</span>
-                </span>
-                <span className="text-[9.5px] font-bold text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-full">
-                  Live &amp; Active
-                </span>
-              </div>
-              <p className="text-[10.5px] text-gray-500 leading-snug">
-                Edits to inventory &amp; homepage sections reflect instantly.
-              </p>
-            </div>
           </div>
-        </aside>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex animate-in fade-in duration-200">
-            <div className="w-72 bg-white h-full p-5 flex flex-col shadow-2xl animate-in slide-in-from-left duration-200">
-              <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+          {/* User Email & Sign Out */}
+          <div className="flex items-center justify-between text-xs px-1 text-white/70">
+            <div className="truncate max-w-[150px] font-medium text-white/90">
+              {adminUser}
+            </div>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="text-white/75 hover:text-rose-200 cursor-pointer transition-colors flex items-center gap-1 font-semibold"
+            >
+              <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex animate-in fade-in duration-150">
+          <div className="w-72 bg-[#133E35] text-white h-full p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-left duration-200">
+            <div>
+              <div className="flex items-center justify-between pb-5 border-b border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full overflow-hidden border border-amber-400 shadow-xs">
-                    <img
-                      src="/images/miracle.jpeg"
-                      alt="Miracle Feng Shui"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-9 h-9 rounded-xl overflow-hidden border border-white/30 bg-white">
+                    <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
                   </div>
-                  <span className="font-bold text-base text-[#2A1D38]">Miracle Admin</span>
+                  <span className="font-bold text-base text-white">Miracle Admin</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1.5 text-gray-500 hover:text-black cursor-pointer rounded-lg hover:bg-gray-100"
+                  className="p-1.5 text-white/70 hover:text-white rounded-lg cursor-pointer"
                 >
                   <i className="fa-solid fa-xmark text-lg" />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-1.5 mt-4">
+              <div className="flex flex-col gap-2 mt-5">
                 {navItems.map((item) => {
                   const active = isActive(item);
                   return (
@@ -312,56 +253,48 @@ export default function AdminLayout({
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline ${
+                      className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold no-underline ${
                         active
-                          ? 'bg-[#2A1D38] text-white font-semibold'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-white text-[#133E35] shadow-xs'
+                          : 'text-white/80 hover:bg-white/10'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <i className={`fa-solid ${item.icon} ${active ? 'text-amber-300' : 'text-gray-400'}`} />
-                        <span style={{ color: active ? '#ffffff' : undefined }}>{item.name}</span>
+                        <i className={`fa-solid ${item.icon}`} />
+                        <span>{item.name}</span>
                       </div>
-                      {item.badge && (
-                        <span className="text-[10px] bg-amber-300 text-black px-2 py-0.5 rounded-full font-bold">
-                          {item.badge}
-                        </span>
-                      )}
+                      {active && <span className="w-2 h-2 rounded-full bg-[#133E35]" />}
                     </Link>
                   );
                 })}
               </div>
-
-              <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
-                <Link
-                  href="/"
-                  target="_blank"
-                  className="w-full flex items-center justify-center gap-2 bg-[#2A1D38] text-white py-2.5 rounded-xl font-semibold text-xs no-underline shadow-xs"
-                >
-                  <i className="fa-solid fa-arrow-up-right-from-square text-xs" />
-                  <span>Open Storefront</span>
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="w-full flex items-center justify-center gap-2 bg-rose-50 text-rose-600 py-2 rounded-xl font-semibold text-xs border border-rose-200 cursor-pointer"
-                >
-                  <i className="fa-solid fa-arrow-right-from-bracket text-xs" />
-                  <span>Sign Out</span>
-                </button>
-              </div>
             </div>
-            <div
-              className="flex-1"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-          </div>
-        )}
 
-        {/* Dynamic Admin Content */}
-        <main className="flex-1 min-w-0">{children}</main>
-      </div>
+            <div className="pt-4 border-t border-white/10 flex flex-col gap-2">
+              <Link
+                href="/"
+                target="_blank"
+                className="w-full text-center py-2.5 bg-white/20 text-white rounded-xl text-xs font-semibold no-underline"
+              >
+                Open Storefront
+              </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="w-full py-2 bg-rose-500/20 text-rose-200 rounded-xl text-xs font-semibold cursor-pointer"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+          <div className="flex-1" onClick={() => setMobileMenuOpen(false)} />
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        {children}
+      </main>
     </div>
   );
 }

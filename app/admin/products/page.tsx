@@ -104,7 +104,7 @@ export default function AdminProductsPage() {
     <div className="flex flex-col gap-6">
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1E132A] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-amber-400/30">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#133E35] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-white/20">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>

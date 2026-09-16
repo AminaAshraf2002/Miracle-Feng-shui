@@ -49,9 +49,9 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Toast */}
+      {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1E132A] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-amber-400/30">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#133E35] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-white/20">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">{toastMessage}</span>
         </div>
@@ -84,7 +84,7 @@ export default function AdminOrdersPage() {
               onClick={() => setSelectedStatus(st)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 selectedStatus === st
-                  ? 'bg-[#2A1D38] text-white shadow-xs'
+                  ? 'bg-[#133E35] text-white shadow-xs'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -297,7 +297,7 @@ export default function AdminOrdersPage() {
               <button
                 type="button"
                 onClick={() => setViewingOrder(null)}
-                className="px-5 py-2 text-xs font-semibold bg-[#2A1D38] hover:bg-[#1E132A] text-white rounded-xl shadow-xs transition-colors cursor-pointer"
+                className="px-5 py-2 text-xs font-semibold bg-[#133E35] hover:bg-[#0E2E27] text-white rounded-xl shadow-xs transition-colors cursor-pointer"
               >
                 Close
               </button>
