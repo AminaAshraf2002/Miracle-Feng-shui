@@ -209,7 +209,7 @@ export default function AdminLoginPage() {
                 style={{ backgroundColor: '#ffffff', color: '#1A1124' }}
                 className="text-[11px] font-bold px-3 py-1 rounded-full border border-amber-400/60 hover:bg-amber-50 hover:border-amber-500 transition-all shadow-xs cursor-pointer shrink-0 text-amber-900"
               >
-                ✨ Auto-fill
+                 Auto-fill
               </button>
             </div>
           </div>
