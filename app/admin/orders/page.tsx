@@ -21,11 +21,11 @@ export default function AdminOrdersPage() {
   ];
 
   const statusBadgeStyle: Record<OrderStatus, string> = {
-    Pending: 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]/60',
-    Processing: 'bg-blue-50 text-blue-700 border-blue-200',
-    Shipped: 'bg-purple-50 text-purple-700 border-purple-200',
-    Delivered: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    Cancelled: 'bg-rose-50 text-rose-700 border-rose-200',
+    Pending: 'bg-[#FEF7EE] text-[#B45309] border border-[#FED7AA]',
+    Processing: 'bg-[#F0F5FA] text-[#1D4ED8] border border-blue-200',
+    Shipped: 'bg-[#F6F2FC] text-[#6B21A8] border border-purple-200',
+    Delivered: 'bg-[#F0F7F5] text-[#115E59] border border-teal-200',
+    Cancelled: 'bg-[#FDF4F0] text-[#B91C1C] border border-rose-200',
   };
 
   const showToast = (msg: string) => {
@@ -78,13 +78,14 @@ export default function AdminOrdersPage() {
               key={st}
               type="button"
               onClick={() => setSelectedStatus(st)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              style={selectedStatus === st ? { color: '#ffffff' } : { color: '#374151' }}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedStatus === st
-                  ? 'bg-[#170E22] text-white shadow-xs border border-white/20'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-[#140D1F] !text-white shadow-xs border border-white/20'
+                  : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
               }`}
             >
-              {st}
+              <span style={selectedStatus === st ? { color: '#ffffff' } : { color: '#374151' }}>{st}</span>
             </button>
           ))}
         </div>
@@ -293,9 +294,10 @@ export default function AdminOrdersPage() {
               <button
                 type="button"
                 onClick={() => setViewingOrder(null)}
-                className="px-5 py-2 text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white rounded-xl shadow-xs transition-colors cursor-pointer border border-white/20"
+                style={{ color: '#ffffff' }}
+                className="px-5 py-2 text-xs font-bold bg-[#140D1F] hover:bg-[#2B154C] !text-white rounded-xl shadow-xs transition-colors cursor-pointer border border-white/20"
               >
-                Close
+                <span style={{ color: '#ffffff' }}>Close Window</span>
               </button>
             </div>
           </div>

@@ -376,11 +376,11 @@ export default function AdminDashboardPage() {
 
       {/* Compact KPI Cards Grid with Minimalist Pastel Circles */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Total Sales (Pastel Peach / Soft Amber) */}
+        {/* Total Sales (Very Light Pastel Amber) */}
         <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-sm shrink-0 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-[#FEF7EE] text-[#B45309] flex items-center justify-center text-sm shrink-0 shadow-2xs border border-[#FED7AA]/30">
                 <i className="fa-solid fa-indian-rupee-sign" />
               </div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -392,18 +392,18 @@ export default function AdminDashboardPage() {
             <div className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               ₹{totalRevenue.toLocaleString('en-IN')}
             </div>
-            <span className="text-[10.5px] font-semibold text-[#C2410C] bg-[#FFF7ED] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/70 flex items-center gap-1">
+            <span className="text-[10.5px] font-semibold text-[#B45309] bg-[#FEF7EE] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/50 flex items-center gap-1">
               <i className="fa-solid fa-arrow-trend-up text-[9px]" />
               <span>18%</span>
             </span>
           </div>
         </div>
 
-        {/* Customer Orders (Pastel Peach) */}
+        {/* Customer Orders (Very Light Pastel Peach / Blush) */}
         <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-sm shrink-0 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-[#FDF4F0] text-[#9A3412] flex items-center justify-center text-sm shrink-0 shadow-2xs border border-[#FDBA74]/30">
                 <i className="fa-solid fa-bag-shopping" />
               </div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -415,18 +415,18 @@ export default function AdminDashboardPage() {
             <div className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               {orders.length}
             </div>
-            <span className="text-[10.5px] font-semibold text-orange-800 bg-[#FDF1EC] px-1.5 py-0.5 rounded-md border border-orange-200/60 flex items-center gap-1">
+            <span className="text-[10.5px] font-semibold text-[#9A3412] bg-[#FDF4F0] px-1.5 py-0.5 rounded-md border border-[#FDBA74]/50 flex items-center gap-1">
               <i className="fa-solid fa-arrow-trend-up text-[9px]" />
               <span>8%</span>
             </span>
           </div>
         </div>
 
-        {/* Active Products (Pastel Lavender) */}
+        {/* Active Products (Very Light Pastel Lavender) */}
         <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-sm shrink-0 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-[#F6F2FC] text-[#6B21A8] flex items-center justify-center text-sm shrink-0 shadow-2xs border border-purple-200/30">
                 <i className="fa-solid fa-cubes" />
               </div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -438,18 +438,18 @@ export default function AdminDashboardPage() {
             <div className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               {products.length}
             </div>
-            <span className="text-[10.5px] font-semibold text-purple-800 bg-[#F3EEFC] px-1.5 py-0.5 rounded-md border border-purple-200/60 flex items-center gap-1">
+            <span className="text-[10.5px] font-semibold text-[#6B21A8] bg-[#F6F2FC] px-1.5 py-0.5 rounded-md border border-purple-200/50 flex items-center gap-1">
               <i className="fa-solid fa-check text-[9px]" />
               <span>Active</span>
             </span>
           </div>
         </div>
 
-        {/* Layout Sections (Pastel Jade/Mint) */}
+        {/* Layout Sections (Very Light Pastel Mint / Sage) */}
         <div className="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#E6F4F1] text-[#0F766E] flex items-center justify-center text-sm shrink-0 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-[#F0F7F5] text-[#115E59] flex items-center justify-center text-sm shrink-0 shadow-2xs border border-teal-200/30">
                 <i className="fa-solid fa-sliders" />
               </div>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
@@ -461,7 +461,7 @@ export default function AdminDashboardPage() {
             <div className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
               {activeSectionsCount} / {sections.length}
             </div>
-            <span className="text-[10.5px] font-semibold text-teal-800 bg-[#E6F4F1] px-1.5 py-0.5 rounded-md border border-teal-200/60 flex items-center gap-1">
+            <span className="text-[10.5px] font-semibold text-[#115E59] bg-[#F0F7F5] px-1.5 py-0.5 rounded-md border border-teal-200/50 flex items-center gap-1">
               <i className="fa-solid fa-check text-[9px]" />
               <span>Optimal</span>
             </span>
@@ -488,9 +488,9 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {/* Card 1: Pastel Peach */}
+              {/* Card 1: Very Light Pastel Amber */}
               <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-3 rounded-xl border border-gray-200/60 flex flex-col items-center text-center">
-                <div className="w-9 h-9 rounded-xl bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-base mb-1.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-xl bg-[#FEF7EE] text-[#B45309] flex items-center justify-center text-base mb-1.5 shadow-2xs border border-[#FED7AA]/30">
                   <i className="fa-solid fa-star" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -501,9 +501,9 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              {/* Card 2: Pastel Peach */}
+              {/* Card 2: Very Light Pastel Peach / Blush */}
               <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-3 rounded-xl border border-gray-200/60 flex flex-col items-center text-center">
-                <div className="w-9 h-9 rounded-xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-base mb-1.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-xl bg-[#FDF4F0] text-[#9A3412] flex items-center justify-center text-base mb-1.5 shadow-2xs border border-[#FDBA74]/30">
                   <i className="fa-solid fa-gem" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -514,9 +514,9 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              {/* Card 3: Pastel Lavender */}
+              {/* Card 3: Very Light Pastel Lavender */}
               <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-3 rounded-xl border border-gray-200/60 flex flex-col items-center text-center">
-                <div className="w-9 h-9 rounded-xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-base mb-1.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-xl bg-[#F6F2FC] text-[#6B21A8] flex items-center justify-center text-base mb-1.5 shadow-2xs border border-purple-200/30">
                   <i className="fa-solid fa-circle-nodes" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -527,9 +527,9 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              {/* Card 4: Pastel Mint */}
+              {/* Card 4: Very Light Pastel Mint / Sage */}
               <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-3 rounded-xl border border-gray-200/60 flex flex-col items-center text-center">
-                <div className="w-9 h-9 rounded-xl bg-[#E6F4F1] text-[#0F766E] flex items-center justify-center text-base mb-1.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-xl bg-[#F0F7F5] text-[#115E59] flex items-center justify-center text-base mb-1.5 shadow-2xs border border-teal-200/30">
                   <i className="fa-solid fa-gift" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -623,16 +623,16 @@ export default function AdminDashboardPage() {
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/70 shadow-2xs flex flex-col">
             <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-gray-100">
               <h2 className="text-sm sm:text-base font-bold text-gray-900">System Alerts</h2>
-              <div className="w-5 h-5 rounded-full bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-[10px]">
+              <div className="w-5 h-5 rounded-full bg-[#FEF7EE] text-[#B45309] flex items-center justify-center text-[10px] border border-[#FED7AA]/40">
                 <i className="fa-solid fa-exclamation" />
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              {/* Alert 1: Pastel Peach */}
+              {/* Alert 1: Very Light Pastel Peach */}
               <div className="p-2.5 bg-gray-50/70 rounded-xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#FDF4F0] text-[#9A3412] flex items-center justify-center text-xs shrink-0 border border-[#FDBA74]/30">
                     <i className="fa-solid fa-bolt" />
                   </div>
                   <div>
@@ -649,10 +649,10 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              {/* Alert 2: Pastel Peach */}
+              {/* Alert 2: Very Light Pastel Amber */}
               <div className="p-2.5 bg-gray-50/70 rounded-xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-[#FFF7ED] text-[#C2410C] flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#FEF7EE] text-[#B45309] flex items-center justify-center text-xs shrink-0 border border-[#FED7AA]/30">
                     <i className="fa-solid fa-shield-halved" />
                   </div>
                   <div>
@@ -664,15 +664,15 @@ export default function AdminDashboardPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-[9.5px] font-bold text-[#C2410C] bg-[#FFF7ED] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/60">
+                <span className="text-[9.5px] font-bold text-[#B45309] bg-[#FEF7EE] px-1.5 py-0.5 rounded-md border border-[#FED7AA]/60">
                   Optimal
                 </span>
               </div>
 
-              {/* Alert 3: Pastel Lavender */}
+              {/* Alert 3: Very Light Pastel Lavender */}
               <div className="p-2.5 bg-gray-50/70 rounded-xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#F6F2FC] text-[#6B21A8] flex items-center justify-center text-xs shrink-0 border border-purple-200/30">
                     <i className="fa-solid fa-box-open" />
                   </div>
                   <div>
@@ -684,27 +684,29 @@ export default function AdminDashboardPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-[9.5px] font-bold text-purple-800 bg-[#F3EEFC] px-1.5 py-0.5 rounded-md border border-purple-200/60">
+                <span className="text-[9.5px] font-bold text-purple-800 bg-[#F6F2FC] px-1.5 py-0.5 rounded-md border border-purple-200/60">
                   Normal
                 </span>
               </div>
             </div>
 
-            {/* Quick Actions */}
+            {/* Quick Actions with Guaranteed High-Contrast Visible Button Text */}
             <div className="mt-4 pt-3 border-t border-gray-100 flex flex-col gap-2">
               <Link
                 href="/admin/products"
-                className="w-full py-2 bg-gradient-to-r from-[#170E22] via-[#241334] to-[#150C20] hover:opacity-95 text-white text-xs font-bold rounded-xl text-center transition-opacity no-underline shadow-xs flex items-center justify-center gap-1.5 border border-white/15"
+                style={{ color: '#ffffff' }}
+                className="w-full py-2.5 bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-xs font-bold rounded-xl text-center transition-all no-underline shadow-xs flex items-center justify-center gap-2 border border-white/15"
               >
-                <i className="fa-solid fa-plus text-[10px] text-orange-200/90" />
-                <span>Add New Product</span>
+                <i className="fa-solid fa-plus text-[11px]" style={{ color: '#ffffff' }} />
+                <span style={{ color: '#ffffff' }}>Add New Product</span>
               </Link>
 
               <Link
                 href="/admin/homepage"
-                className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl text-center transition-colors no-underline"
+                className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded-xl text-center transition-colors no-underline flex items-center justify-center gap-2 border border-gray-200/70"
               >
-                Reorder Homepage
+                <i className="fa-solid fa-arrows-up-down text-[11px] text-gray-600" />
+                <span className="text-gray-800 font-bold">Reorder Homepage</span>
               </Link>
             </div>
           </div>

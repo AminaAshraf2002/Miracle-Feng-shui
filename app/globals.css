@@ -76,6 +76,7 @@ button {
   background: none;
   cursor: pointer;
   font-family: var(--font-sans);
+  color: inherit;
 }
 
 ::selection {

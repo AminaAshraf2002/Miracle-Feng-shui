@@ -124,8 +124,10 @@ export default function AdminProductsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-2xs">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#A84218] uppercase tracking-wider">
-            <i className="fa-solid fa-box-open" />
+          <div className="flex items-center gap-2 text-xs font-bold text-[#3A1F62] uppercase tracking-wider">
+            <div className="w-6 h-6 rounded-lg bg-[#F6F2FC] text-[#6B21A8] flex items-center justify-center text-xs border border-purple-200/40 shadow-2xs">
+              <i className="fa-solid fa-box-open" />
+            </div>
             <span>Store Catalog &amp; Inventory</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mt-1">
@@ -145,19 +147,20 @@ export default function AdminProductsPage() {
                 showToast('Products reset to defaults.');
               }
             }}
-            className="px-3.5 py-2 text-xs font-semibold text-gray-600 hover:text-red-600 bg-gray-50 hover:bg-red-50 rounded-xl border border-gray-200 transition-colors cursor-pointer"
+            className="px-3.5 py-2 text-xs font-bold text-gray-700 hover:text-red-700 bg-gray-100 hover:bg-red-50 rounded-xl border border-gray-200 transition-colors cursor-pointer flex items-center"
           >
             <i className="fa-solid fa-rotate-left mr-1.5" />
-            Reset Defaults
+            <span>Reset Defaults</span>
           </button>
 
           <button
             type="button"
             onClick={openAddModal}
-            className="bg-[#A84218] hover:bg-[#8F3510] text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer inline-flex items-center gap-2"
+            style={{ color: '#ffffff' }}
+            className="bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer inline-flex items-center gap-2 border border-white/10"
           >
-            <i className="fa-solid fa-plus text-xs" />
-            <span>Add New Product</span>
+            <i className="fa-solid fa-plus text-xs" style={{ color: '#ffffff' }} />
+            <span style={{ color: '#ffffff' }}>Add New Product</span>
           </button>
         </div>
       </div>
@@ -282,10 +285,10 @@ export default function AdminProductsPage() {
                           onClick={() =>
                             updateProduct(prod.id, { bestseller: !prod.bestseller })
                           }
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border transition-colors cursor-pointer ${
+                          className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border transition-colors cursor-pointer ${
                             prod.bestseller
-                              ? 'bg-black text-white border-black'
-                              : 'bg-white text-gray-400 border-gray-200 hover:border-gray-400'
+                              ? 'bg-[#140D1F] !text-white border-[#140D1F]'
+                              : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'
                           }`}
                         >
                           Bestseller
@@ -295,10 +298,10 @@ export default function AdminProductsPage() {
                           onClick={() =>
                             updateProduct(prod.id, { etsyPick: !prod.etsyPick })
                           }
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border transition-colors cursor-pointer ${
+                          className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border transition-colors cursor-pointer ${
                             prod.etsyPick
-                              ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]/60'
-                              : 'bg-white text-gray-400 border-gray-200 hover:border-gray-400'
+                              ? 'bg-[#FEF7EE] text-[#B45309] border border-[#FED7AA]'
+                              : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200'
                           }`}
                         >
                           Miracle Pick
@@ -546,15 +549,16 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold bg-[#A84218] hover:bg-[#8F3510] text-white rounded-xl shadow-xs transition-all cursor-pointer"
+                  style={{ color: '#ffffff' }}
+                  className="px-5 py-2 text-xs font-bold bg-[#3A1F62] hover:bg-[#2B154C] !text-white rounded-xl shadow-xs transition-all cursor-pointer border border-white/10"
                 >
-                  {editingProduct ? 'Update Product' : 'Add to Catalog'}
+                  <span style={{ color: '#ffffff' }}>{editingProduct ? 'Update Product' : 'Add to Catalog'}</span>
                 </button>
               </div>
             </form>
@@ -566,8 +570,8 @@ export default function AdminProductsPage() {
       {deleteConfirmId && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-gray-100 flex flex-col gap-3">
-            <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
-              <i className="fa-solid fa-triangle-exclamation text-lg" />
+            <div className="w-10 h-10 rounded-full bg-[#FDF4F0] text-[#9A3412] flex items-center justify-center mx-auto border border-[#FDBA74]/30 shadow-2xs">
+              <i className="fa-solid fa-triangle-exclamation text-base" />
             </div>
             <h3 className="font-bold text-center text-gray-900 text-base">
               Delete Product?
@@ -579,16 +583,17 @@ export default function AdminProductsPage() {
               <button
                 type="button"
                 onClick={() => setDeleteConfirmId(null)}
-                className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => handleDelete(deleteConfirmId)}
-                className="px-4 py-2 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-xs transition-colors cursor-pointer"
+                style={{ color: '#ffffff' }}
+                className="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 !text-white rounded-xl shadow-xs transition-colors cursor-pointer"
               >
-                Confirm Delete
+                <span style={{ color: '#ffffff' }}>Confirm Delete</span>
               </button>
             </div>
           </div>

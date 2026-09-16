@@ -21,23 +21,23 @@ export default function AdminHomepageManager() {
   const getSectionIcon = (id: HomeSectionId) => {
     switch (id) {
       case 'hero':
-        return 'fa-star text-amber-500';
+        return { icon: 'fa-star', bg: 'bg-[#FEF7EE]', text: 'text-[#B45309]', border: 'border-[#FED7AA]/40' };
       case 'featured_interests':
-        return 'fa-circle-nodes text-blue-500';
+        return { icon: 'fa-circle-nodes', bg: 'bg-[#F0F5FA]', text: 'text-[#475569]', border: 'border-slate-200/50' };
       case 'auspicious_collections':
-        return 'fa-gem text-purple-500';
+        return { icon: 'fa-gem', bg: 'bg-[#F6F2FC]', text: 'text-[#6B21A8]', border: 'border-purple-200/40' };
       case 'prosperity_gifts':
-        return 'fa-gift text-red-500';
+        return { icon: 'fa-gift', bg: 'bg-[#FDF4F0]', text: 'text-[#9A3412]', border: 'border-[#FDBA74]/40' };
       case 'special_gifts':
-        return 'fa-hand-holding-heart text-pink-500';
+        return { icon: 'fa-hand-holding-heart', bg: 'bg-[#FAF0F4]', text: 'text-[#9D174D]', border: 'border-rose-200/40' };
       case 'todays_deals':
-        return 'fa-bolt text-amber-500';
+        return { icon: 'fa-bolt', bg: 'bg-[#FEF7EE]', text: 'text-[#B45309]', border: 'border-[#FED7AA]/40' };
       case 'fashion_guide':
-        return 'fa-video text-teal-500';
+        return { icon: 'fa-video', bg: 'bg-[#F0F7F5]', text: 'text-[#115E59]', border: 'border-teal-200/40' };
       case 'sacred_knowledge':
-        return 'fa-book-open text-indigo-500';
+        return { icon: 'fa-book-open', bg: 'bg-[#F3F4F9]', text: 'text-[#4338CA]', border: 'border-indigo-200/40' };
       default:
-        return 'fa-layer-group text-gray-500';
+        return { icon: 'fa-layer-group', bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-200/50' };
     }
   };
 
@@ -80,10 +80,11 @@ export default function AdminHomepageManager() {
           <Link
             href="/"
             target="_blank"
-            className="bg-[#170E22] hover:bg-[#241334] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2 border border-white/20"
+            style={{ color: '#ffffff' }}
+            className="bg-[#3A1F62] hover:bg-[#2B154C] !text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2 border border-white/20"
           >
-            <i className="fa-solid fa-eye text-orange-200/90" />
-            <span>View Changes Live</span>
+            <i className="fa-solid fa-eye text-amber-300" style={{ color: '#ffffff' }} />
+            <span style={{ color: '#ffffff' }}>View Changes Live</span>
           </Link>
         </div>
       </div>
@@ -93,6 +94,7 @@ export default function AdminHomepageManager() {
         {sections.map((section, idx) => {
           const isFirst = idx === 0;
           const isLast = idx === sections.length - 1;
+          const secStyle = getSectionIcon(section.id);
 
           return (
             <div
@@ -111,9 +113,9 @@ export default function AdminHomepageManager() {
                   <span>#{idx + 1}</span>
                 </div>
 
-                {/* Section Icon */}
-                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-lg shrink-0 border border-gray-100">
-                  <i className={`fa-solid ${getSectionIcon(section.id)}`} />
+                {/* Section Icon with Very Light Pastel Pill */}
+                <div className={`w-10 h-10 rounded-xl ${secStyle.bg} ${secStyle.text} flex items-center justify-center text-base shrink-0 border ${secStyle.border} shadow-2xs`}>
+                  <i className={`fa-solid ${secStyle.icon}`} />
                 </div>
 
                 {/* Section Titles */}
@@ -197,10 +199,11 @@ export default function AdminHomepageManager() {
                 <button
                   type="button"
                   onClick={() => setEditingSection(section)}
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-white/20"
+                  style={{ color: '#ffffff' }}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#3A1F62] hover:bg-[#2B154C] !text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-white/15"
                 >
-                  <i className="fa-solid fa-pen text-[11px]" />
-                  <span>Edit Content</span>
+                  <i className="fa-solid fa-pen text-[11px]" style={{ color: '#ffffff' }} />
+                  <span style={{ color: '#ffffff' }}>Edit Content</span>
                 </button>
               </div>
             </div>
@@ -214,7 +217,7 @@ export default function AdminHomepageManager() {
           <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-[#F6F2FC] text-[#6B21A8] flex items-center justify-center border border-purple-200/40 shadow-2xs">
                   <i className="fa-solid fa-sliders text-sm" />
                 </div>
                 <div>
@@ -229,7 +232,7 @@ export default function AdminHomepageManager() {
               <button
                 type="button"
                 onClick={() => setEditingSection(null)}
-                className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100"
+                className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 cursor-pointer"
               >
                 <i className="fa-solid fa-xmark text-base" />
               </button>
@@ -248,7 +251,7 @@ export default function AdminHomepageManager() {
                   onChange={(e) =>
                     setEditingSection({ ...editingSection, title: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#A84218] focus:ring-2 focus:ring-[#A84218]/10"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#3A1F62] focus:ring-2 focus:ring-[#3A1F62]/10"
                 />
               </div>
 
@@ -264,7 +267,7 @@ export default function AdminHomepageManager() {
                     setEditingSection({ ...editingSection, subtitle: e.target.value })
                   }
                   placeholder="Optional supportive subtext"
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#A84218] focus:ring-2 focus:ring-[#A84218]/10"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#3A1F62] focus:ring-2 focus:ring-[#3A1F62]/10"
                 />
               </div>
 
@@ -281,7 +284,7 @@ export default function AdminHomepageManager() {
                       setEditingSection({ ...editingSection, ctaText: e.target.value })
                     }
                     placeholder="e.g. Shop Now"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#A84218] focus:ring-2 focus:ring-[#A84218]/10"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#3A1F62] focus:ring-2 focus:ring-[#3A1F62]/10"
                   />
                 </div>
                 <div>
@@ -295,7 +298,7 @@ export default function AdminHomepageManager() {
                       setEditingSection({ ...editingSection, ctaLink: e.target.value })
                     }
                     placeholder="e.g. /shop?category=..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#A84218] focus:ring-2 focus:ring-[#A84218]/10"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#3A1F62] focus:ring-2 focus:ring-[#3A1F62]/10"
                   />
                 </div>
               </div>
@@ -309,7 +312,7 @@ export default function AdminHomepageManager() {
                   onChange={(e) =>
                     setEditingSection({ ...editingSection, enabled: e.target.checked })
                   }
-                  className="w-4 h-4 text-[#A84218] rounded-md border-gray-300 focus:ring-[#A84218]"
+                  className="w-4 h-4 text-[#3A1F62] rounded-md border-gray-300 focus:ring-[#3A1F62]"
                 />
                 <label htmlFor="section-enabled" className="text-xs font-medium text-gray-700 cursor-pointer">
                   Display this section on the live storefront
@@ -321,15 +324,16 @@ export default function AdminHomepageManager() {
                 <button
                   type="button"
                   onClick={() => setEditingSection(null)}
-                  className="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+                  className="px-4 py-2 text-xs font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-semibold bg-[#A84218] hover:bg-[#8F3510] text-white rounded-xl shadow-xs transition-all cursor-pointer"
+                  style={{ color: '#ffffff' }}
+                  className="px-5 py-2 text-xs font-bold bg-[#3A1F62] hover:bg-[#2B154C] !text-white rounded-xl shadow-xs transition-all cursor-pointer border border-white/10"
                 >
-                  Save Section Changes
+                  <span style={{ color: '#ffffff' }}>Save Section Changes</span>
                 </button>
               </div>
             </form>
