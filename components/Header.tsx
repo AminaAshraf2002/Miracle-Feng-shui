@@ -159,7 +159,7 @@ export function Header() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search crystals, bracelets, cures..."
-                  className="w-full h-10 pl-3.5 pr-20 rounded-full border-2 border-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E] text-[14px] text-[#222222] placeholder-gray-400 bg-white transition-all shadow-xs"
+                  className="w-full h-10 pl-3.5 pr-20 rounded-full border-2 border-[#222222] focus:outline-none focus:border-black text-[14px] text-[#222222] placeholder-gray-400 bg-white transition-all shadow-xs"
                   autoFocus
                 />
                 {query && (
@@ -175,7 +175,7 @@ export function Header() {
                 <button
                   type="submit"
                   aria-label="Submit search"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#222222] hover:bg-black text-white flex items-center justify-center transition-colors shrink-0"
                 >
                   <i className="fa-solid fa-magnifying-glass text-[12px]" />
                 </button>
@@ -244,12 +244,12 @@ export function Header() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search"
-                    className="w-full h-11 pl-4 pr-12 rounded-full border-2 border-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E] text-[15px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
+                    className="w-full h-11 pl-4 pr-12 rounded-full border-2 border-[#222222] focus:outline-none focus:border-black text-[15px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
                   />
                   <button
                     type="submit"
                     aria-label="Submit search"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#F1641E] hover:bg-[#D75200] text-white flex items-center justify-center transition-colors shrink-0"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#222222] hover:bg-black text-white flex items-center justify-center transition-colors shrink-0"
                   >
                     <i className="fa-solid fa-magnifying-glass text-[13px]" />
                   </button>

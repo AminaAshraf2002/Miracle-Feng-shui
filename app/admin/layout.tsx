@@ -77,26 +77,26 @@ export default function AdminLayout({
     {
       name: 'Overview',
       href: '/admin',
-      icon: 'fa-chart-pie',
+      icon: 'fa-gauge-high',
       exact: true,
       badge: 'Live',
     },
     {
       name: 'Homepage Builder',
       href: '/admin/homepage',
-      icon: 'fa-layer-group',
+      icon: 'fa-wand-magic-sparkles',
       badge: 'Positions',
     },
     {
       name: 'Products Catalog',
       href: '/admin/products',
-      icon: 'fa-box-open',
+      icon: 'fa-boxes-stacked',
       badge: 'CRUD',
     },
     {
       name: 'Customer Orders',
       href: '/admin/orders',
-      icon: 'fa-clipboard-list',
+      icon: 'fa-receipt',
     },
   ];
 
@@ -106,7 +106,7 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] text-[#1E1E1E] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F7F8FA] text-[#1E1E1E] flex flex-col font-outfit antialiased">
       {/* Top Admin Navigation Bar */}
       <header className="sticky top-0 z-40 bg-[#160D23] text-white border-b border-[#2D1B44] shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -132,7 +132,7 @@ export default function AdminLayout({
               <div>
                 <span
                   style={{ color: '#ffffff' }}
-                  className="font-serif font-bold text-base sm:text-lg tracking-tight block leading-tight text-white group-hover:text-amber-200 transition-colors"
+                  className="font-cinzel font-bold text-base sm:text-lg tracking-wider block leading-tight text-white group-hover:text-amber-200 transition-colors"
                 >
                   Miracle Feng Shui
                 </span>
@@ -158,7 +158,7 @@ export default function AdminLayout({
             </Link>
 
             <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 bg-white/5 rounded-full border border-white/10 text-xs text-gray-300">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <i className="fa-solid fa-user-shield text-emerald-400 text-xs" />
               <span className="font-medium text-white">{adminUser}</span>
             </div>
 
@@ -191,11 +191,12 @@ export default function AdminLayout({
                 />
               </div>
               <div className="min-w-0">
-                <span className="font-serif font-semibold text-sm text-white block truncate leading-tight">
+                <span className="font-cinzel font-bold text-sm text-white block truncate tracking-wide leading-tight">
                   Miracle Feng Shui
                 </span>
-                <span className="text-[10px] text-amber-300 font-medium block mt-0.5">
-                  ⚡ Store Manager
+                <span className="text-[10px] text-amber-300 font-medium flex items-center gap-1 mt-0.5">
+                  <i className="fa-solid fa-shield-halved text-[9px]" />
+                  <span>Store Manager</span>
                 </span>
               </div>
             </div>

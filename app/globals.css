@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -165,4 +165,14 @@ button {
   background-size: 200% 100%;
   animation: goldShimmer 3.5s infinite;
 }
+
+/* Modern Typography Utilities for Admin */
+.font-outfit {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif !important;
+}
+
 
