@@ -45,7 +45,7 @@ export default function AdminHomepageManager() {
     <div className="flex flex-col gap-6">
       {/* Toast */}
       {saveToast && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#133E35] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-white/20 animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#170E22] text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-amber-500/30 animate-bounce">
           <i className="fa-solid fa-circle-check text-emerald-400 text-lg" />
           <span className="text-sm font-semibold">Homepage section updated successfully!</span>
         </div>
@@ -80,7 +80,7 @@ export default function AdminHomepageManager() {
           <Link
             href="/"
             target="_blank"
-            className="bg-[#133E35] hover:bg-[#0E2E27] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2"
+            className="bg-[#170E22] hover:bg-[#241334] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition-all shadow-sm no-underline inline-flex items-center gap-2 border border-amber-500/20"
           >
             <i className="fa-solid fa-eye text-amber-300" />
             <span>View Changes Live</span>
@@ -197,7 +197,7 @@ export default function AdminHomepageManager() {
                 <button
                   type="button"
                   onClick={() => setEditingSection(section)}
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#133E35] hover:bg-[#0E2E27] text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#170E22] hover:bg-[#241334] text-white shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 border border-amber-500/20"
                 >
                   <i className="fa-solid fa-pen text-[11px]" />
                   <span>Edit Content</span>

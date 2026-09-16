@@ -58,15 +58,15 @@ export default function AdminLayout({
   // Loading state while checking authentication
   if (isAuthenticated === null || !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#133E35] flex flex-col items-center justify-center text-white font-outfit">
-        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/30 mb-4 animate-pulse shadow-md">
+      <div className="min-h-screen bg-[#140D1F] flex flex-col items-center justify-center text-white font-outfit">
+        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-400/50 mb-4 animate-pulse shadow-md">
           <img
             src="/images/miracle.jpeg"
             alt="Miracle Feng Shui"
             className="w-full h-full object-cover"
           />
         </div>
-        <p className="text-sm font-medium text-white/80 tracking-wide">
+        <p className="text-sm font-medium text-amber-200/90 tracking-wide">
           Verifying store administration credentials...
         </p>
       </div>
@@ -103,9 +103,9 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F7F6] text-[#111827] flex flex-col lg:flex-row font-outfit antialiased">
+    <div className="min-h-screen bg-[#F7F6F3] text-[#140D1F] flex flex-col lg:flex-row font-outfit antialiased">
       {/* Mobile Top Header */}
-      <div className="lg:hidden bg-[#133E35] text-white px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-40">
+      <div className="lg:hidden bg-[#140D1F] text-white px-4 py-3 flex items-center justify-between border-b border-white/10 sticky top-0 z-40 shadow-xs">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -116,7 +116,7 @@ export default function AdminLayout({
             <i className="fa-solid fa-bars text-lg" />
           </button>
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/30 bg-white shrink-0">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-amber-400/40 bg-white shrink-0">
               <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-sm tracking-tight text-white">Miracle Admin</span>
@@ -132,12 +132,12 @@ export default function AdminLayout({
         </button>
       </div>
 
-      {/* Full-Height Desktop Sidebar (Matching Reference Design) */}
-      <aside className="hidden lg:flex w-64 xl:w-72 bg-[#133E35] text-white flex-col justify-between p-6 shrink-0 min-h-screen sticky top-0 h-screen select-none">
+      {/* Full-Height Desktop Sidebar Matching Reference Layout with Store Theme Gradient */}
+      <aside className="hidden lg:flex w-64 xl:w-72 bg-gradient-to-b from-[#140D1F] via-[#1A1028] to-[#120A1A] text-white flex-col justify-between p-6 shrink-0 min-h-screen sticky top-0 h-screen select-none border-r border-white/5">
         <div>
           {/* Top Brand with Circular Logo */}
           <div className="flex items-center gap-3.5 pb-6 border-b border-white/10">
-            <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-white/25 shadow-md shrink-0 bg-white">
+            <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-amber-400/40 shadow-md shrink-0 bg-white">
               <img
                 src="/images/miracle.jpeg"
                 alt="Miracle Feng Shui"
@@ -145,10 +145,10 @@ export default function AdminLayout({
               />
             </div>
             <div className="min-w-0">
-              <span className="font-bold text-base text-white tracking-tight block leading-snug">
+              <span className="font-cinzel font-bold text-sm text-white tracking-wider block leading-snug">
                 Miracle Feng Shui
               </span>
-              <span className="text-[10.5px] text-white/60 font-semibold tracking-wider uppercase block">
+              <span className="text-[10px] text-amber-300 font-semibold tracking-wider uppercase block mt-0.5">
                 STORE COMMAND CENTER
               </span>
             </div>
@@ -164,20 +164,20 @@ export default function AdminLayout({
                   href={item.href}
                   className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all no-underline ${
                     active
-                      ? 'bg-white text-[#133E35] shadow-sm font-bold'
+                      ? 'bg-white text-[#140D1F] shadow-sm font-bold'
                       : 'text-white/75 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-3.5">
                     <i
                       className={`fa-solid ${item.icon} text-base w-5 text-center ${
-                        active ? 'text-[#133E35]' : 'text-white/70'
+                        active ? 'text-[#140D1F]' : 'text-white/70'
                       }`}
                     />
                     <span>{item.name}</span>
                   </div>
                   {active && (
-                    <span className="w-2 h-2 rounded-full bg-[#133E35]" />
+                    <span className="w-2 h-2 rounded-full bg-amber-500" />
                   )}
                 </Link>
               );
@@ -188,8 +188,8 @@ export default function AdminLayout({
         {/* Bottom Sidebar Widget & Actions */}
         <div className="pt-6 border-t border-white/10 flex flex-col gap-3.5">
           {/* Store Status Card */}
-          <div className="bg-white/10 rounded-2xl p-4 border border-white/10 text-center">
-            <div className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center mx-auto mb-2 text-xs">
+          <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-center backdrop-blur-xs">
+            <div className="w-8 h-8 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center mx-auto mb-2 text-xs">
               <i className="fa-solid fa-bolt" />
             </div>
             <span className="text-xs font-bold text-white block tracking-wide uppercase">
@@ -201,7 +201,7 @@ export default function AdminLayout({
             <Link
               href="/"
               target="_blank"
-              className="mt-3 block w-full py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-xl transition-colors no-underline"
+              className="mt-3 block w-full py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl transition-colors no-underline border border-white/10"
             >
               Open Storefront &rarr;
             </Link>
@@ -209,7 +209,7 @@ export default function AdminLayout({
 
           {/* User Email & Sign Out */}
           <div className="flex items-center justify-between text-xs px-1 text-white/70">
-            <div className="truncate max-w-[150px] font-medium text-white/90">
+            <div className="truncate max-w-[140px] font-medium text-white/90">
               {adminUser}
             </div>
             <button
@@ -227,11 +227,11 @@ export default function AdminLayout({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex animate-in fade-in duration-150">
-          <div className="w-72 bg-[#133E35] text-white h-full p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-left duration-200">
+          <div className="w-72 bg-gradient-to-b from-[#140D1F] via-[#1A1028] to-[#120A1A] text-white h-full p-6 flex flex-col justify-between shadow-2xl animate-in slide-in-from-left duration-200">
             <div>
               <div className="flex items-center justify-between pb-5 border-b border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl overflow-hidden border border-white/30 bg-white">
+                  <div className="w-9 h-9 rounded-xl overflow-hidden border border-amber-400/40 bg-white">
                     <img src="/images/miracle.jpeg" alt="Miracle" className="w-full h-full object-cover" />
                   </div>
                   <span className="font-bold text-base text-white">Miracle Admin</span>
@@ -255,7 +255,7 @@ export default function AdminLayout({
                       onClick={() => setMobileMenuOpen(false)}
                       className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold no-underline ${
                         active
-                          ? 'bg-white text-[#133E35] shadow-xs'
+                          ? 'bg-white text-[#140D1F] shadow-xs font-bold'
                           : 'text-white/80 hover:bg-white/10'
                       }`}
                     >
@@ -263,7 +263,7 @@ export default function AdminLayout({
                         <i className={`fa-solid ${item.icon}`} />
                         <span>{item.name}</span>
                       </div>
-                      {active && <span className="w-2 h-2 rounded-full bg-[#133E35]" />}
+                      {active && <span className="w-2 h-2 rounded-full bg-amber-500" />}
                     </Link>
                   );
                 })}
@@ -274,7 +274,7 @@ export default function AdminLayout({
               <Link
                 href="/"
                 target="_blank"
-                className="w-full text-center py-2.5 bg-white/20 text-white rounded-xl text-xs font-semibold no-underline"
+                className="w-full text-center py-2.5 bg-white/10 text-white rounded-xl text-xs font-semibold no-underline border border-white/10"
               >
                 Open Storefront
               </Link>

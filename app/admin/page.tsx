@@ -50,21 +50,25 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto font-outfit antialiased">
-      {/* Top Welcome Banner Matching Reference Screenshot */}
-      <div className="bg-[#133E35] rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[200px]">
-        {/* Banner Top Row: Search & Profile Icons */}
-        <div className="flex items-center justify-between gap-4 w-full">
+      {/* Top Welcome Banner Matching Reference Layout with Brand Gradient */}
+      <div className="bg-gradient-to-r from-[#170E22] via-[#241334] to-[#150C20] rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-md border border-amber-500/20 flex flex-col justify-between min-h-[200px]">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -left-16 -bottom-16 w-72 h-72 rounded-full bg-purple-600/15 blur-3xl pointer-events-none" />
+
+        {/* Banner Top Row: Search & Profile Icons (Matching Reference) */}
+        <div className="flex items-center justify-between gap-4 w-full relative z-10">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] uppercase tracking-wider text-white/70 font-semibold">
-              Miracle Command Center
+            <span className="text-[11px] uppercase tracking-wider text-amber-300 font-bold">
+              Miracle Command Sanctuary
             </span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Minimalist Search in Banner */}
-            <div className="hidden sm:flex items-center bg-white/10 hover:bg-white/15 transition-colors border border-white/15 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-white/50 w-52">
-              <i className="fa-solid fa-magnifying-glass text-[11px] text-white/60 mr-2" />
+            <div className="hidden sm:flex items-center bg-white/10 hover:bg-white/15 transition-colors border border-white/15 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-white/50 w-56 shadow-2xs">
+              <i className="fa-solid fa-magnifying-glass text-[11px] text-amber-300/80 mr-2" />
               <input
                 type="text"
                 placeholder="Search catalog, orders..."
@@ -73,14 +77,14 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Notification Bell */}
-            <div className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white/90 relative cursor-pointer">
+            <div className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center text-white relative cursor-pointer border border-white/10 shadow-2xs">
               <i className="fa-regular fa-bell text-sm" />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-[#133E35]" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-400 ring-2 ring-[#170E22]" />
             </div>
 
             {/* User Profile Avatar */}
             <div className="flex items-center gap-2 pl-1">
-              <div className="w-9 h-9 rounded-full bg-white text-[#133E35] font-bold flex items-center justify-center text-xs shadow-xs">
+              <div className="w-9 h-9 rounded-full bg-amber-400 text-[#170E22] font-bold flex items-center justify-center text-xs shadow-xs border border-white/30">
                 A
               </div>
             </div>
@@ -88,33 +92,33 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Banner Content & Floating Graphic */}
-        <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6 relative z-10">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight font-outfit">
               {greeting}, Admin!
             </h1>
-            <p className="text-xs sm:text-sm text-white/80 mt-1 max-w-xl font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-300 mt-1 max-w-xl font-normal leading-relaxed">
               Monitor store inventory, manage customer orders, and orchestrate homepage layout from your command center.
             </p>
 
             {/* Date & Time Pill matching reference */}
-            <div className="mt-4 inline-flex items-center gap-2 bg-black/20 text-white/90 text-[11.5px] px-3.5 py-1.5 rounded-full border border-white/10 font-medium">
-              <i className="fa-regular fa-clock text-xs text-white/70" />
+            <div className="mt-4 inline-flex items-center gap-2 bg-black/30 text-white/90 text-[11.5px] px-3.5 py-1.5 rounded-full border border-white/10 font-medium">
+              <i className="fa-regular fa-clock text-xs text-amber-300" />
               <span>{currentDateTime || 'Monday, September 16, 2026'}</span>
             </div>
           </div>
 
           {/* Right Floating Card Illustration matching reference */}
-          <div className="hidden md:flex items-center gap-3 bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-4 shadow-sm shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-[#34D399] text-2xl shadow-xs">
+          <div className="hidden md:flex items-center gap-3.5 bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-4 shadow-sm shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-2xl shadow-xs border border-amber-400/30">
               <i className="fa-solid fa-circle-check" />
             </div>
             <div>
               <span className="text-xs font-bold text-white block uppercase tracking-wider">
                 Sanctuary Optimal
               </span>
-              <span className="text-[11px] text-white/70 block">
-                Catalog &amp; database online
+              <span className="text-[11px] text-gray-300 block">
+                Catalog &amp; database live
               </span>
             </div>
           </div>
@@ -123,11 +127,11 @@ export default function AdminDashboardPage() {
 
       {/* KPI Cards Grid with Minimalist Pastel Circles (Matching Reference) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        {/* Total Sales */}
-        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+        {/* Total Sales (Pastel Amber) */}
+        <div className="bg-white p-5 rounded-3xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#E6F4F1] text-[#133E35] flex items-center justify-center text-base shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-[#FEF3C7] text-[#B45309] flex items-center justify-center text-base shrink-0 shadow-2xs">
                 <i className="fa-solid fa-indian-rupee-sign" />
               </div>
               <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
@@ -139,22 +143,22 @@ export default function AdminDashboardPage() {
             <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               ₹{totalRevenue.toLocaleString('en-IN')}
             </div>
-            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-amber-800 bg-[#FEF3C7] px-2 py-0.5 rounded-md border border-amber-200/60 flex items-center gap-1">
               <i className="fa-solid fa-arrow-trend-up text-[10px]" />
               <span>18%</span>
             </span>
           </div>
         </div>
 
-        {/* Total Orders */}
-        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+        {/* Customer Orders (Pastel Peach) */}
+        <div className="bg-white p-5 rounded-3xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-base shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-base shrink-0 shadow-2xs">
                 <i className="fa-solid fa-bag-shopping" />
               </div>
               <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                Customer Orders
+                Store Orders
               </span>
             </div>
           </div>
@@ -162,18 +166,18 @@ export default function AdminDashboardPage() {
             <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {orders.length}
             </div>
-            <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-orange-800 bg-[#FDF1EC] px-2 py-0.5 rounded-md border border-orange-200/60 flex items-center gap-1">
               <i className="fa-solid fa-arrow-trend-up text-[10px]" />
               <span>8%</span>
             </span>
           </div>
         </div>
 
-        {/* Active Products */}
-        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+        {/* Active Products (Pastel Lavender) */}
+        <div className="bg-white p-5 rounded-3xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-base shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-base shrink-0 shadow-2xs">
                 <i className="fa-solid fa-cubes" />
               </div>
               <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
@@ -185,18 +189,18 @@ export default function AdminDashboardPage() {
             <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {products.length}
             </div>
-            <span className="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-purple-800 bg-[#F3EEFC] px-2 py-0.5 rounded-md border border-purple-200/60 flex items-center gap-1">
               <i className="fa-solid fa-check text-[10px]" />
               <span>Active</span>
             </span>
           </div>
         </div>
 
-        {/* Homepage Sections */}
-        <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
+        {/* Layout Sections (Pastel Jade/Mint) */}
+        <div className="bg-white p-5 rounded-3xl border border-gray-200/70 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-base shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-[#E6F4F1] text-[#0F766E] flex items-center justify-center text-base shrink-0 shadow-2xs">
                 <i className="fa-solid fa-sliders" />
               </div>
               <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
@@ -208,7 +212,7 @@ export default function AdminDashboardPage() {
             <div className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               {activeSectionsCount} / {sections.length}
             </div>
-            <span className="text-[11px] font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100 flex items-center gap-1">
+            <span className="text-[11px] font-semibold text-teal-800 bg-[#E6F4F1] px-2 py-0.5 rounded-md border border-teal-200/60 flex items-center gap-1">
               <i className="fa-solid fa-check text-[10px]" />
               <span>Optimal</span>
             </span>
@@ -221,22 +225,23 @@ export default function AdminDashboardPage() {
         {/* Left 8 Cols: Active Sections Cards & Orders Table */}
         <div className="lg:col-span-8 flex flex-col gap-6">
           {/* Active Sections Grid (Matching Reference "Active Organisations") */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-200/70 shadow-2xs">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-gray-900">
                 Active Homepage Sections
               </h2>
               <Link
                 href="/admin/homepage"
-                className="text-xs font-bold text-gray-500 hover:text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg uppercase tracking-wider transition-colors no-underline"
+                className="text-xs font-bold text-gray-600 hover:text-black bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg uppercase tracking-wider transition-colors no-underline"
               >
                 VIEW ALL
               </Link>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-11 h-11 rounded-2xl bg-[#E6F4F1] text-[#133E35] flex items-center justify-center text-lg mb-2 shadow-2xs">
+              {/* Card 1: Pastel Amber */}
+              <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-4 rounded-2xl border border-gray-200/60 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#FEF3C7] text-[#B45309] flex items-center justify-center text-lg mb-2 shadow-2xs">
                   <i className="fa-solid fa-star" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -247,7 +252,8 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+              {/* Card 2: Pastel Peach */}
+              <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-4 rounded-2xl border border-gray-200/60 flex flex-col items-center text-center">
                 <div className="w-11 h-11 rounded-2xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-lg mb-2 shadow-2xs">
                   <i className="fa-solid fa-gem" />
                 </div>
@@ -259,7 +265,8 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
+              {/* Card 3: Pastel Lavender */}
+              <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-4 rounded-2xl border border-gray-200/60 flex flex-col items-center text-center">
                 <div className="w-11 h-11 rounded-2xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-lg mb-2 shadow-2xs">
                   <i className="fa-solid fa-circle-nodes" />
                 </div>
@@ -271,8 +278,9 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="bg-gray-50/70 hover:bg-gray-100/80 transition-colors p-4 rounded-2xl border border-gray-100 flex flex-col items-center text-center">
-                <div className="w-11 h-11 rounded-2xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-lg mb-2 shadow-2xs">
+              {/* Card 4: Pastel Mint */}
+              <div className="bg-[#FAF9F6] hover:bg-[#F5F2EB] transition-colors p-4 rounded-2xl border border-gray-200/60 flex flex-col items-center text-center">
+                <div className="w-11 h-11 rounded-2xl bg-[#E6F4F1] text-[#0F766E] flex items-center justify-center text-lg mb-2 shadow-2xs">
                   <i className="fa-solid fa-gift" />
                 </div>
                 <span className="text-xs font-bold text-gray-800 truncate w-full">
@@ -286,7 +294,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Recent Orders Table */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs flex flex-col">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-200/70 shadow-2xs flex flex-col">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
               <div>
                 <h2 className="text-base font-bold text-gray-900">Recent Customer Orders</h2>
@@ -294,7 +302,7 @@ export default function AdminDashboardPage() {
               </div>
               <Link
                 href="/admin/orders"
-                className="text-xs font-bold text-[#133E35] hover:underline no-underline"
+                className="text-xs font-bold text-[#170E22] hover:text-amber-800 no-underline"
               >
                 All Orders &rarr;
               </Link>
@@ -302,7 +310,7 @@ export default function AdminDashboardPage() {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50/70 text-gray-400 text-[11px] uppercase tracking-wider font-semibold">
+                <thead className="bg-gray-50/80 text-gray-400 text-[11px] uppercase tracking-wider font-semibold">
                   <tr>
                     <th className="py-2.5 px-3 rounded-l-xl">Order #</th>
                     <th className="py-2.5 px-3">Customer</th>
@@ -360,10 +368,10 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Right 4 Cols: System Alerts (Matching Reference "System Alerts") & Shortcuts */}
+        {/* Right 4 Cols: System Alerts & Shortcuts */}
         <div className="lg:col-span-4 flex flex-col gap-6">
           {/* System Alerts Card */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-2xs flex flex-col">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-200/70 shadow-2xs flex flex-col">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
               <h2 className="text-base font-bold text-gray-900">System Alerts</h2>
               <div className="w-6 h-6 rounded-full bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-xs">
@@ -372,8 +380,8 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="flex flex-col gap-3">
-              {/* Alert 1 */}
-              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+              {/* Alert 1: Pastel Peach */}
+              <div className="p-3 bg-gray-50/70 rounded-2xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-[#FDF1EC] text-[#EA580C] flex items-center justify-center text-sm shrink-0">
                     <i className="fa-solid fa-bolt" />
@@ -383,19 +391,19 @@ export default function AdminDashboardPage() {
                       Realtime Catalog Sync
                     </span>
                     <span className="text-[10.5px] text-gray-400 block">
-                      Active storefront connection
+                      Live storefront connection
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                <span className="text-[10px] font-bold text-emerald-800 bg-[#E6F4F1] px-2 py-0.5 rounded-md border border-emerald-200/60">
                   Live
                 </span>
               </div>
 
-              {/* Alert 2 */}
-              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+              {/* Alert 2: Pastel Amber */}
+              <div className="p-3 bg-gray-50/70 rounded-2xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#FEF9C3] text-[#A16207] flex items-center justify-center text-sm shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-[#FEF3C7] text-[#B45309] flex items-center justify-center text-sm shrink-0">
                     <i className="fa-solid fa-shield-halved" />
                   </div>
                   <div>
@@ -407,15 +415,15 @@ export default function AdminDashboardPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
+                <span className="text-[10px] font-bold text-amber-800 bg-[#FEF3C7] px-2 py-0.5 rounded-md border border-amber-200/60">
                   Optimal
                 </span>
               </div>
 
-              {/* Alert 3 */}
-              <div className="p-3 bg-gray-50/60 rounded-2xl flex items-center justify-between border border-gray-100">
+              {/* Alert 3: Pastel Lavender */}
+              <div className="p-3 bg-gray-50/70 rounded-2xl flex items-center justify-between border border-gray-200/60">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#EBF2FE] text-[#2563EB] flex items-center justify-center text-sm shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-[#F3EEFC] text-[#7C3AED] flex items-center justify-center text-sm shrink-0">
                     <i className="fa-solid fa-box-open" />
                   </div>
                   <div>
@@ -427,19 +435,19 @@ export default function AdminDashboardPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                <span className="text-[10px] font-bold text-purple-800 bg-[#F3EEFC] px-2 py-0.5 rounded-md border border-purple-200/60">
                   Normal
                 </span>
               </div>
             </div>
 
-            {/* Quick Actions at bottom */}
-            <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2">
+            {/* Quick Actions with Store Gradient Button */}
+            <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col gap-2.5">
               <Link
                 href="/admin/products"
-                className="w-full py-2.5 bg-[#133E35] hover:bg-[#0E2E27] text-white text-xs font-bold rounded-xl text-center transition-colors no-underline shadow-xs flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-gradient-to-r from-[#170E22] via-[#241334] to-[#150C20] hover:opacity-95 text-white text-xs font-bold rounded-xl text-center transition-opacity no-underline shadow-xs flex items-center justify-center gap-2 border border-amber-500/20"
               >
-                <i className="fa-solid fa-plus text-[11px]" />
+                <i className="fa-solid fa-plus text-[11px] text-amber-300" />
                 <span>Add New Product</span>
               </Link>
 
