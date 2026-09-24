@@ -4,7 +4,11 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useStore } from '@/context/StoreContext';
 import { products } from '@/lib/placeholder-data';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useLocale } from '@/context/CurrencyContext';
+import { Country, Currency, Language, translateCategory } from '@/lib/translations';
 
 export function Header() {
   const router = useRouter();
@@ -14,7 +18,21 @@ export function Header() {
   if (pathname?.startsWith('/admin')) {
     return null;
   }
-  const { count, userLoggedIn, setUserLoggedIn } = useCart();
+  const { count, userLoggedIn, setUserLoggedIn, favorites } = useCart();
+  const { categories: storeCategories } = useStore();
+  const { data: session, status } = useSession();
+  const {
+    country,
+    currency,
+    language,
+    isRtl,
+    setCountry,
+    setCurrency,
+    setLanguage,
+    formatPrice,
+    t,
+  } = useLocale();
+
   const [query, setQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -24,9 +42,19 @@ export function Header() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [currency, setCurrency] = useState('INR');
-  const [country, setCountry] = useState('India');
-  const [language, setLanguage] = useState('English (IN)');
+
+  // Temp values for Region & Language modal
+  const [tempCountry, setTempCountry] = useState<Country>(country);
+  const [tempCurrency, setTempCurrency] = useState<Currency>(currency);
+  const [tempLanguage, setTempLanguage] = useState<Language>(language);
+
+  useEffect(() => {
+    if (showRegionModal) {
+      setTempCountry(country);
+      setTempCurrency(currency);
+      setTempLanguage(language);
+    }
+  }, [showRegionModal, country, currency, language]);
 
   // Profile Dropdown & Modal States
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -35,13 +63,44 @@ export function Header() {
   const [showInvoiceModal, setShowInvoiceModal] = useState(false);
 
   // User Profile Data
-  const [userName, setUserName] = useState('Amina Ashraf');
-  const [userEmail, setUserEmail] = useState('amina.ashraf@example.com');
-  const [userPhone, setUserPhone] = useState('+91 98765 43210');
-  const [userAddress, setUserAddress] = useState(
-    'B-583 Adjacent Park Plaza, Sushant Lok Phase-I, Gurgaon, Haryana 122009'
-  );
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+  const [userAddress, setUserAddress] = useState('');
   const [savedToast, setSavedToast] = useState(false);
+
+  // Synchronize session with header profile and login status
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      setUserLoggedIn(true);
+      if (session.user.name) {
+        setUserName(session.user.name);
+      } else if (session.user.email) {
+        setUserName(session.user.email.split('@')[0]);
+      }
+      if (session.user.email) {
+        setUserEmail(session.user.email);
+      }
+
+      // Fetch persisted user profile and addresses from PostgreSQL
+      fetch('/api/auth/profile')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && data.success && data.data) {
+            if (data.data.name) setUserName(data.data.name);
+            if (data.data.phone) setUserPhone(data.data.phone);
+            if (data.data.addresses && data.data.addresses.length > 0) {
+              const def = data.data.addresses.find((a: any) => a.isDefault) || data.data.addresses[0];
+              const fullAddr = [def.line1, def.line2, def.city, def.state, def.pincode, def.country].filter(Boolean).join(', ');
+              setUserAddress(fullAddr || def.line1);
+            }
+          }
+        })
+        .catch(() => {});
+    } else if (status === 'unauthenticated') {
+      setUserLoggedIn(false);
+    }
+  }, [status, session, setUserLoggedIn]);
 
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +112,8 @@ export function Header() {
   const [firstName, setFirstName] = useState('');
   const [password, setPassword] = useState('');
   const [staySignedIn, setStaySignedIn] = useState(true);
+  const [authError, setAuthError] = useState('');
+  const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -120,36 +181,121 @@ export function Header() {
       .slice(0, 8);
   }, [query]);
 
-  const secondaryNavItems = [
-    { name: 'Feng Shui Decor', href: '/shop?category=Feng%20Shui%20Decor', isGift: true },
-    { name: 'Feng Shui Jewelry', href: '/shop?category=Feng%20Shui%20Jewelry' },
-    { name: 'Feng Shui Candles', href: '/shop?category=Feng%20Shui%20Candles' },
-    { name: 'Crystals & Trees', href: '/shop?category=Crystals%20%26%20Trees' },
-    { name: 'Zen & Meditation', href: '/shop?category=Zen%20%26%20Meditation' },
-    { name: 'Feng Shui Books', href: '/shop?category=Feng%20Shui%20Books' },
-  ];
+  const secondaryNavItems = useMemo(() => {
+    if (storeCategories && storeCategories.length > 1) {
+      return storeCategories
+        .filter((c) => c !== 'All')
+        .slice(0, 8)
+        .map((catName, idx) => ({
+          name: catName,
+          href: `/shop?category=${encodeURIComponent(catName)}`,
+          isGift: idx === 0,
+        }));
+    }
+    return [
+      { name: 'Feng Shui Decor', href: '/shop?category=Feng%20Shui%20Decor', isGift: true },
+      { name: 'Feng Shui Jewelry', href: '/shop?category=Feng%20Shui%20Jewelry' },
+      { name: 'Feng Shui Candles', href: '/shop?category=Feng%20Shui%20Candles' },
+      { name: 'Crystals & Trees', href: '/shop?category=Crystals%20%26%20Trees' },
+      { name: 'Zen & Meditation', href: '/shop?category=Zen%20%26%20Meditation' },
+      { name: 'Feng Shui Books', href: '/shop?category=Feng%20Shui%20Books' },
+    ];
+  }, [storeCategories]);
 
-  const handleAuthSubmit = (e: React.FormEvent) => {
+  const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    setAuthError('');
+    setIsAuthSubmitting(true);
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
+    try {
+      if (isRegisterMode) {
+        const regRes = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: firstName.trim() || cleanEmail.split('@')[0],
+            email: cleanEmail,
+            password: cleanPassword,
+          }),
+        });
+        const regData = await regRes.json();
+        if (!regRes.ok || !regData.success) {
+          setAuthError(regData.error || 'Registration failed');
+          setIsAuthSubmitting(false);
+          return;
+        }
+      }
+
+      const res = await signIn('credentials', {
+        email: cleanEmail,
+        password: cleanPassword,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        setAuthError('Invalid email or password');
+        setIsAuthSubmitting(false);
+        return;
+      }
+
       setUserLoggedIn(true);
       if (firstName.trim()) {
         setUserName(firstName.trim());
+      } else {
+        setUserName(cleanEmail.split('@')[0]);
       }
-      setUserEmail(email.trim());
+      setUserEmail(cleanEmail);
       setShowAuthModal(false);
+      setPassword('');
+    } catch {
+      setAuthError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsAuthSubmitting(false);
     }
   };
 
-  const handleSaveAddress = (e: React.FormEvent) => {
+  const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch('/api/addresses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: userName || 'Valued Customer',
+          phone: userPhone || '+971 50 123 4567',
+          line1: userAddress.trim(),
+          city: 'Dubai',
+          state: 'Dubai',
+          pincode: '00000',
+          country: country || 'United Arab Emirates',
+          isDefault: true,
+        }),
+      });
+    } catch {
+      // Gracefully fall back to local update
+    }
     setShowAddressModal(false);
     setSavedToast(true);
     setTimeout(() => setSavedToast(false), 3000);
   };
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch('/api/auth/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: userName.trim(),
+          phone: userPhone.trim(),
+        }),
+      });
+    } catch {
+      // Gracefully fall back to local update
+    }
     setShowProfileEditModal(false);
     setSavedToast(true);
     setTimeout(() => setSavedToast(false), 3000);
@@ -283,7 +429,7 @@ export function Header() {
                               </span>
                               <div className="flex items-center gap-2 mt-1">
                                 <span className="text-xs font-bold text-gray-900">
-                                  ₹{prod.price.toLocaleString('en-IN')}
+                                  {formatPrice(prod.price)}
                                 </span>
                                 {prod.bestseller && (
                                   <span className="text-[9px] font-bold text-amber-800 bg-[#FEF9C3] px-1.5 py-0.2 rounded border border-yellow-300">
@@ -379,11 +525,11 @@ export function Header() {
                 className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-etsy-bg-soft text-[14px] font-semibold text-etsy-dark shrink-0 transition-colors ml-1"
               >
                 <i className="fa-solid fa-bars text-[13px]" />
-                <span>Categories</span>
+                <span>{t('nav.categories', 'Categories')}</span>
               </button>
             </div>
 
-            {/* Middle: Desktop Search Bar (Hidden on mobile by default per user request) */}
+            {/* Middle: Desktop Search Bar */}
             <form
               onSubmit={handleSearch}
               role="search"
@@ -394,7 +540,7 @@ export function Header() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search"
+                  placeholder={t('nav.search_placeholder', 'Search')}
                   className="w-full h-10 md:h-11 pl-4 pr-12 rounded-full border border-gray-400 md:border-2 md:border-[#222222] focus:outline-none focus:border-[#3A1F62] text-[14.5px] text-[#222222] placeholder-gray-500 bg-white transition-all shadow-2xs"
                 />
                 {query && (
@@ -418,9 +564,9 @@ export function Header() {
               </div>
             </form>
 
-            {/* Right Actions: Mobile Search Icon 🔍 | Indian Flag 🇮🇳 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
+            {/* Right Actions: Mobile Search Icon 🔍 | Region Flag 🇮🇳/🇦🇪 | Profile / Sign In 👤 | Favourites ♥ | Cart 👜 */}
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              {/* Mobile Search Icon Trigger Button (Shows only search icon on mobile by default) */}
+              {/* Mobile Search Icon Trigger Button */}
               <button
                 type="button"
                 aria-label="Open search"
@@ -433,7 +579,7 @@ export function Header() {
                 <i className="fa-solid fa-magnifying-glass text-[17px] text-[#3A1F62]" />
               </button>
 
-              {/* Region Button with Tooltip (Indian Flag) */}
+              {/* Region Button with Tooltip (Dynamic Flag: India 🇮🇳 or UAE 🇦🇪) */}
               <div
                 className="relative"
                 onMouseEnter={() => setHoveredIcon('region')}
@@ -441,23 +587,35 @@ export function Header() {
               >
                 <button
                   type="button"
-                  aria-label="Select region and currency"
+                  aria-label="Select region, language and currency"
                   onClick={() => setShowRegionModal(true)}
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-[#DCE8F5] flex items-center justify-center transition-colors"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-[#DCE8F5] flex items-center justify-center transition-colors cursor-pointer"
                 >
-                  <svg className="w-5 h-5 rounded-full shadow-xs" viewBox="0 0 36 36" fill="none">
-                    <circle cx="18" cy="18" r="18" fill="#F4F4F4" />
-                    <path d="M0 6C0 2.686 2.686 0 6 0H30C33.314 0 36 2.686 36 6V12H0V6Z" fill="#FF9933" />
-                    <path d="M0 24H36V30C36 33.314 33.314 36 30 36H6C2.686 36 0 33.314 0 30V24Z" fill="#138808" />
-                    <path d="M0 12H36V24H0V12Z" fill="#FFFFFF" />
-                    <circle cx="18" cy="18" r="4.5" stroke="#000080" strokeWidth="1" fill="none" />
-                    <circle cx="18" cy="18" r="1.2" fill="#000080" />
-                  </svg>
+                  {country === 'UAE' ? (
+                    /* UAE Flag */
+                    <svg className="w-5 h-5 rounded-full shadow-xs" viewBox="0 0 36 36" fill="none">
+                      <circle cx="18" cy="18" r="18" fill="#F4F4F4" />
+                      <path d="M0 6C0 2.686 2.686 0 6 0H36V12H0V6Z" fill="#00732F" />
+                      <path d="M0 12H36V24H0V12Z" fill="#FFFFFF" />
+                      <path d="M0 24H36V30C36 33.314 33.314 36 30 36H6C2.686 36 0 33.314 0 30V24Z" fill="#000000" />
+                      <path d="M0 6C0 2.686 2.686 0 6 0H12V36H6C2.686 36 0 33.314 0 30V6Z" fill="#FF0000" />
+                    </svg>
+                  ) : (
+                    /* Indian Flag */
+                    <svg className="w-5 h-5 rounded-full shadow-xs" viewBox="0 0 36 36" fill="none">
+                      <circle cx="18" cy="18" r="18" fill="#F4F4F4" />
+                      <path d="M0 6C0 2.686 2.686 0 6 0H30C33.314 0 36 2.686 36 6V12H0V6Z" fill="#FF9933" />
+                      <path d="M0 24H36V30C36 33.314 33.314 36 30 36H6C2.686 36 0 33.314 0 30V24Z" fill="#138808" />
+                      <path d="M0 12H36V24H0V12Z" fill="#FFFFFF" />
+                      <circle cx="18" cy="18" r="4.5" stroke="#000080" strokeWidth="1" fill="none" />
+                      <circle cx="18" cy="18" r="1.2" fill="#000080" />
+                    </svg>
+                  )}
                 </button>
 
                 {hoveredIcon === 'region' && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-[#1E2B37] text-white text-[12px] font-semibold px-3 py-1 rounded-md shadow-lg whitespace-nowrap z-50 animate-in fade-in">
-                    Region &amp; Currency
+                    {country === 'UAE' ? '🇦🇪 UAE (AED)' : '🇮🇳 India (INR)'}
                   </div>
                 )}
               </div>
@@ -501,7 +659,7 @@ export function Header() {
                           className="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 hover:text-black transition-colors"
                         >
                           <i className="fa-regular fa-calendar-check text-[14px] text-gray-400 w-4 text-center shrink-0" />
-                          <span className="font-medium text-gray-800">My orders</span>
+                          <span className="font-medium text-gray-800">{t('nav.my_orders', 'My orders')}</span>
                         </Link>
 
                         <button
@@ -513,7 +671,7 @@ export function Header() {
                           className="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 hover:text-black transition-colors text-left cursor-pointer"
                         >
                           <i className="fa-solid fa-location-dot text-[14px] text-gray-400 w-4 text-center shrink-0" />
-                          <span className="font-medium text-gray-800">Delivery addresses</span>
+                          <span className="font-medium text-gray-800">{t('nav.delivery_addresses', 'Delivery addresses')}</span>
                         </button>
 
                         <button
@@ -525,7 +683,7 @@ export function Header() {
                           className="w-full flex items-center gap-3.5 px-3 py-2.5 rounded-xl hover:bg-gray-50 hover:text-black transition-colors text-left cursor-pointer"
                         >
                           <i className="fa-regular fa-user text-[14px] text-gray-400 w-4 text-center shrink-0" />
-                          <span className="font-medium text-gray-800">Edit profile</span>
+                          <span className="font-medium text-gray-800">{t('nav.edit_profile', 'Edit profile')}</span>
                         </button>
                       </div>
 
@@ -533,14 +691,15 @@ export function Header() {
                       <div className="pt-2 mt-1 border-t border-gray-100">
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={async () => {
+                            await signOut({ redirect: false });
                             setUserLoggedIn(false);
                             setProfileDropdownOpen(false);
                           }}
                           className="w-full flex items-center gap-3.5 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 font-medium text-[13px] transition-colors text-left cursor-pointer"
                         >
                           <i className="fa-solid fa-arrow-right-from-bracket text-[13px] text-red-500 w-4 text-center shrink-0" />
-                          <span>Sign out</span>
+                          <span>{t('nav.sign_out', 'Sign out')}</span>
                         </button>
                       </div>
                     </div>
@@ -556,28 +715,33 @@ export function Header() {
                   aria-label="Sign in"
                   className="w-8 h-8 sm:w-auto sm:h-auto sm:px-4 sm:py-1.5 rounded-full hover:bg-gray-100 text-[13.5px] font-semibold text-[#111111] transition-colors cursor-pointer flex items-center justify-center"
                 >
-                  <span className="hidden sm:inline">Sign in</span>
+                  <span className="hidden sm:inline">{t('nav.signin', 'Sign in')}</span>
                   <i className="fa-solid fa-user text-[16px] text-[#222222] sm:hidden" />
                 </button>
               )}
 
-              {/* Wishlist / Favourites Button with Tooltip (Desktop/Tablet) */}
+              {/* Wishlist / Favourites Button with Tooltip */}
               <div
-                className="hidden sm:block relative"
+                className="relative"
                 onMouseEnter={() => setHoveredIcon('favourites')}
                 onMouseLeave={() => setHoveredIcon(null)}
               >
                 <Link
                   href="/favorites"
                   aria-label="Favourites"
-                  className="w-10 h-10 rounded-full hover:bg-[#DCE8F5] text-etsy-dark flex items-center justify-center transition-colors"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full hover:bg-[#DCE8F5] text-etsy-dark flex items-center justify-center transition-colors relative"
                 >
-                  <i className="fa-solid fa-heart text-[18px] text-[#222222]" />
+                  <i className="fa-solid fa-heart text-[16px] sm:text-[18px] text-[#222222]" />
+                  {favorites.length > 0 && (
+                    <span className="absolute -top-1 -right-1 sm:top-0.5 sm:right-0.5 bg-etsy-orange text-white text-[10px] font-bold rounded-full min-w-[16px] h-[16px] px-1 inline-flex items-center justify-center leading-none shadow-xs">
+                      {favorites.length}
+                    </span>
+                  )}
                 </Link>
 
                 {hoveredIcon === 'favourites' && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-[#1E2B37] text-white text-[12px] font-semibold px-3 py-1 rounded-md shadow-lg whitespace-nowrap z-50 animate-in fade-in">
-                    Favourites
+                  <div className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-[#1E2B37] text-white text-[12px] font-semibold px-3 py-1 rounded-md shadow-lg whitespace-nowrap z-50 animate-in fade-in">
+                    {t('nav.favorites', 'Favourites')}
                   </div>
                 )}
               </div>
@@ -603,7 +767,7 @@ export function Header() {
 
                 {hoveredIcon === 'cart' && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-[#1E2B37] text-white text-[12px] font-semibold px-3 py-1 rounded-md shadow-lg whitespace-nowrap z-50 animate-in fade-in">
-                    Cart
+                    {t('nav.cart', 'Cart')}
                   </div>
                 )}
               </div>
@@ -623,7 +787,7 @@ export function Header() {
                       }`}
                   >
                     {item.isGift && <i className="fa-solid fa-gift text-[13px]" />}
-                    <span>{item.name}</span>
+                    <span>{translateCategory(item.name, language)}</span>
                   </Link>
                 </li>
               ))}
@@ -682,14 +846,14 @@ export function Header() {
                   }}
                   className="w-full py-2.5 px-4 rounded-full bg-[#222222] text-white text-[14px] font-bold shadow-xs hover:bg-black transition-colors"
                 >
-                  Sign in or Register
+                  {t('nav.signin_or_register', 'Sign in or Register')}
                 </button>
               )}
             </div>
 
             {/* Categories Navigation */}
             <div className="py-4 flex-1">
-              <p className="text-[12px] font-bold text-gray-400 uppercase tracking-wider mb-2">Explore Categories</p>
+              <p className="text-[12px] font-bold text-gray-400 uppercase tracking-wider mb-2">{t('nav.explore_categories', 'Explore Categories')}</p>
               <div className="space-y-1">
                 {secondaryNavItems.map((item) => (
                   <Link
@@ -700,7 +864,7 @@ export function Header() {
                   >
                     <span className="flex items-center gap-2">
                       {item.isGift && <i className="fa-solid fa-gift text-etsy-orange text-[13px]" />}
-                      {item.name}
+                      {translateCategory(item.name, language)}
                     </span>
                     <i className="fa-solid fa-chevron-right text-[11px] text-gray-300" />
                   </Link>
@@ -712,10 +876,17 @@ export function Header() {
                 <Link
                   href="/favorites"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-[#222222]"
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-[#222222]"
                 >
-                  <i className="fa-solid fa-heart text-[15px] text-gray-500 w-5 text-center" />
-                  <span>Favourites</span>
+                  <span className="flex items-center gap-3">
+                    <i className="fa-solid fa-heart text-[15px] text-gray-500 w-5 text-center" />
+                    <span>{t('nav.favorites', 'Favourites')}</span>
+                  </span>
+                  {favorites.length > 0 && (
+                    <span className="bg-etsy-orange text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
+                      {favorites.length}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   href="/my-orders"
@@ -723,15 +894,22 @@ export function Header() {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-[#222222]"
                 >
                   <i className="fa-regular fa-calendar-check text-[15px] text-gray-500 w-5 text-center" />
-                  <span>My orders</span>
+                  <span>{t('nav.my_orders', 'My orders')}</span>
                 </Link>
                 <Link
                   href="/cart"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-[#222222]"
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 text-[14px] font-medium text-[#222222]"
                 >
-                  <i className="fa-solid fa-bag-shopping text-[15px] text-gray-500 w-5 text-center" />
-                  <span>Cart ({count})</span>
+                  <span className="flex items-center gap-3">
+                    <i className="fa-solid fa-bag-shopping text-[15px] text-gray-500 w-5 text-center" />
+                    <span>{t('nav.cart', 'Cart')}</span>
+                  </span>
+                  {count > 0 && (
+                    <span className="bg-etsy-orange text-white text-[11px] font-bold px-2 py-0.5 rounded-full">
+                      {count}
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>
@@ -833,34 +1011,32 @@ export function Header() {
                 </div>
               )}
 
-              {/* Password with Show/Hide Eye Icon */}
-              {isRegisterMode && (
-                <div>
-                  <label className="text-[13.5px] font-medium text-[#222222] block mb-1">
-                    Password<span className="text-[#A61A11] ml-0.5">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full h-[44px] px-3.5 pr-11 rounded-[10px] border border-[#757575] text-[14.5px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-black/15 focus:border-black transition-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#222222] hover:text-etsy-orange focus:outline-none p-1"
-                    >
-                      {showPassword ? (
-                        <i className="fa-regular fa-eye-slash text-[14px]" />
-                      ) : (
-                        <i className="fa-regular fa-eye text-[14px]" />
-                      )}
-                    </button>
-                  </div>
+              {/* Password with Show/Hide Eye Icon (Needed for both Register and Sign in) */}
+              <div>
+                <label className="text-[13.5px] font-medium text-[#222222] block mb-1">
+                  Password<span className="text-[#A61A11] ml-0.5">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full h-[44px] px-3.5 pr-11 rounded-[10px] border border-[#757575] text-[14.5px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-black/15 focus:border-black transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#222222] hover:text-etsy-orange focus:outline-none p-1"
+                  >
+                    {showPassword ? (
+                      <i className="fa-regular fa-eye-slash text-[14px]" />
+                    ) : (
+                      <i className="fa-regular fa-eye text-[14px]" />
+                    )}
+                  </button>
                 </div>
-              )}
+              </div>
 
               {/* Stay Signed In (Sign in mode) */}
               {!isRegisterMode && (
@@ -879,21 +1055,33 @@ export function Header() {
                   </div>
                   <button
                     type="button"
-                    className="text-[12.5px] text-[#222222] hover:underline"
-                    onClick={() => alert('Password reset link sent to your email.')}
+                    className="text-[12.5px] text-[#222222] hover:underline cursor-pointer"
+                    onClick={() => {
+                      setShowAuthModal(false);
+                      router.push('/forgot-password');
+                    }}
                   >
                     Forgot your password?
                   </button>
                 </div>
               )}
 
+              {/* Auth Error Message */}
+              {authError && (
+                <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium flex items-center gap-2">
+                  <i className="fa-solid fa-circle-exclamation text-red-500" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
               {/* Submit Button (Register in Create Mode / Sign in in Login Mode) */}
               <button
                 type="submit"
+                disabled={isAuthSubmitting}
                 style={{ backgroundColor: '#222222', color: '#ffffff' }}
-                className="w-full bg-[#222222] hover:bg-black text-white font-bold h-[46px] rounded-full text-[15.5px] transition-all mt-3.5 cursor-pointer text-center flex items-center justify-center shadow-sm hover:shadow-md"
+                className="w-full bg-[#222222] hover:bg-black disabled:opacity-60 text-white font-bold h-[46px] rounded-full text-[15.5px] transition-all mt-3.5 cursor-pointer text-center flex items-center justify-center shadow-sm hover:shadow-md"
               >
-                {isRegisterMode ? 'Register' : 'Sign in'}
+                {isAuthSubmitting ? 'Please wait...' : isRegisterMode ? 'Register' : 'Sign in'}
               </button>
             </form>
 
@@ -1012,60 +1200,64 @@ export function Header() {
 
             <div className="flex items-center gap-3 mb-5">
               <i className="fa-solid fa-globe text-[20px] text-etsy-dark" />
-              <h2 className="text-[22px] font-bold text-etsy-dark">
-                Update your settings
-              </h2>
+              <div>
+                <h2 className="text-[20px] font-bold text-etsy-dark">
+                  {t('modal.region_title', 'Update your settings')}
+                </h2>
+                <p className="text-[12px] text-gray-500 mt-0.5">
+                  {t('modal.region_subtitle', 'Select your country of delivery and preferred language.')}
+                </p>
+              </div>
             </div>
 
             <div className="space-y-4 text-left">
               <div>
                 <label className="text-[13px] font-bold text-etsy-dark block mb-1">
-                  Region:
+                  {t('modal.country', 'Country / Region:')}
                 </label>
                 <select
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer"
+                  value={tempCountry}
+                  onChange={(e) => {
+                    const c = e.target.value as Country;
+                    setTempCountry(c);
+                    if (c === 'India') {
+                      setTempCurrency('INR');
+                    } else if (c === 'UAE') {
+                      setTempCurrency('AED');
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer font-medium"
                 >
-                  <option value="India">India (🇮🇳)</option>
-                  <option value="United States">United States (🇺🇸)</option>
-                  <option value="United Kingdom">United Kingdom (🇬🇧)</option>
-                  <option value="Canada">Canada (🇨🇦)</option>
-                  <option value="Australia">Australia (🇦🇺)</option>
-                  <option value="Germany">Germany (🇩🇪)</option>
+                  <option value="India">🇮🇳 India (भारत)</option>
+                  <option value="UAE">🇦🇪 United Arab Emirates (الإمارات العربية المتحدة)</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-[13px] font-bold text-etsy-dark block mb-1">
-                  Language:
+                  {t('modal.language', 'Language:')}
                 </label>
                 <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer"
+                  value={tempLanguage}
+                  onChange={(e) => setTempLanguage(e.target.value as Language)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer font-medium"
                 >
-                  <option value="English (IN)">English (IN)</option>
-                  <option value="English (US)">English (US)</option>
-                  <option value="English (UK)">English (UK)</option>
-                  <option value="Deutsch">Deutsch</option>
-                  <option value="Français">Français</option>
+                  <option value="en">English (US/UK)</option>
+                  <option value="ar">العربية (Arabic)</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-[13px] font-bold text-etsy-dark block mb-1">
-                  Currency:
+                  {t('modal.currency', 'Currency:')}
                 </label>
                 <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer"
+                  value={tempCurrency}
+                  onChange={(e) => setTempCurrency(e.target.value as Currency)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-etsy-border text-[14px] text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer font-medium"
                 >
                   <option value="INR">₹ INR (Indian Rupee)</option>
-                  <option value="USD">$ USD (United States Dollar)</option>
-                  <option value="GBP">£ GBP (British Pound)</option>
-                  <option value="EUR">€ EUR (Euro)</option>
+                  <option value="AED">AED د.إ (UAE Dirham)</option>
                 </select>
               </div>
             </div>
@@ -1077,15 +1269,20 @@ export function Header() {
                 style={{ border: '1.5px solid #222222', color: '#222222', backgroundColor: '#FFFFFF' }}
                 className="px-5 py-2 rounded-full hover:bg-[#F5F5F1] text-[14px] font-bold transition-colors cursor-pointer"
               >
-                Cancel
+                {t('modal.cancel', 'Cancel')}
               </button>
               <button
                 type="button"
-                onClick={() => setShowRegionModal(false)}
+                onClick={() => {
+                  setCountry(tempCountry);
+                  setCurrency(tempCurrency);
+                  setLanguage(tempLanguage);
+                  setShowRegionModal(false);
+                }}
                 style={{ backgroundColor: '#222222', color: '#FFFFFF' }}
                 className="px-6 py-2 rounded-full hover:bg-black text-[14px] font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
               >
-                Save
+                {t('modal.save', 'Save Preferences')}
               </button>
             </div>
           </div>
@@ -1311,10 +1508,10 @@ export function Header() {
                     Order #FS-235358
                   </p>
                   <p className="text-[12px] text-[#595959]">
-                    15 Sept 2026 • ₹4,349 (Paid in full)
+                    15 Sept 2026 • {formatPrice(4349)} (Paid in full)
                   </p>
                   <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1">
-                    ✓ GST Invoice Ready
+                    ✓ {currency === 'AED' ? 'VAT' : 'GST'} Invoice Ready
                   </span>
                 </div>
                 <button
@@ -1334,7 +1531,7 @@ export function Header() {
                     Order #FS-190482
                   </p>
                   <p className="text-[12px] text-[#595959]">
-                    02 Aug 2026 • ₹2,430 (Delivered)
+                    02 Aug 2026 • {formatPrice(2430)} (Delivered)
                   </p>
                   <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1">
                     ✓ Consecration Certificate Ready

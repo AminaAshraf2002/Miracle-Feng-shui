@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -13,46 +14,78 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // If already logged in, redirect to /admin
+  // If already logged in and not coming from an auth failure, redirect to /admin
   useEffect(() => {
     try {
       const auth = localStorage.getItem('mfs_admin_auth');
-      if (auth === 'true') {
-        router.replace('/admin');
+      if (
+        auth === 'true' &&
+        typeof window !== 'undefined' &&
+        !window.location.search.includes('callbackUrl')
+      ) {
+        window.location.href = '/admin';
       }
     } catch {
       // ignore
     }
-  }, [router]);
+  }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
-      const cleanEmail = email.trim().toLowerCase();
-      const cleanPass = password.trim();
+    const rawEmail = email.trim().toLowerCase();
+    const cleanEmail = rawEmail === 'admin' ? 'admin@miraclefengshui.com' : rawEmail;
+    const cleanPass = password.trim();
 
-      if (
-        (cleanEmail === 'admin@miraclefengshui.com' || cleanEmail === 'admin') &&
-        (cleanPass === 'admin' || cleanPass === 'admin123' || cleanPass === 'password')
-      ) {
+    try {
+      const res = await signIn('credentials', {
+        email: cleanEmail,
+        password: cleanPass,
+        redirect: false,
+      });
+
+      if (res?.error || !res?.ok) {
+        localStorage.removeItem('mfs_admin_auth');
+        localStorage.removeItem('mfs_admin_user');
+        document.cookie = 'mfs_admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+        setError('Invalid credentials. Use admin@miraclefengshui.com and password: admin');
+        setLoading(false);
+      } else {
         localStorage.setItem('mfs_admin_auth', 'true');
         localStorage.setItem('mfs_admin_user', cleanEmail);
-        router.replace('/admin');
-      } else {
-        setError('Invalid admin credentials. Please use the demo credentials below.');
-        setLoading(false);
+        document.cookie = 'mfs_admin_auth=true; path=/; max-age=2592000; SameSite=Lax';
+
+        // Resolve callbackUrl or default to /admin
+        let target = '/admin';
+        if (typeof window !== 'undefined') {
+          const params = new URLSearchParams(window.location.search);
+          const cb = params.get('callbackUrl');
+          if (cb && !cb.includes('/admin/login')) {
+            target = cb;
+          }
+        }
+
+        // Direct browser navigation ensures session cookies are reliably committed
+        window.location.href = target;
       }
-    }, 350);
+    } catch {
+      localStorage.removeItem('mfs_admin_auth');
+      localStorage.removeItem('mfs_admin_user');
+      document.cookie = 'mfs_admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+      setError('An error occurred during sign in');
+      setLoading(false);
+    }
   };
+
 
   const handleFillDemo = () => {
     setEmail('admin@miraclefengshui.com');
     setPassword('admin');
     setError('');
   };
+
 
   return (
     <div className="min-h-screen bg-[#0E0817] text-[#222222] flex items-center justify-center p-3 sm:p-6 font-sans relative overflow-hidden selection:bg-amber-500 selection:text-black">

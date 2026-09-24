@@ -34,7 +34,7 @@ export function GuestNotificationToast() {
       return <i className="fa-solid fa-bag-shopping text-[12px]" />;
     }
     if (guestToast.type === 'favorite') {
-      return <i className="fa-regular fa-clock text-[12px]" />;
+      return <i className="fa-solid fa-heart text-[12px]" />;
     }
     return <i className="fa-regular fa-clock text-[12px]" />;
   };
@@ -43,7 +43,7 @@ export function GuestNotificationToast() {
     <div
       role="alert"
       aria-live="polite"
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[480px] animate-in slide-in-from-bottom-5 duration-300 pointer-events-auto select-none"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[490px] animate-in slide-in-from-bottom-5 duration-300 pointer-events-auto select-none"
     >
       <div className="bg-[#4D6325] text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-white/15 backdrop-blur-xs">
         {/* Left Circular Badge */}
@@ -59,12 +59,20 @@ export function GuestNotificationToast() {
           <p className="text-white/95 text-[12px] sm:text-[12.5px] mt-0.5">
             <button
               type="button"
+              onClick={() => triggerAuth('register')}
+              className="underline font-bold hover:text-yellow-200 cursor-pointer transition-colors"
+            >
+              Register
+            </button>{' '}
+            or{' '}
+            <button
+              type="button"
               onClick={() => triggerAuth('signin')}
               className="underline font-bold hover:text-yellow-200 cursor-pointer transition-colors"
             >
-              Sign in or register
+              sign in
             </button>{' '}
-            {guestToast.subtitle || (guestToast.type === 'cart' ? 'to add to your cart.' : 'to add to your wishlist.')}
+            {guestToast.subtitle || (guestToast.type === 'cart' ? 'to add to your basket.' : 'to add to your wishlist.')}
           </p>
         </div>
 

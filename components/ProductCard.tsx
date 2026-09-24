@@ -4,6 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Product } from '@/lib/placeholder-data';
 import { useCart } from '@/context/CartContext';
+import { useLocale } from '@/context/CurrencyContext';
+import { translateProductTitle } from '@/lib/translations';
 
 interface ProductCardProps {
   product: Product;
@@ -11,7 +13,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { isFavorite, addFavorite, removeFavorite } = useCart();
+  const { formatPrice, t, language } = useLocale();
   const favorited = isFavorite(product.id);
+  const localizedTitle = translateProductTitle(product.name, language, product.id);
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -34,7 +38,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-etsy-bg-soft border border-etsy-border/60">
         <img
           src={mainImage}
-          alt={product.name}
+          alt={localizedTitle}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
@@ -45,16 +49,27 @@ export function ProductCard({ product }: ProductCardProps) {
           }}
         />
 
-        {/* Overlay Badges (Clean, minimal, no tacky icons) */}
+        {/* Overlay Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10 pointer-events-none">
+          {product.stock !== undefined && product.stock > 0 && product.stock < 10 && (
+            <span className="bg-[#C2410C] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide shadow-xs flex items-center gap-1">
+              <i className="fa-solid fa-fire text-[9px]" />
+              Only {product.stock} left
+            </span>
+          )}
+          {product.stock === 0 && (
+            <span className="bg-red-700 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wide shadow-xs">
+              Out of stock
+            </span>
+          )}
           {product.bestseller && (
             <span className="bg-black/85 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full tracking-wide shadow-xs backdrop-blur-xs">
-              Bestseller
+              {t('badge.bestseller', 'Bestseller')}
             </span>
           )}
           {product.etsyPick && !product.bestseller && (
             <span className="bg-white/95 text-[#111111] border border-black/10 text-[10px] font-semibold px-2.5 py-0.5 rounded-full tracking-wide shadow-xs backdrop-blur-xs">
-              Miracle Pick
+              {t('badge.miracle_pick', 'Miracle Pick')}
             </span>
           )}
         </div>
@@ -83,8 +98,8 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* 2. Card Body */}
       <div className="pt-2.5 flex flex-col flex-grow">
         {/* Title */}
-        <h3 className="text-[14px] font-medium text-etsy-dark leading-snug line-clamp-2 no-underline">
-          {product.name}
+        <h3 style={{ fontWeight: 400 }} className="text-[13.5px] font-normal text-etsy-dark leading-snug line-clamp-2 no-underline">
+          {localizedTitle}
         </h3>
 
         {/* Rating & Review Count */}
@@ -102,11 +117,11 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price & Discounts */}
         <div className="flex items-baseline flex-wrap gap-1.5 mt-1.5">
           <span className="text-[16px] font-bold text-etsy-dark">
-            ₹{product.price.toLocaleString('en-IN')}
+            {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
             <span className="text-[13px] text-etsy-gray line-through">
-              ₹{product.originalPrice.toLocaleString('en-IN')}
+              {formatPrice(product.originalPrice)}
             </span>
           )}
           {product.discount && (
@@ -120,7 +135,21 @@ export function ProductCard({ product }: ProductCardProps) {
         {product.freeShipping && (
           <div className="text-[12px] font-semibold text-etsy-green mt-0.5 flex items-center gap-1">
             <i className="fa-solid fa-truck-fast text-[11px]" />
-            <span>FREE delivery</span>
+            <span>{t('badge.free_delivery', 'FREE delivery')}</span>
+          </div>
+        )}
+
+        {/* Low Stock Indicator (< 10 products left) */}
+        {product.stock !== undefined && product.stock > 0 && product.stock < 10 && (
+          <div className="text-[11.5px] font-bold text-[#C2410C] mt-1 flex items-center gap-1">
+            <i className="fa-solid fa-fire text-[#EA580C] text-[10.5px]" />
+            <span>Only {product.stock} left in stock — order soon!</span>
+          </div>
+        )}
+        {product.stock === 0 && (
+          <div className="text-[11.5px] font-bold text-red-600 mt-1 flex items-center gap-1">
+            <i className="fa-solid fa-circle-xmark text-[10.5px]" />
+            <span>Out of stock</span>
           </div>
         )}
       </div>

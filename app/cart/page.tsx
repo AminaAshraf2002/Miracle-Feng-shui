@@ -4,12 +4,15 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useLocale } from '@/context/CurrencyContext';
 import { products } from '@/lib/placeholder-data';
+import { translateProductTitle } from '@/lib/translations';
 
 export default function MiracleCartPage() {
   const router = useRouter();
   const { items, removeItem, saveForLater, setQty, addItem, subtotal, count } =
     useCart();
+  const { country, formatPrice, t, language } = useLocale();
   const [couponCode, setCouponCode] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -24,9 +27,11 @@ export default function MiracleCartPage() {
   };
 
   const handleSaveForLater = (itemId: string) => {
-    saveForLater(itemId);
-    setSaveToast(true);
-    setTimeout(() => setSaveToast(false), 3000);
+    const success = saveForLater(itemId);
+    if (success) {
+      setSaveToast(true);
+      setTimeout(() => setSaveToast(false), 3000);
+    }
   };
 
   const triggerAuth = (mode: 'signin' | 'register') => {
@@ -44,7 +49,7 @@ export default function MiracleCartPage() {
       <div className="etsy-container py-6 sm:py-8 max-w-[1200px]">
         {/* Page Title */}
         <h1 className="text-[26px] sm:text-[30px] font-bold text-[#222222] mb-6 tracking-tight">
-          Your basket {count > 0 && `(${count})`}
+          {t('cart.basket_title', 'Your basket')} {count > 0 && `(${count})`}
         </h1>
 
         {/* Save for later toast notification */}
@@ -52,10 +57,10 @@ export default function MiracleCartPage() {
           <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 px-4 py-3 rounded-xl flex items-center justify-between text-[13.5px] font-semibold mb-6 animate-in fade-in slide-in-from-top-1 shadow-xs">
             <span className="flex items-center gap-2">
               <i className="fa-solid fa-bookmark text-emerald-600 text-[14px]" />
-              Saved to your favourite items!
+              {t('cart.saved_to_fav', 'Saved to your favourite items!')}
             </span>
             <Link href="/favorites" className="underline hover:text-emerald-950 font-bold">
-              View favourites →
+              {t('cart.view_fav', 'View favourites')} →
             </Link>
           </div>
         )}
@@ -64,7 +69,7 @@ export default function MiracleCartPage() {
         {items.length === 0 ? (
           <div className="py-12 sm:py-16 text-center flex flex-col items-center">
             <h2 className="text-[34px] sm:text-[42px] font-serif font-normal text-[#222222] my-10 tracking-tight">
-              Your basket is empty.
+              {t('cart.basket_empty_title', 'Your basket is empty.')}
             </h2>
 
             <Link
@@ -72,7 +77,7 @@ export default function MiracleCartPage() {
               style={{ backgroundColor: '#222222', color: '#FFFFFF' }}
               className="bg-[#222222] hover:bg-black text-white font-bold text-[15px] px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all inline-block mb-16 no-underline"
             >
-              Discover Feng Shui finds
+              {t('cart.discover_finds', 'Discover Feng Shui finds')}
             </Link>
 
             {/* Climate Note */}
@@ -92,33 +97,6 @@ export default function MiracleCartPage() {
             {/* LEFT: BASKET ITEMS (8 Columns) */}
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-white border border-[#E1E3DF] rounded-2xl shadow-xs overflow-hidden">
-                {/* Shop Header */}
-                <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#E1E3DF]/80">
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src={items[0]?.product.makerAvatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=60&q=80'}
-                      alt={items[0]?.product.maker || 'Shop'}
-                      className="w-7 h-7 rounded-full object-cover border border-[#E1E3DF]"
-                    />
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-[14px] text-[#222222] hover:underline cursor-pointer">
-                        {items[0]?.product.maker || 'bodyjewelrydesignart'}
-                      </span>
-                      <span className="text-[12.5px] text-[#595959]">
-                        ★ 4.8 (102)
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    aria-label="More options"
-                    className="p-1 rounded-full hover:bg-[#F5F5F1] text-[#595959] cursor-pointer"
-                  >
-                    <i className="fa-solid fa-ellipsis text-[14px]" />
-                  </button>
-                </div>
-
                 {/* Line Items List */}
                 <div className="divide-y divide-[#E1E3DF]/70">
                   {items.map((item) => (
@@ -128,7 +106,7 @@ export default function MiracleCartPage() {
                         <div className="flex gap-4">
                           <img
                             src={item.product.images[0]}
-                            alt={item.product.name}
+                            alt={translateProductTitle(item.product.name, language, item.product.id)}
                             className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover border border-[#E1E3DF] shrink-0"
                           />
 
@@ -137,23 +115,47 @@ export default function MiracleCartPage() {
                               href={`/product/${item.product.id}`}
                               className="text-[14px] sm:text-[15px] font-medium text-[#222222] hover:underline line-clamp-2 leading-snug"
                             >
-                              {item.product.name}
+                              {translateProductTitle(item.product.name, language, item.product.id)}
                             </Link>
 
-                            {/* Variations Badges (e.g. Color: Gold, Size: 18G-6mm) */}
-                            <div className="flex flex-wrap gap-1.5 pt-0.5">
-                              <span className="text-[11.5px] text-[#595959] bg-[#F5F5F1] px-2 py-0.5 rounded-md border border-[#E1E3DF]">
-                                Color: Gold
-                              </span>
-                              <span className="text-[11.5px] text-[#595959] bg-[#F5F5F1] px-2 py-0.5 rounded-md border border-[#E1E3DF]">
-                                Standard Edition
-                              </span>
-                            </div>
+                            {/* Dynamic Variations or Materials */}
+                            {item.selectedVariations && Object.keys(item.selectedVariations).length > 0 ? (
+                              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                {Object.entries(item.selectedVariations).map(([k, v]) => (
+                                  <span key={k} className="text-[11.5px] text-[#595959] bg-[#F5F5F1] px-2 py-0.5 rounded-md border border-[#E1E3DF]">
+                                    {k}: {v}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : item.product.materials && item.product.materials.length > 0 ? (
+                              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                {item.product.materials.slice(0, 2).map((mat) => (
+                                  <span key={mat} className="text-[11.5px] text-[#595959] bg-[#F5F5F1] px-2 py-0.5 rounded-md border border-[#E1E3DF]">
+                                    {mat}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : null}
 
-                            {/* Red Urgency Text */}
-                            <p className="text-[12.5px] text-[#A82218] font-medium pt-1">
-                              In 493 baskets, 9 bought in the past 24 hours
-                            </p>
+                            {/* Personalization if provided */}
+                            {item.personalizationText && (
+                              <p className="text-[11.5px] text-[#595959] italic pt-0.5">
+                                Dedication: &quot;{item.personalizationText}&quot;
+                              </p>
+                            )}
+
+                            {/* Dynamic Urgency / Demand Indicator (only if product has inDemandCount or bestseller) */}
+                            {item.product.inDemandCount && item.product.inDemandCount > 0 ? (
+                              <p className="text-[12px] text-[#A82218] font-medium pt-0.5 flex items-center gap-1.5">
+                                <i className="fa-solid fa-fire text-[11px]" />
+                                <span>In {item.product.inDemandCount} people&apos;s baskets right now</span>
+                              </p>
+                            ) : item.product.bestseller ? (
+                              <p className="text-[12px] text-emerald-700 font-medium pt-0.5 flex items-center gap-1.5">
+                                <i className="fa-solid fa-star text-[11px]" />
+                                <span>Bestselling consecrated cure</span>
+                              </p>
+                            ) : null}
 
                             {/* Actions row: Quantity selector + Edit + Save for later + Remove */}
                             <div className="flex flex-wrap items-center gap-3 pt-3">
@@ -200,7 +202,7 @@ export default function MiracleCartPage() {
                         {/* Price */}
                         <div className="text-right sm:self-start shrink-0">
                           <span className="text-[17px] sm:text-[18px] font-bold text-[#222222]">
-                            ₹ {(item.product.price * item.quantity).toLocaleString('en-IN')}
+                            {formatPrice(item.product.price * item.quantity)}
                           </span>
                         </div>
                       </div>
@@ -211,7 +213,7 @@ export default function MiracleCartPage() {
                 {/* Postage / Delivery Strip */}
                 <div className="bg-[#FAF9F5] border-t border-[#E1E3DF] px-5 py-3 text-[13px] text-[#222222] flex items-center justify-between">
                   <span>
-                    <strong>Postage:</strong> Free delivery (Get it by 18–28 Sept)
+                    <strong>{t('cart.shipping', 'Delivery')}:</strong> {t('cart.free', 'FREE')} ({country === 'UAE' ? 'Express Air Delivery to UAE' : 'Express Insured Delivery across India'})
                   </span>
                 </div>
               </div>
@@ -233,9 +235,9 @@ export default function MiracleCartPage() {
               <div className="bg-white border border-[#E1E3DF] rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
                 {/* Item(s) total */}
                 <div className="flex justify-between items-center text-[15px] text-[#222222]">
-                  <span>Item(s) total</span>
+                  <span>{t('cart.subtotal', 'Item(s) total')}</span>
                   <span className="font-bold">
-                    ₹ {subtotal.toLocaleString('en-IN')}
+                    {formatPrice(subtotal)}
                   </span>
                 </div>
 
@@ -255,16 +257,16 @@ export default function MiracleCartPage() {
                 {/* Delivery */}
                 <div className="flex justify-between items-center text-[13.5px] text-[#222222]">
                   <div>
-                    <span>Delivery</span>
-                    <span className="text-[12px] text-[#595959] block">(To India)</span>
+                    <span>{t('cart.shipping', 'Delivery')}</span>
+                    <span className="text-[12px] text-[#595959] block">(To {country === 'UAE' ? 'UAE' : 'India'})</span>
                   </div>
-                  <span className="font-semibold text-[#0F6C34]">FREE</span>
+                  <span className="font-semibold text-[#0F6C34]">{t('cart.free', 'FREE')}</span>
                 </div>
 
                 {/* Total */}
                 <div className="flex justify-between items-baseline text-[17px] font-bold text-[#222222] pt-2 border-t border-[#E1E3DF]">
-                  <span>Total ({count} {count === 1 ? 'item' : 'items'})</span>
-                  <span>₹ {subtotal.toLocaleString('en-IN')}</span>
+                  <span>{t('product.total', 'Total')} ({count} {count === 1 ? 'item' : 'items'})</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
 
                 {/* Mark as Gift Checkbox */}
@@ -289,7 +291,7 @@ export default function MiracleCartPage() {
                   className="w-full bg-[#222222] hover:bg-black text-white font-bold text-[14.5px] py-3.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <i className="fa-solid fa-lock text-[12px]" />
-                  <span>Proceed to checkout</span>
+                  <span>{t('cart.proceed_to_checkout', 'Proceed to checkout')}</span>
                 </button>
 
                 {/* Secure options */}
@@ -388,7 +390,7 @@ export default function MiracleCartPage() {
                   <div className="aspect-square rounded-xl overflow-hidden bg-[#F5F5F1] mb-2.5 relative">
                     <img
                       src={prod.images[0]}
-                      alt={prod.name}
+                      alt={translateProductTitle(prod.name, language, prod.id)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -396,18 +398,18 @@ export default function MiracleCartPage() {
                     href={`/product/${prod.id}`}
                     className="text-[13px] font-medium text-[#222222] hover:underline line-clamp-2 leading-snug"
                   >
-                    {prod.name}
+                    {translateProductTitle(prod.name, language, prod.id)}
                   </Link>
                   <p className="text-[11px] text-[#595959] mt-0.5">
                     ✿ Ad by Miracle feng shui seller
                   </p>
                   <div className="flex items-baseline gap-1.5 mt-2">
                     <span className="text-[14px] font-bold text-[#222222]">
-                      ₹ {prod.price.toLocaleString('en-IN')}
+                      {formatPrice(prod.price)}
                     </span>
                     {prod.originalPrice && (
                       <span className="text-[11px] text-[#757575] line-through">
-                        ₹ {prod.originalPrice.toLocaleString('en-IN')}
+                        {formatPrice(prod.originalPrice)}
                       </span>
                     )}
                   </div>

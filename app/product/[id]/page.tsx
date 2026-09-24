@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { sampleReviews } from '@/lib/placeholder-data';
 import { useCart } from '@/context/CartContext';
 import { useStore } from '@/context/StoreContext';
+import { useLocale } from '@/context/CurrencyContext';
+import { translateProductTitle, translateProductDescription, translateCategory } from '@/lib/translations';
 
 export default function ProductDetailPage({
   params,
@@ -17,8 +19,11 @@ export default function ProductDetailPage({
   const router = useRouter();
   const { addItem, addFavorite, removeFavorite, isFavorite } = useCart();
   const { products } = useStore();
+  const { country, formatPrice, t, language } = useLocale();
 
   const product = products.find((p) => p.id === id) || products[0];
+  const localizedTitle = translateProductTitle(product.name, language, product.id);
+  const localizedDescription = translateProductDescription(product.description, language, product.id);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedVariations, setSelectedVariations] = useState<Record<string, string>>(() => {
@@ -44,14 +49,18 @@ export default function ProductDetailPage({
   };
 
   const handleAddToCart = () => {
-    addItem(product, quantity, selectedVariations, personalizationText);
-    setAddedToast(true);
-    setTimeout(() => setAddedToast(false), 3000);
+    const success = addItem(product, quantity, selectedVariations, personalizationText);
+    if (success) {
+      setAddedToast(true);
+      setTimeout(() => setAddedToast(false), 3000);
+    }
   };
 
   const handleBuyItNow = () => {
-    addItem(product, quantity, selectedVariations, personalizationText);
-    router.push('/cart');
+    const success = addItem(product, quantity, selectedVariations, personalizationText);
+    if (success) {
+      router.push('/cart');
+    }
   };
 
   const relatedProducts = products
@@ -98,11 +107,11 @@ export default function ProductDetailPage({
             href={`/shop?category=${encodeURIComponent(product.category)}`}
             className="hover:text-black transition-colors"
           >
-            {product.category}
+            {translateCategory(product.category, language)}
           </Link>
           <span className="text-gray-300">›</span>
-          <span className="text-black font-semibold truncate max-w-[300px]">
-            {product.name}
+          <span className="text-gray-600 font-normal truncate max-w-[300px]">
+            {localizedTitle}
           </span>
         </nav>
 
@@ -114,7 +123,7 @@ export default function ProductDetailPage({
             <div className="relative aspect-square max-w-[440px] max-h-[440px] w-full bg-[#F8F8F8] border border-gray-200/80 rounded-2xl overflow-hidden group shadow-2xs">
               <img
                 src={product.images[activeImageIndex] || product.images[0]}
-                alt={product.name}
+                alt={localizedTitle}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
 
@@ -174,9 +183,9 @@ export default function ProductDetailPage({
 
           {/* RIGHT: PRODUCT INFO & PURCHASE CONTROLS (7 Cols) */}
           <div className="lg:col-span-7 space-y-4">
-            {/* Title (Modern clean font, decreased size & balanced weight) */}
-            <h1 className="font-sans text-[20px] sm:text-[23px] font-medium text-[#111111] tracking-normal leading-snug">
-              {product.name}
+            {/* Title (Modern clean font, decreased size & lighter elegant font weight) */}
+            <h1 style={{ fontWeight: 400 }} className="font-sans text-[20px] sm:text-[23px] font-normal text-[#111111] tracking-normal leading-snug">
+              {localizedTitle}
             </h1>
 
             {/* Star Rating - Premium Standard Font Awesome Stars */}
@@ -202,11 +211,11 @@ export default function ProductDetailPage({
             {/* Price & Discounts */}
             <div className="flex items-baseline gap-3 flex-wrap pt-1">
               <span className="text-[28px] sm:text-[32px] font-bold text-[#111111]">
-                ₹ {product.price.toLocaleString('en-IN')}
+                {formatPrice(product.price)}
               </span>
               {product.originalPrice && (
                 <span className="text-[17px] text-gray-400 line-through">
-                  ₹ {product.originalPrice.toLocaleString('en-IN')}
+                  {formatPrice(product.originalPrice)}
                 </span>
               )}
               {product.discount && (
@@ -217,16 +226,20 @@ export default function ProductDetailPage({
             </div>
             <p className="text-[12px] text-gray-500 flex items-center gap-1.5">
               <i className="fa-solid fa-truck-fast text-emerald-600" />
-              <span>Inclusive of all GST • <strong>Free Express Insured Delivery</strong> in 2–4 business days</span>
+              <span>
+                {country === 'UAE'
+                  ? t('product.tax_notice_uae', 'VAT Included • Express Air Shipping in 3–5 days to Dubai, Abu Dhabi & All Emirates')
+                  : t('product.tax_notice_india', 'Inclusive of all GST • Free Express Insured Delivery in 2–4 business days')}
+              </span>
             </p>
 
-            {/* In Demand Notice - Minimal & Refined (No clunky circular icon) */}
+            {/* In Demand Notice */}
             <div className="flex items-center gap-2.5 py-2.5 px-3.5 bg-[#FFF9F5] border border-[#FDE6D8] rounded-xl text-[13px]">
               <span className="w-2 h-2 rounded-full bg-[#F1641E] shrink-0" />
               <p className="text-[#333333] leading-snug">
-                <strong className="font-semibold text-[#111111]">In high demand:</strong>{' '}
+                <strong className="font-semibold text-[#111111]">{t('product.in_high_demand', 'In high demand')}:</strong>{' '}
                 <span className="text-gray-600">
-                  {product.inDemandCount || 18} seekers welcomed this sacred piece into their sanctuary in the last 24 hours.
+                  {product.inDemandCount || 18} {t('product.seekers_welcomed', 'seekers welcomed this sacred piece into their sanctuary in the last 24 hours.')}
                 </span>
               </p>
             </div>
@@ -241,32 +254,32 @@ export default function ProductDetailPage({
               <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 flex items-center gap-2.5">
                 <i className="fa-solid fa-om text-[#111111] text-[15px] w-5 text-center shrink-0" />
                 <div>
-                  <span className="font-bold text-[#111111] block leading-tight">Blessed by Master</span>
-                  <span className="text-[10.5px] text-gray-500">Mantra energized</span>
+                  <span className="font-bold text-[#111111] block leading-tight">{t('product.blessed_by_master', 'Blessed by Master')}</span>
+                  <span className="text-[10.5px] text-gray-500">{t('product.blessed_sub', 'Mantra energized')}</span>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 flex items-center gap-2.5">
                 <i className="fa-solid fa-gem text-[#111111] text-[15px] w-5 text-center shrink-0" />
                 <div>
-                  <span className="font-bold text-[#111111] block leading-tight">100% Authentic</span>
-                  <span className="text-[10.5px] text-gray-500">Certified Grade-A</span>
+                  <span className="font-bold text-[#111111] block leading-tight">{t('product.authentic', '100% Authentic')}</span>
+                  <span className="text-[10.5px] text-gray-500">{t('product.authentic_sub', 'Certified Grade-A')}</span>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 flex items-center gap-2.5">
                 <i className="fa-solid fa-truck-fast text-[#111111] text-[15px] w-5 text-center shrink-0" />
                 <div>
-                  <span className="font-bold text-[#111111] block leading-tight">Express Shipping</span>
-                  <span className="text-[10.5px] text-gray-500">Insured 2–4 days</span>
+                  <span className="font-bold text-[#111111] block leading-tight">{t('product.express_shipping', 'Express Shipping')}</span>
+                  <span className="text-[10.5px] text-gray-500">{t('product.express_sub', 'Insured 2–4 days')}</span>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100 flex items-center gap-2.5">
                 <i className="fa-solid fa-shield-halved text-[#111111] text-[15px] w-5 text-center shrink-0" />
                 <div>
-                  <span className="font-bold text-[#111111] block leading-tight">14-Day Warranty</span>
-                  <span className="text-[10.5px] text-gray-500">Energy harmony</span>
+                  <span className="font-bold text-[#111111] block leading-tight">{t('product.energy_warranty', 'Sanctuary Harmony')}</span>
+                  <span className="text-[10.5px] text-gray-500">{t('product.energy_sub', 'Sacred energy alignment')}</span>
                 </div>
               </div>
             </div>
@@ -355,20 +368,39 @@ export default function ProductDetailPage({
               </div>
 
               <span className="text-[20px] font-bold text-[#111111]">
-                Total: ₹ {(product.price * quantity).toLocaleString('en-IN')}
+                {t('product.total', 'Total')}: {formatPrice(product.price * quantity)}
               </span>
             </div>
 
-            {/* Action Buttons (Dual Style Matching Modern Reference) */}
+            {/* Stock Urgency Notice (< 10 products left) */}
+            {product.stock !== undefined && product.stock > 0 && product.stock < 10 && (
+              <div className="flex items-center gap-2.5 py-2.5 px-3.5 bg-[#FFF7ED] border border-[#FED7AA] rounded-xl text-[13px] text-[#C2410C] font-semibold animate-in fade-in">
+                <i className="fa-solid fa-fire text-[#EA580C] text-[15px]" />
+                <span>
+                  <strong>Only {product.stock} left in stock</strong> — order soon to secure yours!
+                </span>
+              </div>
+            )}
+            {product.stock === 0 && (
+              <div className="flex items-center gap-2.5 py-2.5 px-3.5 bg-rose-50 border border-rose-200 rounded-xl text-[13px] text-rose-700 font-semibold">
+                <i className="fa-solid fa-circle-exclamation text-rose-600 text-[15px]" />
+                <span>Currently out of stock. New consecrated batch arriving soon.</span>
+              </div>
+            )}
+
+            {/* Action Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <button
                 type="button"
                 onClick={handleAddToCart}
-                style={{ backgroundColor: '#111111', color: '#FFFFFF' }}
-                className="w-full bg-[#111111] hover:bg-black text-white font-bold text-[13px] uppercase tracking-wider py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                disabled={product.stock === 0}
+                style={{ backgroundColor: product.stock === 0 ? '#9CA3AF' : '#111111', color: '#FFFFFF' }}
+                className={`w-full font-bold text-[13px] uppercase tracking-wider py-4 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 ${
+                  product.stock === 0 ? 'cursor-not-allowed opacity-60' : 'hover:bg-black hover:shadow-lg cursor-pointer'
+                }`}
               >
                 <i className="fa-solid fa-bag-shopping text-[14px]" />
-                <span>Add To Bag</span>
+                <span>{product.stock === 0 ? 'Out of Stock' : t('product.add_to_cart', 'Add To Bag')}</span>
               </button>
 
               <button
@@ -388,7 +420,7 @@ export default function ProductDetailPage({
                       : 'fa-regular fa-heart text-[#111111]'
                   }`}
                 />
-                <span>{productIsFavorite ? 'Saved to Wishlist' : 'Add To Wishlist'}</span>
+                <span>{productIsFavorite ? 'Saved' : 'Wishlist'}</span>
               </button>
             </div>
 
@@ -396,11 +428,14 @@ export default function ProductDetailPage({
             <button
               type="button"
               onClick={handleBuyItNow}
-              style={{ backgroundColor: '#F1641E', color: '#FFFFFF' }}
-              className="w-full bg-[#F1641E] hover:bg-[#D75200] text-white font-bold text-[13px] uppercase tracking-wider py-3.5 px-6 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+              disabled={product.stock === 0}
+              style={{ backgroundColor: product.stock === 0 ? '#9CA3AF' : '#F1641E', color: '#FFFFFF' }}
+              className={`w-full font-bold text-[13px] uppercase tracking-wider py-3.5 px-6 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 ${
+                product.stock === 0 ? 'cursor-not-allowed opacity-60' : 'hover:bg-[#D75200] cursor-pointer'
+              }`}
             >
-              <i className="fa-solid fa-bolt text-[14px]" />
-              <span>Instant Buy It Now</span>
+              <i className="fa-solid fa-bolt text-[13px]" />
+              <span>{product.stock === 0 ? 'Unavailable' : t('product.buy_now', 'Buy It Now')}</span>
             </button>
 
             {/* Social Share Strip */}
@@ -408,7 +443,7 @@ export default function ProductDetailPage({
               <span className="font-semibold text-gray-700">Share this sacred piece:</span>
               <div className="flex items-center gap-2.5 text-gray-500">
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} on Miracle Feng Shui`)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(`Check out ${localizedTitle} on Miracle Feng Shui`)}`}
                   target="_blank"
                   rel="noreferrer"
                   className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:text-emerald-600 hover:border-emerald-600 transition-colors"
@@ -523,7 +558,7 @@ export default function ProductDetailPage({
                   <h4 className="font-bold text-[#111111] text-[14.5px] mb-2">
                     Craft Lineage &amp; Sacred Provenance
                   </h4>
-                  <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{localizedDescription}</p>
                 </div>
               </div>
             )}
@@ -650,7 +685,7 @@ export default function ProductDetailPage({
               style={{ marginBottom: '32px' }}
               className="font-sans text-[22px] sm:text-[24px] font-bold text-[#111111] block"
             >
-              May We Suggest
+              {t('product.may_we_suggest', 'May We Suggest')}
             </h2>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
@@ -668,12 +703,12 @@ export default function ProductDetailPage({
                     />
                   </div>
                   <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
-                    <h3 className="font-sans text-[13px] sm:text-[14px] font-medium text-[#111111] line-clamp-1 group-hover:underline">
+                    <h3 style={{ fontWeight: 400 }} className="font-sans text-[13px] sm:text-[13.5px] font-normal text-[#111111] line-clamp-1 group-hover:underline">
                       {item.name}
                     </h3>
                     <div className="flex items-center justify-between mt-1.5">
                       <span className="font-sans text-[14px] sm:text-[15px] font-bold text-[#111111]">
-                        ₹ {item.price.toLocaleString('en-IN')}
+                        {formatPrice(item.price)}
                       </span>
                       <span className="font-sans text-[11.5px] text-amber-600 font-semibold flex items-center gap-1">
                         <i className="fa-solid fa-star text-amber-400 text-[10px]" />

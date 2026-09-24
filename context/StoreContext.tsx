@@ -28,6 +28,66 @@ export interface HomeSectionConfig {
   badge?: string;
 }
 
+// 1. HERO SLIDES & RIGHT CARD
+export interface HeroSlideItem {
+  id: string;
+  image: string;
+  alt: string;
+}
+
+export interface HeroRightCard {
+  badge: string;
+  title: string;
+  subtitle: string;
+  link: string;
+  image: string;
+}
+
+export interface HeroBannerData {
+  title: string;
+  ctaText: string;
+  ctaLink: string;
+  slides: HeroSlideItem[];
+  rightCard: HeroRightCard;
+}
+
+// 2. PROSPERITY HERO CATEGORY CARDS
+export interface ProsperityHeroCard {
+  id: string;
+  title: string;
+  slug: string;
+  image: string;
+}
+
+// 3. SPECIAL GIFTS
+export interface SpecialGiftItem {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+}
+
+// 4. ENERGY & HARMONY GUIDE (CURATED STYLE & CHI)
+export interface GuideCardItem {
+  id: string;
+  title: string;
+  slug: string;
+  image: string;
+  videoUrl?: string;
+  tag?: string;
+}
+
+// 5. SACRED KNOWLEDGE / BLOG POSTS
+export interface BlogPostItem {
+  id: string;
+  title: string;
+  category: string;
+  summary: string;
+  slug: string;
+  image: string;
+  collage?: string[];
+}
+
 export type OrderStatus = 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
 
 export interface StoreOrder {
@@ -108,6 +168,9 @@ export const defaultSections: HomeSectionConfig[] = [
     enabled: true,
     title: "Miracle feng shui's Guide to Energy & Harmony",
     subtitle: 'From sacred brass talismans to handcrafted healing crystals, everything you need to balance your home and spirit.',
+    badge: 'Curated Style & Chi',
+    ctaText: 'Shop these sacred finds',
+    ctaLink: '/shop?category=Feng%20Shui%20Decor',
   },
   {
     id: 'sacred_knowledge',
@@ -115,6 +178,194 @@ export const defaultSections: HomeSectionConfig[] = [
     enabled: true,
     title: 'From our Feng Shui Masters & Curators',
     subtitle: 'Ancient wisdom and modern placement tips for high Chi living.',
+  },
+];
+
+export const defaultHeroBanner: HeroBannerData = {
+  title: 'Invite wealth, peace & positive energy home',
+  ctaText: 'Shop Feng Shui',
+  ctaLink: '/shop?q=feng+shui',
+  slides: [
+    {
+      id: 'slide-1',
+      image: '/images/feng_shui_hero_banner.jpg',
+      alt: 'Feng Shui Prosperity Bonsai Tree & Brass Dragon Turtle',
+    },
+    {
+      id: 'slide-2',
+      image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+      alt: 'Taoist Master Blessed Five Emperor Coins',
+    },
+    {
+      id: 'slide-3',
+      image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
+      alt: 'Citrine Crystal Bonsai Money Tree',
+    },
+    {
+      id: 'slide-4',
+      image: 'https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=600&q=80',
+      alt: 'Brass Dragon Turtle',
+    },
+  ],
+  rightCard: {
+    badge: 'Harmonious Living',
+    title: 'Sacred Feng Shui Finds',
+    subtitle: 'Explore energy decor',
+    link: '/shop?category=Feng%20Shui%20Decor',
+    image: '/images/feng_shui_sacred_finds.jpg',
+  },
+};
+
+export const defaultProsperityCards: ProsperityHeroCard[] = [
+  {
+    id: 'prosp-1',
+    title: 'Feng Shui Wealth Corner Starter Kits',
+    slug: 'Feng Shui Decor',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+  },
+  {
+    id: 'prosp-2',
+    title: 'Cinnabar & Obsidian Talismans',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
+  },
+  {
+    id: 'prosp-3',
+    title: 'Natural Citrine & Amethyst Money Trees',
+    slug: 'Crystals & Trees',
+    image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
+  },
+];
+
+export const defaultSpecialGifts: SpecialGiftItem[] = [
+  {
+    id: 'sg-1',
+    name: 'Protection Mirrors & Charms',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
+  },
+  {
+    id: 'sg-2',
+    name: 'Abundance Candles',
+    slug: 'Feng Shui Candles',
+    image: 'https://i.etsystatic.com/59148376/r/il/5c6a68/7037517033/il_fullxfull.7037517033_rp73.jpg',
+  },
+  {
+    id: 'sg-3',
+    name: 'Pixiu Luck Bracelets',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
+  },
+  {
+    id: 'sg-4',
+    name: 'Cinnabar Protection',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
+  },
+  {
+    id: 'sg-5',
+    name: 'Wealth Coins & Charms',
+    slug: 'Feng Shui Decor',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+  },
+  {
+    id: 'sg-6',
+    name: 'Tibetan Sound Bowls',
+    slug: 'Zen & Meditation',
+    image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=500&q=80',
+  },
+];
+
+export const defaultGuideCards: GuideCardItem[] = [
+  {
+    id: 'gc-1',
+    title: 'Brass Bagua Pendant Necklace | Feng Shui I Ching',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
+    videoUrl: '/videos/fashion-craft-3.mp4',
+    tag: 'Video Cure',
+  },
+  {
+    id: 'gc-2',
+    title: 'Feng Shui 2026 28 Hums Safety Talisman Keychain',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/18528884/r/il/4255ed/7574072434/il_fullxfull.7574072434_8ebu.jpg',
+    videoUrl: '/videos/fashion-craft-2.mp4',
+    tag: 'Video Protection',
+  },
+  {
+    id: 'gc-3',
+    title: 'S925 Pixiu Ring, Feng Shui Wealth Luck Amulet',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
+    tag: 'Wealth Amulet',
+  },
+  {
+    id: 'gc-4',
+    title: 'Blackwood Feng Shui Amulet Necklace: Tree of Life',
+    slug: 'Feng Shui Jewelry',
+    image: 'https://i.etsystatic.com/28306871/r/il/791365/7159126948/il_fullxfull.7159126948_ebgf.jpg',
+    tag: 'Tree of Life',
+  },
+  {
+    id: 'gc-5',
+    title: 'Taoist Master Blessed Five Emperor Coins',
+    slug: 'Feng Shui Decor',
+    image: 'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+    tag: 'Prosperity Coins',
+  },
+  {
+    id: 'gc-6',
+    title: 'Feng Shui Lucky Dragon Incense Burner, Vintage',
+    slug: 'Feng Shui Candles',
+    image: 'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
+    videoUrl: '/videos/fashion-craft-1.mp4',
+    tag: 'Dragon Censer',
+  },
+];
+
+export const defaultBlogPosts: BlogPostItem[] = [
+  {
+    id: 'blog-1',
+    category: 'Shopping Guides',
+    title: "How to activate your home's southeast wealth corner with Feng Shui",
+    summary:
+      "Discover the exact placements for water elements, citrine crystals, and dragon censers to amplify your home's prosperity.",
+    slug: '/shop?category=Feng%20Shui%20Decor',
+    image:
+      'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_qiy1.jpg',
+    collage: [
+      'https://i.etsystatic.com/61062687/r/il/8c215d/7104788870/il_794xN.7104788870_shv6.jpg',
+      'https://i.etsystatic.com/58154797/r/il/827b49/7627716971/il_fullxfull.7627716971_ctfy.jpg',
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?auto=format&fit=crop&w=400&q=80',
+    ],
+  },
+  {
+    id: 'blog-2',
+    category: 'Energy Balance',
+    title: 'The secret sacred power of Tibetan Singing Bowls for grounding space',
+    summary:
+      'Harness sound resonance to dissipate stagnant energy, clear negative vibes, and restore tranquility across your living sanctuary.',
+    slug: '/shop?category=Zen%20%26%20Meditation',
+    image:
+      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=500&q=80',
+  },
+  {
+    id: 'blog-3',
+    category: 'Sacred Decor',
+    title: '5 Master rules for placing water fountains and wealth mirrors',
+    summary:
+      'Avoid common chi flow errors and create magnetic wealth channels through proper elemental orientation and balance.',
+    slug: '/shop?category=Feng%20Shui%20Decor',
+    image:
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+    collage: [
+      'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=400&q=80',
+      'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
+      'https://i.etsystatic.com/60335618/r/il/5e079c/7435054325/il_1080xN.7435054325_s37u.jpg',
+      'https://i.etsystatic.com/27864554/r/il/32250d/5943360949/il_fullxfull.5943360949_g433.jpg',
+    ],
   },
 ];
 
@@ -148,47 +399,23 @@ const sampleOrders: StoreOrder[] = [
     ],
     totalAmount: 5472,
     paymentMethod: 'UPI / Online Payment',
-    status: 'Processing',
+    status: 'Shipped',
   },
   {
     id: 'ord-1002',
     orderNumber: 'MFS-82915',
-    date: '2026-09-13 11:15',
-    customerName: 'Priya Iyer',
-    email: 'priya.iyer@example.com',
+    date: '2026-09-15 10:15',
+    customerName: 'Priya Patel',
+    email: 'priya.patel@example.com',
     phone: '+91 98234 56789',
-    address: 'Villa 12, Palm Meadows, Whitefield',
-    city: 'Bengaluru',
-    state: 'Karnataka',
-    pincode: '560066',
-    items: [
-      {
-        productId: 'c1',
-        productName: 'Money Multiplying Poster, Wealth Building Feng Shui',
-        price: 2433,
-        quantity: 2,
-        image: 'https://i.etsystatic.com/19246526/r/il/35c642/6558547910/il_fullxfull.6558547910_qiy1.jpg',
-      },
-    ],
-    totalAmount: 4866,
-    paymentMethod: 'Credit Card',
-    status: 'Delivered',
-  },
-  {
-    id: 'ord-1003',
-    orderNumber: 'MFS-82916',
-    date: '2026-09-15 09:40',
-    customerName: 'Rohan Mehta',
-    email: 'rohan.mehta@example.com',
-    phone: '+91 99100 23456',
-    address: 'B-702, DLF Phase 5',
-    city: 'Gurugram',
-    state: 'Haryana',
-    pincode: '122002',
+    address: 'B-12, Shanti Niketan Society, Satellite',
+    city: 'Ahmedabad',
+    state: 'Gujarat',
+    pincode: '380015',
     items: [
       {
         productId: 'j2',
-        productName: 'S925 Pixiu Ring, Feng Shui Wealth Luck Amulet',
+        productName: 'S925 Pixiu Ring, Wealth Luck Amulet',
         price: 3462,
         quantity: 1,
         image: 'https://i.etsystatic.com/65398995/r/il/637ebb/7994749201/il_1080xN.7994749201_tjcq.jpg',
@@ -209,124 +436,533 @@ interface StoreContextType {
   getProductById: (id: string) => Product | undefined;
   resetProducts: () => void;
 
-  // Sections
+  // Sections (Layout & Titles)
   sections: HomeSectionConfig[];
   moveSection: (index: number, direction: 'up' | 'down') => void;
   toggleSection: (id: HomeSectionId) => void;
   updateSection: (id: HomeSectionId, data: Partial<HomeSectionConfig>) => void;
   resetSections: () => void;
 
-  // Orders
+  // 1. Hero Banner Content
+  heroBanner: HeroBannerData;
+  updateHeroBanner: (data: Partial<HeroBannerData>) => void;
+  addHeroSlide: (slide: Omit<HeroSlideItem, 'id'> & { id?: string }) => void;
+  updateHeroSlide: (id: string, slide: Partial<HeroSlideItem>) => void;
+  deleteHeroSlide: (id: string) => void;
+
+  // 2. Prosperity Gifts Hero Cards
+  prosperityCards: ProsperityHeroCard[];
+  addProsperityCard: (card: Omit<ProsperityHeroCard, 'id'> & { id?: string }) => void;
+  updateProsperityCard: (id: string, card: Partial<ProsperityHeroCard>) => void;
+  deleteProsperityCard: (id: string) => void;
+
+  // 3. Special Gifts
+  specialGifts: SpecialGiftItem[];
+  addSpecialGift: (gift: Omit<SpecialGiftItem, 'id'> & { id?: string }) => void;
+  updateSpecialGift: (id: string, gift: Partial<SpecialGiftItem>) => void;
+  deleteSpecialGift: (id: string) => void;
+
+  // 4. Energy & Harmony Guide Cards
+  guideCards: GuideCardItem[];
+  addGuideCard: (card: Omit<GuideCardItem, 'id'> & { id?: string }) => void;
+  updateGuideCard: (id: string, card: Partial<GuideCardItem>) => void;
+  deleteGuideCard: (id: string) => void;
+
+  // 5. Blog Posts
+  blogPosts: BlogPostItem[];
+  addBlogPost: (post: Omit<BlogPostItem, 'id'> & { id?: string }) => void;
+  updateBlogPost: (id: string, post: Partial<BlogPostItem>) => void;
+  deleteBlogPost: (id: string) => void;
+
+  // Global Reset for Homepage Content
+  resetHomepageContent: () => void;
+
+  // Orders & Fulfillment
   orders: StoreOrder[];
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
+  confirmOrder: (orderId: string) => void;
   deleteOrder: (orderId: string) => void;
   addOrder: (order: Omit<StoreOrder, 'id'>) => void;
+  // Live Metrics & Counters
+  ordersLeftToConfirm: number;
+  ordersLeftToPack: number;
+  ordersInTransit: number;
+  settledBalance: number;
+  pendingBalance: number;
+  totalOrderRevenue: number;
+
+  // Categories
+  categories: string[];
+  categoriesList: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    image?: string;
+    imageUrl?: string;
+    description?: string;
+    productCount?: number;
+  }>;
+  refreshCategories: () => Promise<void>;
+  refreshProducts: () => Promise<void>;
+  refreshOrders: () => Promise<void>;
 
   isLoaded: boolean;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
-const PRODUCTS_KEY = 'mfs_products_v2';
+// Storage keys
+const HERO_KEY = 'mfs_hero_banner_v2';
+const PROSPERITY_KEY = 'mfs_prosperity_cards_v2';
+const SPECIAL_GIFTS_KEY = 'mfs_special_gifts_v2';
+const GUIDE_CARDS_KEY = 'mfs_guide_cards_v2';
+const BLOG_POSTS_KEY = 'mfs_blog_posts_v2';
 const SECTIONS_KEY = 'mfs_sections_v2';
-const ORDERS_KEY = 'mfs_orders_v2';
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [sections, setSections] = useState<HomeSectionConfig[]>(defaultSections);
   const [orders, setOrders] = useState<StoreOrder[]>(sampleOrders);
+  const [categoriesList, setCategoriesList] = useState<
+    Array<{
+      id: string;
+      name: string;
+      slug: string;
+      image?: string;
+      imageUrl?: string;
+      description?: string;
+      productCount?: number;
+    }>
+  >([]);
+  const [categoriesState, setCategoriesState] = useState<string[]>([...categories]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load persisted data
-  useEffect(() => {
+  // Dynamic Homepage Content State
+  const [heroBanner, setHeroBanner] = useState<HeroBannerData>(defaultHeroBanner);
+  const [prosperityCards, setProsperityCards] = useState<ProsperityHeroCard[]>(defaultProsperityCards);
+  const [specialGifts, setSpecialGifts] = useState<SpecialGiftItem[]>(defaultSpecialGifts);
+  const [guideCards, setGuideCards] = useState<GuideCardItem[]>(defaultGuideCards);
+  const [blogPosts, setBlogPosts] = useState<BlogPostItem[]>(defaultBlogPosts);
+
+  const refreshCategories = async () => {
     try {
-      const storedProducts = localStorage.getItem(PRODUCTS_KEY);
-      if (storedProducts) {
-        const parsed = JSON.parse(storedProducts);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setProducts(parsed);
+      const res = await fetch('/api/categories');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setCategoriesList(data.data);
+          const names = ['All', ...data.data.map((c: any) => c.name)];
+          setCategoriesState(names);
         }
       }
-
-      const storedSections = localStorage.getItem(SECTIONS_KEY);
-      if (storedSections) {
-        const parsed = JSON.parse(storedSections);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge with default in case new section was added
-          const merged = parsed.map((s: HomeSectionConfig) => {
-            const def = defaultSections.find((d) => d.id === s.id);
-            return { ...def, ...s };
-          });
-          setSections(merged);
-        }
-      }
-
-      const storedOrders = localStorage.getItem(ORDERS_KEY);
-      if (storedOrders) {
-        const parsed = JSON.parse(storedOrders);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setOrders(parsed);
-        }
-      }
-    } catch (err) {
-      console.error('Error loading store data from localStorage:', err);
-    } finally {
-      setIsLoaded(true);
+    } catch (e) {
+      console.warn('Could not fetch categories from API:', e);
     }
+  };
+
+  const refreshProducts = async () => {
+    try {
+      const res = await fetch('/api/products?pageSize=100');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data?.items) && data.data.items.length > 0) {
+          setProducts(data.data.items);
+        }
+      }
+    } catch (e) {
+      console.warn('Could not refresh products from API:', e);
+    }
+  };
+
+  const refreshOrders = async () => {
+    try {
+      const res = await fetch('/api/admin/orders');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          setOrders(data.data);
+        }
+      }
+    } catch (e) {
+      console.warn('Could not refresh orders from API:', e);
+    }
+  };
+
+  // Load from local storage and backend on mount
+  useEffect(() => {
+    let isMounted = true;
+
+    // 1. Check local storage for customized homepage content
+    if (typeof window !== 'undefined') {
+      try {
+        const savedHero = localStorage.getItem(HERO_KEY);
+        if (savedHero) setHeroBanner(JSON.parse(savedHero));
+
+        const savedProsperity = localStorage.getItem(PROSPERITY_KEY);
+        if (savedProsperity) setProsperityCards(JSON.parse(savedProsperity));
+
+        const savedSpecial = localStorage.getItem(SPECIAL_GIFTS_KEY);
+        if (savedSpecial) setSpecialGifts(JSON.parse(savedSpecial));
+
+        const savedGuide = localStorage.getItem(GUIDE_CARDS_KEY);
+        if (savedGuide) setGuideCards(JSON.parse(savedGuide));
+
+        const savedBlog = localStorage.getItem(BLOG_POSTS_KEY);
+        if (savedBlog) setBlogPosts(JSON.parse(savedBlog));
+
+        const savedSections = localStorage.getItem(SECTIONS_KEY);
+        if (savedSections) setSections(JSON.parse(savedSections));
+      } catch (e) {
+        console.warn('Error reading from local storage:', e);
+      }
+    }
+
+    // 2. Fetch real data from database API
+    async function loadData() {
+      try {
+        try {
+          const res = await fetch('/api/products?pageSize=100');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.data?.items) && data.data.items.length > 0) {
+              if (isMounted) setProducts(data.data.items);
+            }
+          }
+        } catch (e) {
+          console.warn('Could not fetch products from API:', e);
+        }
+
+        // Only fetch protected admin endpoints if browsing the /admin portal
+        if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+          try {
+            const res = await fetch('/api/admin/homepage');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+                if (isMounted) setSections(data.data);
+              }
+            }
+          } catch (e) {
+            // ignore admin unauthorized on guest pages
+          }
+
+          try {
+            const res = await fetch('/api/admin/orders');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+                if (isMounted) setOrders(data.data);
+              }
+            }
+          } catch (e) {
+            // ignore admin unauthorized on guest pages
+          }
+        }
+
+        try {
+          await refreshCategories();
+        } catch (e) {
+          console.warn('Could not load categories:', e);
+        }
+      } catch (err) {
+        console.error('Error loading store data:', err);
+      } finally {
+        if (isMounted) setIsLoaded(true);
+      }
+    }
+
+    loadData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Save products
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-    } catch (e) {
-      console.error('Failed to save products:', e);
+  // Sync state helpers
+  const saveToStorage = (key: string, data: any) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (e) {
+        console.error(`Failed to save ${key} to localStorage:`, e);
+      }
     }
-  }, [products, isLoaded]);
+  };
 
-  // Save sections
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem(SECTIONS_KEY, JSON.stringify(sections));
-    } catch (e) {
-      console.error('Failed to save sections:', e);
-    }
-  }, [sections, isLoaded]);
+  // 1. HERO BANNER ACTIONS
+  const updateHeroBanner = (data: Partial<HeroBannerData>) => {
+    setHeroBanner((prev) => {
+      const updated = {
+        ...prev,
+        ...data,
+        rightCard: {
+          ...prev.rightCard,
+          ...(data.rightCard || {}),
+        },
+      };
+      saveToStorage(HERO_KEY, updated);
+      return updated;
+    });
+  };
 
-  // Save orders
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    } catch (e) {
-      console.error('Failed to save orders:', e);
+  const addHeroSlide = (slide: Omit<HeroSlideItem, 'id'> & { id?: string }) => {
+    setHeroBanner((prev) => {
+      const newSlide: HeroSlideItem = {
+        id: slide.id || `slide-${Date.now()}`,
+        image: slide.image,
+        alt: slide.alt || 'Feng Shui Hero Artwork',
+      };
+      const updated = { ...prev, slides: [...prev.slides, newSlide] };
+      saveToStorage(HERO_KEY, updated);
+      return updated;
+    });
+  };
+
+  const updateHeroSlide = (id: string, slideUpdate: Partial<HeroSlideItem>) => {
+    setHeroBanner((prev) => {
+      const updatedSlides = prev.slides.map((s) => (s.id === id ? { ...s, ...slideUpdate } : s));
+      const updated = { ...prev, slides: updatedSlides };
+      saveToStorage(HERO_KEY, updated);
+      return updated;
+    });
+  };
+
+  const deleteHeroSlide = (id: string) => {
+    setHeroBanner((prev) => {
+      if (prev.slides.length <= 1) {
+        alert('At least one hero slide must remain.');
+        return prev;
+      }
+      const updatedSlides = prev.slides.filter((s) => s.id !== id);
+      const updated = { ...prev, slides: updatedSlides };
+      saveToStorage(HERO_KEY, updated);
+      return updated;
+    });
+  };
+
+  // 2. PROSPERITY HERO CARDS ACTIONS
+  const addProsperityCard = (card: Omit<ProsperityHeroCard, 'id'> & { id?: string }) => {
+    setProsperityCards((prev) => {
+      const newCard: ProsperityHeroCard = {
+        id: card.id || `prosp-${Date.now()}`,
+        title: card.title,
+        slug: card.slug || 'Feng Shui Decor',
+        image: card.image,
+      };
+      const updated = [...prev, newCard];
+      saveToStorage(PROSPERITY_KEY, updated);
+      return updated;
+    });
+  };
+
+  const updateProsperityCard = (id: string, cardUpdate: Partial<ProsperityHeroCard>) => {
+    setProsperityCards((prev) => {
+      const updated = prev.map((c) => (c.id === id ? { ...c, ...cardUpdate } : c));
+      saveToStorage(PROSPERITY_KEY, updated);
+      return updated;
+    });
+  };
+
+  const deleteProsperityCard = (id: string) => {
+    setProsperityCards((prev) => {
+      const updated = prev.filter((c) => c.id !== id);
+      saveToStorage(PROSPERITY_KEY, updated);
+      return updated;
+    });
+  };
+
+  // 3. SPECIAL GIFTS ACTIONS
+  const addSpecialGift = (gift: Omit<SpecialGiftItem, 'id'> & { id?: string }) => {
+    setSpecialGifts((prev) => {
+      const newGift: SpecialGiftItem = {
+        id: gift.id || `sg-${Date.now()}`,
+        name: gift.name,
+        slug: gift.slug || 'Feng Shui Jewelry',
+        image: gift.image,
+      };
+      const updated = [...prev, newGift];
+      saveToStorage(SPECIAL_GIFTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const updateSpecialGift = (id: string, giftUpdate: Partial<SpecialGiftItem>) => {
+    setSpecialGifts((prev) => {
+      const updated = prev.map((g) => (g.id === id ? { ...g, ...giftUpdate } : g));
+      saveToStorage(SPECIAL_GIFTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const deleteSpecialGift = (id: string) => {
+    setSpecialGifts((prev) => {
+      const updated = prev.filter((g) => g.id !== id);
+      saveToStorage(SPECIAL_GIFTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  // 4. ENERGY & HARMONY GUIDE ACTIONS
+  const addGuideCard = (card: Omit<GuideCardItem, 'id'> & { id?: string }) => {
+    setGuideCards((prev) => {
+      const newCard: GuideCardItem = {
+        id: card.id || `gc-${Date.now()}`,
+        title: card.title,
+        slug: card.slug || 'Feng Shui Jewelry',
+        image: card.image,
+        videoUrl: card.videoUrl,
+        tag: card.tag,
+      };
+      const updated = [...prev, newCard];
+      saveToStorage(GUIDE_CARDS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const updateGuideCard = (id: string, cardUpdate: Partial<GuideCardItem>) => {
+    setGuideCards((prev) => {
+      const updated = prev.map((c) => (c.id === id ? { ...c, ...cardUpdate } : c));
+      saveToStorage(GUIDE_CARDS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const deleteGuideCard = (id: string) => {
+    setGuideCards((prev) => {
+      const updated = prev.filter((c) => c.id !== id);
+      saveToStorage(GUIDE_CARDS_KEY, updated);
+      return updated;
+    });
+  };
+
+  // 5. BLOG POSTS ACTIONS
+  const addBlogPost = (post: Omit<BlogPostItem, 'id'> & { id?: string }) => {
+    setBlogPosts((prev) => {
+      const newPost: BlogPostItem = {
+        id: post.id || `blog-${Date.now()}`,
+        title: post.title,
+        category: post.category || 'Shopping Guides',
+        summary: post.summary || '',
+        slug: post.slug || '/shop',
+        image: post.image,
+        collage: post.collage,
+      };
+      const updated = [newPost, ...prev];
+      saveToStorage(BLOG_POSTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const updateBlogPost = (id: string, postUpdate: Partial<BlogPostItem>) => {
+    setBlogPosts((prev) => {
+      const updated = prev.map((p) => (p.id === id ? { ...p, ...postUpdate } : p));
+      saveToStorage(BLOG_POSTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  const deleteBlogPost = (id: string) => {
+    setBlogPosts((prev) => {
+      const updated = prev.filter((p) => p.id !== id);
+      saveToStorage(BLOG_POSTS_KEY, updated);
+      return updated;
+    });
+  };
+
+  // RESET ALL HOMEPAGE CONTENT TO SEED DEFAULTS
+  const resetHomepageContent = () => {
+    setHeroBanner(defaultHeroBanner);
+    setProsperityCards(defaultProsperityCards);
+    setSpecialGifts(defaultSpecialGifts);
+    setGuideCards(defaultGuideCards);
+    setBlogPosts(defaultBlogPosts);
+    setSections(defaultSections);
+
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(HERO_KEY);
+      localStorage.removeItem(PROSPERITY_KEY);
+      localStorage.removeItem(SPECIAL_GIFTS_KEY);
+      localStorage.removeItem(GUIDE_CARDS_KEY);
+      localStorage.removeItem(BLOG_POSTS_KEY);
+      localStorage.removeItem(SECTIONS_KEY);
     }
-  }, [orders, isLoaded]);
+  };
 
   // Product Actions
-  const addProduct = (newProd: Omit<Product, 'id'> & { id?: string }) => {
-    const id = newProd.id || `prod_${Date.now()}`;
+  const addProduct = async (newProd: Omit<Product, 'id'> & { id?: string }) => {
+    const tempId = newProd.id || `prod_${Date.now()}`;
     const fullProd: Product = {
       ...newProd,
-      id,
+      id: tempId,
       rating: newProd.rating ?? 5.0,
       reviewCount: newProd.reviewCount ?? 1,
       itemDetails: newProd.itemDetails?.length ? newProd.itemDetails : ['Temple blessed authentic talisman'],
       maker: newProd.maker || 'Miracle Feng Shui Studio',
     };
     setProducts((prev) => [fullProd, ...prev]);
+
+    try {
+      const res = await fetch('/api/admin/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newProd.name,
+          description: newProd.description || 'Authentic blessed talisman',
+          price: newProd.price,
+          comparePrice: newProd.originalPrice,
+          categoryId: newProd.category || 'Feng Shui Decor',
+          images: newProd.images?.length
+            ? newProd.images
+            : ['https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80'],
+          stock: newProd.stock !== undefined ? newProd.stock : 50,
+          isFeatured: true,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data?.id) {
+          setProducts((prev) =>
+            prev.map((p) => (p.id === tempId ? { ...p, id: data.data.id } : p))
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('API add product failed, fallback stored in memory:', err);
+    }
   };
 
-  const updateProduct = (id: string, updated: Partial<Product>) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
-    );
+  const updateProduct = async (id: string, updated: Partial<Product>) => {
+    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...updated } : p)));
+
+    try {
+      await fetch(`/api/admin/products/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: updated.name,
+          description: updated.description,
+          price: updated.price,
+          comparePrice: updated.originalPrice,
+          images: updated.images,
+          stock: updated.stock,
+          bestseller: updated.bestseller,
+          etsyPick: updated.etsyPick,
+        }),
+      });
+    } catch (err) {
+      console.warn('API update product failed, updated in memory:', err);
+    }
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = async (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
+
+    try {
+      await fetch(`/api/admin/products/${id}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.warn('API delete product failed, removed from memory:', err);
+    }
   };
 
   const getProductById = (id: string) => {
@@ -335,55 +971,114 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const resetProducts = () => {
     setProducts(initialProducts);
-    localStorage.removeItem(PRODUCTS_KEY);
   };
 
-  // Section Actions
+  // Section Layout Actions
   const moveSection = (index: number, direction: 'up' | 'down') => {
-    if (direction === 'up' && index === 0) return;
-    if (direction === 'down' && index === sections.length - 1) return;
-
-    const newSections = [...sections];
+    if (
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === sections.length - 1)
+    ) {
+      return;
+    }
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    const temp = newSections[index];
-    newSections[index] = newSections[targetIndex];
-    newSections[targetIndex] = temp;
-
-    setSections(newSections);
+    setSections((prev) => {
+      const next = [...prev];
+      const temp = next[index];
+      next[index] = next[targetIndex];
+      next[targetIndex] = temp;
+      saveToStorage(SECTIONS_KEY, next);
+      return next;
+    });
   };
 
   const toggleSection = (id: HomeSectionId) => {
-    setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s))
-    );
+    setSections((prev) => {
+      const next = prev.map((sec) => (sec.id === id ? { ...sec, enabled: !sec.enabled } : sec));
+      saveToStorage(SECTIONS_KEY, next);
+      return next;
+    });
   };
 
   const updateSection = (id: HomeSectionId, data: Partial<HomeSectionConfig>) => {
-    setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, ...data } : s))
-    );
+    setSections((prev) => {
+      const next = prev.map((sec) => (sec.id === id ? { ...sec, ...data } : sec));
+      saveToStorage(SECTIONS_KEY, next);
+      return next;
+    });
   };
 
   const resetSections = () => {
     setSections(defaultSections);
-    localStorage.removeItem(SECTIONS_KEY);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(SECTIONS_KEY);
+    }
   };
 
   // Order Actions
-  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
+  const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
     setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status } : o))
+      prev.map((o) => (o.id === orderId || o.orderNumber === orderId ? { ...o, status } : o))
     );
+
+    try {
+      await fetch(`/api/admin/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: status.toUpperCase() }),
+      });
+    } catch (err) {
+      console.warn('API order status update failed, memory updated:', err);
+    }
   };
 
-  const deleteOrder = (orderId: string) => {
+  const confirmOrder = (orderId: string) => {
+    updateOrderStatus(orderId, 'Processing');
+  };
+
+  const deleteOrder = async (orderId: string) => {
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
+    try {
+      await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.warn('API delete order failed, removed from local state:', err);
+    }
   };
 
   const addOrder = (order: Omit<StoreOrder, 'id'>) => {
     const id = `ord-${Date.now()}`;
     setOrders((prev) => [{ ...order, id }, ...prev]);
   };
+
+  // Live Order Fulfillment & Cash Flow Calculations
+  const ordersLeftToConfirm = orders.filter((o) => o.status === 'Pending').length;
+  const ordersLeftToPack = orders.filter((o) => o.status === 'Processing').length;
+  const ordersInTransit = orders.filter((o) => o.status === 'Shipped').length;
+
+  const settledBalance = orders
+    .filter((o) => {
+      if (o.status === 'Cancelled') return false;
+      const m = (o.paymentMethod || '').toLowerCase();
+      const isOnline = m.includes('online') || m.includes('upi') || m.includes('razorpay');
+      const isDeliveredCOD = o.status === 'Delivered' && (m.includes('cash') || m.includes('cod'));
+      return isOnline || isDeliveredCOD;
+    })
+    .reduce((sum, o) => sum + o.totalAmount, 0);
+
+  const pendingBalance = orders
+    .filter((o) => {
+      if (o.status === 'Cancelled' || o.status === 'Delivered') return false;
+      const m = (o.paymentMethod || '').toLowerCase();
+      const isCOD = m.includes('cash') || m.includes('cod');
+      return isCOD;
+    })
+    .reduce((sum, o) => sum + o.totalAmount, 0);
+
+  const totalOrderRevenue = orders
+    .filter((o) => o.status !== 'Cancelled')
+    .reduce((sum, o) => sum + o.totalAmount, 0);
 
   return (
     <StoreContext.Provider
@@ -399,10 +1094,47 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         toggleSection,
         updateSection,
         resetSections,
+        // Homepage Section Content
+        heroBanner,
+        updateHeroBanner,
+        addHeroSlide,
+        updateHeroSlide,
+        deleteHeroSlide,
+        prosperityCards,
+        addProsperityCard,
+        updateProsperityCard,
+        deleteProsperityCard,
+        specialGifts,
+        addSpecialGift,
+        updateSpecialGift,
+        deleteSpecialGift,
+        guideCards,
+        addGuideCard,
+        updateGuideCard,
+        deleteGuideCard,
+        blogPosts,
+        addBlogPost,
+        updateBlogPost,
+        deleteBlogPost,
+        resetHomepageContent,
+        // Orders & Fulfillment
         orders,
         updateOrderStatus,
+        confirmOrder,
         deleteOrder,
         addOrder,
+        ordersLeftToConfirm,
+        ordersLeftToPack,
+        ordersInTransit,
+        settledBalance,
+        pendingBalance,
+        totalOrderRevenue,
+        // Categories
+        categories: categoriesState,
+        categoriesList,
+        refreshCategories,
+        refreshProducts,
+        refreshOrders,
         isLoaded,
       }}
     >

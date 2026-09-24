@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import { Product } from '@/lib/placeholder-data';
 
 export type CartItem = {
@@ -26,11 +27,11 @@ interface CartContextType {
     quantity?: number,
     selectedVariations?: Record<string, string>,
     personalizationText?: string
-  ) => void;
+  ) => boolean;
   removeItem: (itemId: string) => void;
   setQty: (itemId: string, quantity: number) => void;
   toggleGift: (itemId: string) => void;
-  saveForLater: (itemId: string) => void;
+  saveForLater: (itemId: string) => boolean;
   clearCart: () => void;
   count: number;
   subtotal: number;
@@ -38,7 +39,7 @@ interface CartContextType {
 
   // Favorites / Wishlist
   favorites: Product[];
-  addFavorite: (product: Product) => void;
+  addFavorite: (product: Product) => boolean;
   removeFavorite: (productId: string) => void;
   isFavorite: (productId: string) => boolean;
 
@@ -57,26 +58,55 @@ const FAV_STORAGE_KEY = 'miracle_feng_shui_favorites_v1';
 const USER_STORAGE_KEY = 'miracle_feng_shui_user_v1';
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
   const [items, setItems] = useState<CartItem[]>([]);
   const [favorites, setFavorites] = useState<Product[]>([]);
   const [userLoggedIn, setUserLoggedInState] = useState(false);
   const [guestToast, setGuestToast] = useState<ToastInfo | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from localStorage on mount
+  // Sync NextAuth session with local user status
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      setUserLoggedInState(true);
+      try {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(true));
+      } catch (e) {
+        console.error(e);
+      }
+    } else if (status === 'unauthenticated') {
+      setUserLoggedInState(false);
+      setItems([]);
+      setFavorites([]);
+      try {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(false));
+        localStorage.removeItem(CART_STORAGE_KEY);
+        localStorage.removeItem(FAV_STORAGE_KEY);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [status, session]);
+
+  // Load from localStorage on mount ONLY if user was logged in
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-      if (savedCart) {
-        setItems(JSON.parse(savedCart));
-      }
-      const savedFavs = localStorage.getItem(FAV_STORAGE_KEY);
-      if (savedFavs) {
-        setFavorites(JSON.parse(savedFavs));
-      }
       const savedUser = localStorage.getItem(USER_STORAGE_KEY);
-      if (savedUser) {
-        setUserLoggedInState(JSON.parse(savedUser));
+      const isUserSaved = savedUser ? JSON.parse(savedUser) : false;
+      if (isUserSaved) {
+        setUserLoggedInState(true);
+        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+        if (savedCart) {
+          setItems(JSON.parse(savedCart));
+        }
+        const savedFavs = localStorage.getItem(FAV_STORAGE_KEY);
+        if (savedFavs) {
+          setFavorites(JSON.parse(savedFavs));
+        }
+      } else {
+        setUserLoggedInState(false);
+        setItems([]);
+        setFavorites([]);
       }
     } catch (e) {
       console.error('Failed to load storage:', e);
@@ -85,30 +115,61 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Save cart to localStorage
+  // Fetch persisted cart and favorites from DB when authenticated
+  useEffect(() => {
+    if (status === 'authenticated' || userLoggedIn) {
+      fetch('/api/cart')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((resData) => {
+          if (resData?.data?.items && Array.isArray(resData.data.items)) {
+            setItems(resData.data.items);
+          }
+        })
+        .catch(() => {});
+
+      fetch('/api/favorites')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((resData) => {
+          if (resData?.data && Array.isArray(resData.data)) {
+            setFavorites(resData.data);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [status, userLoggedIn]);
+
+  // Save cart to localStorage only when user is logged in
   useEffect(() => {
     if (!isLoaded) return;
+    if (!userLoggedIn && status !== 'authenticated') return;
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     } catch (e) {
       console.error('Failed to save cart:', e);
     }
-  }, [items, isLoaded]);
+  }, [items, isLoaded, userLoggedIn, status]);
 
-  // Save favorites to localStorage
+  // Save favorites to localStorage only when user is logged in
   useEffect(() => {
     if (!isLoaded) return;
+    if (!userLoggedIn && status !== 'authenticated') return;
     try {
       localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(favorites));
     } catch (e) {
       console.error('Failed to save favorites:', e);
     }
-  }, [favorites, isLoaded]);
+  }, [favorites, isLoaded, userLoggedIn, status]);
 
   const setUserLoggedIn = useCallback((val: boolean) => {
     setUserLoggedInState(val);
     try {
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(val));
+      if (!val) {
+        setItems([]);
+        setFavorites([]);
+        localStorage.removeItem(CART_STORAGE_KEY);
+        localStorage.removeItem(FAV_STORAGE_KEY);
+      }
     } catch (e) {
       console.error('Failed to save user session:', e);
     }
@@ -158,8 +219,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     quantity: number = 1,
     selectedVariations?: Record<string, string>,
     personalizationText?: string
-  ) => {
-    if (quantity <= 0) return;
+  ): boolean => {
+    if (quantity <= 0) return false;
+
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (!isAuthed) {
+      showGuestToast(
+        "Don't lose this item!",
+        'to add to your basket.',
+        'cart'
+      );
+      return false;
+    }
 
     // Create unique key based on product + variations
     const varKey = selectedVariations
@@ -192,29 +263,56 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       ];
     });
 
-    // Trigger guest toast if user is not logged in
-    if (!userLoggedIn) {
-      showGuestToast(
-        "Don't lose this item!",
-        'to add to your cart.',
-        'cart'
-      );
-    }
-  }, [userLoggedIn, showGuestToast]);
+    // Persist to backend
+    fetch('/api/cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        productId: product.id,
+        quantity,
+        selectedVariations,
+        personalizationText,
+      }),
+    }).catch((err) => {
+      console.error('Failed to sync cart item to DB:', err);
+    });
+
+    return true;
+  }, [status, userLoggedIn, showGuestToast]);
 
   const removeItem = useCallback((itemId: string) => {
     setItems((prev) => prev.filter((item) => item.id !== itemId));
-  }, []);
+
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (isAuthed) {
+      fetch(`/api/cart/${encodeURIComponent(itemId)}`, {
+        method: 'DELETE',
+      }).catch((err) => {
+        console.error('Failed to delete cart item from DB:', err);
+      });
+    }
+  }, [status, userLoggedIn]);
 
   const setQty = useCallback((itemId: string, quantity: number) => {
     if (quantity <= 0) {
-      setItems((prev) => prev.filter((item) => item.id !== itemId));
+      removeItem(itemId);
       return;
     }
     setItems((prev) =>
       prev.map((item) => (item.id === itemId ? { ...item, quantity } : item))
     );
-  }, []);
+
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (isAuthed) {
+      fetch(`/api/cart/${encodeURIComponent(itemId)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantity }),
+      }).catch((err) => {
+        console.error('Failed to update cart item in DB:', err);
+      });
+    }
+  }, [removeItem, status, userLoggedIn]);
 
   const toggleGift = useCallback((itemId: string) => {
     setItems((prev) =>
@@ -224,30 +322,64 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
-  const addFavorite = useCallback((product: Product) => {
-    setFavorites((prev) => {
-      if (prev.some((p) => p.id === product.id)) return prev;
-      return [product, ...prev];
-    });
-
-    if (!userLoggedIn) {
+  const addFavorite = useCallback((product: Product): boolean => {
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (!isAuthed) {
       showGuestToast(
         "Don't lose this favourite!",
         'to add to your wishlist.',
         'favorite'
       );
+      return false;
     }
-  }, [userLoggedIn, showGuestToast]);
+
+    setFavorites((prev) => {
+      if (prev.some((p) => p.id === product.id)) return prev;
+      return [product, ...prev];
+    });
+
+    // Persist to backend
+    fetch('/api/favorites', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId: product.id }),
+    }).catch((err) => {
+      console.error('Failed to sync favorite to DB:', err);
+    });
+
+    return true;
+  }, [status, userLoggedIn, showGuestToast]);
 
   const removeFavorite = useCallback((productId: string) => {
     setFavorites((prev) => prev.filter((p) => p.id !== productId));
-  }, []);
+
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (isAuthed) {
+      fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      }).catch((err) => {
+        console.error('Failed to sync favorite removal to DB:', err);
+      });
+    }
+  }, [status, userLoggedIn]);
 
   const isFavorite = useCallback((productId: string) => {
     return favorites.some((p) => p.id === productId);
   }, [favorites]);
 
-  const saveForLater = useCallback((itemId: string) => {
+  const saveForLater = useCallback((itemId: string): boolean => {
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (!isAuthed) {
+      showGuestToast(
+        "Don't lose this favourite!",
+        'to add to your wishlist.',
+        'favorite'
+      );
+      return false;
+    }
+
     setItems((prev) => {
       const itemToSave = prev.find((it) => it.id === itemId);
       if (itemToSave) {
@@ -255,14 +387,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           if (favs.some((p) => p.id === itemToSave.product.id)) return favs;
           return [itemToSave.product, ...favs];
         });
+        fetch('/api/favorites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: itemToSave.product.id }),
+        }).catch(() => {});
       }
       return prev.filter((it) => it.id !== itemId);
     });
-  }, []);
+
+    fetch(`/api/cart/${encodeURIComponent(itemId)}`, {
+      method: 'DELETE',
+    }).catch(() => {});
+
+    return true;
+  }, [status, userLoggedIn, showGuestToast]);
 
   const clearCart = useCallback(() => {
     setItems([]);
-  }, []);
+
+    const isAuthed = status === 'authenticated' || userLoggedIn;
+    if (isAuthed) {
+      fetch('/api/cart', {
+        method: 'DELETE',
+      }).catch((err) => {
+        console.error('Failed to clear cart in DB:', err);
+      });
+    }
+  }, [status, userLoggedIn]);
 
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce(

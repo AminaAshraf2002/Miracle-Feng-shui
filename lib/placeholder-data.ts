@@ -36,6 +36,7 @@ export type Product = {
   allowsPersonalization?: boolean;
   personalizationPrompt?: string;
   inDemandCount?: number;
+  stock?: number;
 };
 
 export const categories = [
@@ -381,7 +382,7 @@ export const products: Product[] = [
   {
     "id": "j2",
     "name": "S925 Pixiu Ring, Feng Shui Wealth Luck Amulet",
-    "maker": "Pluyndi",
+    "maker": "Miracle Feng Shui Studio",
     "price": 3462,
     "originalPrice": 4945,
     "discount": "30% off",

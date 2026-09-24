@@ -3,10 +3,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLocale } from '@/context/CurrencyContext';
 
 export function Footer() {
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+  const { country, currency, language, t } = useLocale();
 
   // Completely hide public store footer on all admin routes
   if (pathname?.startsWith('/admin')) {
@@ -22,7 +24,7 @@ export function Footer() {
           style={{ marginBottom: '64px' }}
           className="text-[26px] sm:text-[30px] md:text-[34px] font-serif font-normal text-[#222222] tracking-tight leading-[1.18]"
         >
-          We&apos;re on a mission to<br className="hidden sm:inline" /> keep commerce human.
+          {t('footer.mission', "We're on a mission to keep commerce human.")}
         </h2>
 
         {/* 4 Columns + Illustration Layout */}
@@ -31,41 +33,41 @@ export function Footer() {
           <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 text-[14px]">
             {/* Column 1: Shop */}
             <div>
-              <h3 className="text-[14px] font-bold text-[#222222] mb-3">Shop</h3>
+              <h3 className="text-[14px] font-bold text-[#222222] mb-3">{t('footer.shop', 'Shop')}</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
                   <Link href="/shop?category=Gifts" className="hover:underline">
-                    Gift cards
+                    {t('footer.gift_cards', 'Gift cards')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop?category=Wedding%20%26%20Party" className="hover:underline">
-                    Miracle feng shui Registry
+                    {t('footer.registry', 'Miracle feng shui Registry')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Sitemap
+                    {t('footer.sitemap', 'Sitemap')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Miracle feng shui blog
+                    {t('footer.blog', 'Miracle feng shui blog')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Miracle feng shui United Kingdom
+                    {t('footer.uk', 'Miracle feng shui United Kingdom')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Miracle feng shui Germany
+                    {t('footer.germany', 'Miracle feng shui Germany')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Miracle feng shui Canada
+                    {t('footer.canada', 'Miracle feng shui Canada')}
                   </Link>
                 </li>
               </ul>
@@ -73,26 +75,26 @@ export function Footer() {
 
             {/* Column 2: Sell */}
             <div>
-              <h3 className="text-[14px] font-bold text-[#222222] mb-3">Sell</h3>
+              <h3 className="text-[14px] font-bold text-[#222222] mb-3">{t('footer.sell', 'Sell')}</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Sell on Miracle feng shui
+                    {t('footer.sell_on', 'Sell on Miracle feng shui')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Teams
+                    {t('footer.teams', 'Teams')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Forums
+                    {t('footer.forums', 'Forums')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Affiliates & Creators
+                    {t('footer.affiliates', 'Affiliates & Creators')}
                   </Link>
                 </li>
               </ul>
@@ -100,41 +102,46 @@ export function Footer() {
 
             {/* Column 3: About */}
             <div>
-              <h3 className="text-[14px] font-bold text-[#222222] mb-3">About</h3>
+              <h3 className="text-[14px] font-bold text-[#222222] mb-3">{t('footer.about', 'About')}</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
                   <Link href="/about" className="hover:underline font-medium">
-                    About Miracle feng shui
+                    {t('footer.about_miracle', 'About Miracle feng shui')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/privacy-policy" className="hover:underline">
-                    Privacy Policy
+                    {t('footer.privacy', 'Privacy Policy')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/terms" className="hover:underline">
-                    Terms & Conditions
+                    {t('footer.terms', 'Terms & Conditions')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/return-policy" className="hover:underline">
+                    {t('footer.cancellation_policy', 'Cancellation & Return Policy')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Impact & Artisan Heritage
+                    {t('footer.impact', 'Impact & Artisan Heritage')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Careers
+                    {t('footer.careers', 'Careers')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Press
+                    {t('footer.press', 'Press')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Legal Imprint
+                    {t('footer.legal_imprint', 'Legal Imprint')}
                   </Link>
                 </li>
               </ul>
@@ -142,16 +149,16 @@ export function Footer() {
 
             {/* Column 4: Help */}
             <div>
-              <h3 className="text-[14px] font-bold text-[#222222] mb-3">Help</h3>
+              <h3 className="text-[14px] font-bold text-[#222222] mb-3">{t('footer.help', 'Help')}</h3>
               <ul className="list-none p-0 m-0 space-y-2.5 text-[#222222]">
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Help Centre
+                    {t('footer.help_centre', 'Help Centre')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/shop" className="hover:underline">
-                    Privacy settings
+                    {t('footer.privacy_settings', 'Privacy settings')}
                   </Link>
                 </li>
               </ul>
@@ -267,10 +274,10 @@ export function Footer() {
             </svg>
             <div className="text-left leading-none">
               <span className="text-[10px] text-gray-300 font-medium tracking-wide block uppercase mb-0.5">
-                Download on the
+                {t('footer.download_on', 'Download on the')}
               </span>
               <span className="text-[15px] font-bold text-white block">
-                App Store
+                {t('footer.app_store', 'App Store')}
               </span>
             </div>
           </a>
@@ -286,10 +293,10 @@ export function Footer() {
             </svg>
             <div className="text-left leading-none">
               <span className="text-[10px] text-gray-300 font-medium tracking-wide block uppercase mb-0.5">
-                GET IT ON
+                {t('footer.get_it_on', 'GET IT ON')}
               </span>
               <span className="text-[15px] font-bold text-white block">
-                Google Play
+                {t('footer.google_play', 'Google Play')}
               </span>
             </div>
           </a>
@@ -299,15 +306,12 @@ export function Footer() {
       {/* Bottom Light-Grey Bar */}
       <div className="bg-[#EAE9E4] border-t border-[#DCDAD4] py-4 text-[13px] text-[#222222]">
         <div className="etsy-container flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Left: India flag + Social media icons */}
+          {/* Left: Country flag + currency */}
           <div className="flex items-center gap-5">
-            <button
-              type="button"
-              className="flex items-center gap-2 hover:underline font-semibold"
-            >
-              <span className="text-[16px]">🇮🇳</span>
-              <span>India</span>
-            </button>
+            <div className="flex items-center gap-2 font-semibold">
+              <span className="text-[17px]">{country === 'UAE' ? '🇦🇪' : '🇮🇳'}</span>
+              <span>{country === 'UAE' ? t('footer.uae_display', 'United Arab Emirates | AED (د.إ)') : t('footer.india_display', 'India | INR (₹)')}</span>
+            </div>
 
             {/* Social Icons */}
             <div className="flex items-center gap-4 text-[#222222]">
@@ -364,21 +368,24 @@ export function Footer() {
 
           {/* Right: Copyright & Legal links */}
           <div className="flex flex-wrap items-center justify-center gap-4 text-[#222222]">
-            <span>© {currentYear} Miracle feng shui, Inc.</span>
+            <span>© {currentYear} Miracle feng shui, Inc. {t('footer.all_rights', 'All rights reserved.')}</span>
             <Link href="/about" className="hover:underline font-medium">
-              About
+              {t('footer.about', 'About')}
             </Link>
             <Link href="/terms" className="hover:underline">
-              Terms of Use
+              {t('footer.terms_of_use', 'Terms of Use')}
             </Link>
             <Link href="/privacy-policy" className="hover:underline">
-              Privacy
+              {t('footer.privacy_short', 'Privacy')}
+            </Link>
+            <Link href="/return-policy" className="hover:underline">
+              {t('footer.cancellation_policy', 'Cancellation & Return Policy')}
             </Link>
             <Link href="/shop" className="hover:underline">
-              Interest-based ads
+              {t('footer.interest_ads', 'Interest-based ads')}
             </Link>
             <Link href="/shop" className="hover:underline">
-              Local Shops
+              {t('footer.local_shops', 'Local Shops')}
             </Link>
           </div>
         </div>

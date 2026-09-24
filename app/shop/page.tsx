@@ -5,11 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { categories } from '@/lib/placeholder-data';
 import { ProductCard } from '@/components/ProductCard';
 import { useStore } from '@/context/StoreContext';
+import { useLocale } from '@/context/CurrencyContext';
+import { translateCategory } from '@/lib/translations';
 
 function EtsyShopContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { products } = useStore();
+  const { products, categories: storeCategories } = useStore();
+  const { formatPrice, currencySymbol, language, t } = useLocale();
+  const availableCategories = storeCategories && storeCategories.length > 0 ? storeCategories : categories;
 
   const currentCategory = searchParams.get('category') || 'All';
   const searchQuery = searchParams.get('q') || '';
@@ -142,7 +146,9 @@ function EtsyShopContent() {
           </button>
           <i className="fa-solid fa-chevron-right text-[10px]" />
           <span className="text-etsy-dark font-semibold">
-            {searchQuery ? `Search: "${searchQuery}"` : currentCategory}
+            {searchQuery
+              ? `${t('shop.results_for', 'Results for "{query}"').replace('{query}', searchQuery)}`
+              : translateCategory(currentCategory, language)}
           </span>
         </div>
 
@@ -150,10 +156,14 @@ function EtsyShopContent() {
         <div className="flex flex-col sm:row items-start sm:items-center justify-between gap-4 pb-6 border-b border-etsy-border">
           <div>
             <h1 className="text-[26px] md:text-[30px] font-bold text-etsy-dark">
-              {searchQuery ? `Results for "${searchQuery}"` : currentCategory === 'All' ? 'All Feng Shui & Spiritual Harmony Items' : currentCategory}
+              {searchQuery
+                ? t('shop.results_for', 'Results for "{query}"').replace('{query}', searchQuery)
+                : currentCategory === 'All'
+                ? t('shop.all_items_heading', 'All Feng Shui & Spiritual Harmony Items')
+                : translateCategory(currentCategory, language)}
             </h1>
             <p className="text-[13px] text-etsy-gray mt-1">
-              ({filteredProducts.length} items found)
+              ({filteredProducts.length} {t('shop.items_found', 'items found')})
             </p>
           </div>
 
@@ -165,13 +175,13 @@ function EtsyShopContent() {
               className="lg:hidden flex items-center gap-2 px-4 py-2 rounded-full border border-etsy-dark text-[14px] font-semibold text-etsy-dark hover:bg-etsy-bg-soft"
             >
               <i className="fa-solid fa-sliders text-[13px]" />
-              <span>Filters</span>
+              <span>{t('shop.filters', 'Filters')}</span>
             </button>
 
             {/* Sort Select */}
             <div className="flex items-center gap-2">
               <label htmlFor="sort-dropdown" className="text-[13px] text-etsy-gray font-medium hidden sm:inline">
-                Sort by:
+                {t('shop.sort_by', 'Sort by:')}
               </label>
               <select
                 id="sort-dropdown"
@@ -179,11 +189,11 @@ function EtsyShopContent() {
                 onChange={(e) => updateFilters({ sort: e.target.value })}
                 className="bg-white border border-etsy-border rounded-full px-4 py-2 text-[13px] font-semibold text-etsy-dark focus:outline-none focus:ring-2 focus:ring-etsy-orange cursor-pointer"
               >
-                <option value="relevancy">Relevancy</option>
-                <option value="price-asc">Lowest Price</option>
-                <option value="price-desc">Highest Price</option>
-                <option value="reviews">Top Customer Reviews</option>
-                <option value="rating">Highest Rated</option>
+                <option value="relevancy">{t('shop.sort_relevancy', 'Relevancy')}</option>
+                <option value="price-asc">{t('shop.sort_price_asc', 'Lowest Price')}</option>
+                <option value="price-desc">{t('shop.sort_price_desc', 'Highest Price')}</option>
+                <option value="reviews">{t('shop.sort_reviews', 'Top Customer Reviews')}</option>
+                <option value="rating">{t('shop.sort_rating', 'Highest Rated')}</option>
               </select>
             </div>
           </div>
@@ -191,7 +201,7 @@ function EtsyShopContent() {
 
         {/* Horizontal Category Tabs on Mobile (Aligned Left) */}
         <div className="lg:hidden flex items-center gap-2 overflow-x-auto py-3 no-scrollbar border-b border-gray-100 justify-start">
-          {categories.map((cat) => {
+          {availableCategories.map((cat) => {
             const isActive =
               currentCategory === cat ||
               (cat === 'All' && !searchParams.get('category'));
@@ -205,7 +215,7 @@ function EtsyShopContent() {
                     : 'bg-[#F4F4F4] text-[#222222] hover:bg-[#EAEAEA]'
                 }`}
               >
-                {cat}
+                {translateCategory(cat, language)}
               </button>
             );
           })}
@@ -218,10 +228,10 @@ function EtsyShopContent() {
             {/* Categories Filter */}
             <div>
               <h3 className="font-bold text-[14px] uppercase tracking-wider text-etsy-gray mb-3">
-                Categories
+                {t('shop.categories', 'Categories')}
               </h3>
               <ul className="list-none p-0 m-0 space-y-2">
-                {categories.map((cat) => {
+                {availableCategories.map((cat) => {
                   const isActive =
                     currentCategory === cat ||
                     (cat === 'All' && !searchParams.get('category'));
@@ -235,7 +245,7 @@ function EtsyShopContent() {
                             : 'hover:text-etsy-orange text-etsy-dark'
                         }`}
                       >
-                        {cat}
+                        {translateCategory(cat, language)}
                       </button>
                     </li>
                   );
@@ -245,7 +255,7 @@ function EtsyShopContent() {
 
             {/* Special Offers */}
             <div className="border-t border-etsy-border pt-5">
-              <h3 className="font-bold text-[14px] mb-3">Special offers</h3>
+              <h3 className="font-bold text-[14px] mb-3">{t('shop.special_offers', 'Special offers')}</h3>
               <div className="space-y-2.5">
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
@@ -256,7 +266,7 @@ function EtsyShopContent() {
                     }
                     className="w-4 h-4 rounded text-etsy-orange focus:ring-etsy-orange"
                   />
-                  <span className="text-[14px]">FREE delivery</span>
+                  <span className="text-[14px]">{t('shop.free_delivery', 'FREE delivery')}</span>
                 </label>
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
@@ -267,21 +277,21 @@ function EtsyShopContent() {
                     }
                     className="w-4 h-4 rounded text-etsy-orange focus:ring-etsy-orange"
                   />
-                  <span className="text-[14px]">On sale</span>
+                  <span className="text-[14px]">{t('shop.on_sale', 'On sale')}</span>
                 </label>
               </div>
             </div>
 
             {/* Price Range */}
             <div className="border-t border-etsy-border pt-5">
-              <h3 className="font-bold text-[14px] mb-3">Price (₹)</h3>
+              <h3 className="font-bold text-[14px] mb-3">{t('shop.price', 'Price')} ({currencySymbol})</h3>
               <div className="space-y-2">
                 {[
-                  { label: 'Any price', val: 'all' },
-                  { label: 'Under ₹1,000', val: 'under-1000' },
-                  { label: '₹1,000 to ₹1,500', val: '1000-1500' },
-                  { label: '₹1,500 to ₹2,000', val: '1500-2000' },
-                  { label: 'Over ₹2,000', val: 'over-2000' },
+                  { label: t('shop.any_price', 'Any price'), val: 'all' },
+                  { label: `${t('shop.under_price', 'Under')} ${formatPrice(1000)}`, val: 'under-1000' },
+                  { label: `${formatPrice(1000)} to ${formatPrice(1500)}`, val: '1000-1500' },
+                  { label: `${formatPrice(1500)} to ${formatPrice(2000)}`, val: '1500-2000' },
+                  { label: `${t('shop.over_price', 'Over')} ${formatPrice(2000)}`, val: 'over-2000' },
                 ].map((p) => (
                   <label
                     key={p.val}
@@ -306,7 +316,7 @@ function EtsyShopContent() {
                 onClick={clearAllFilters}
                 className="w-full py-2 rounded-full border border-etsy-dark text-[13px] font-bold text-etsy-dark hover:bg-etsy-bg-soft transition-colors"
               >
-                Reset all filters
+                {t('shop.reset_filters', 'Reset all filters')}
               </button>
             </div>
           </aside>
@@ -322,16 +332,16 @@ function EtsyShopContent() {
             ) : (
               <div className="py-24 text-center flex flex-col items-center justify-center bg-etsy-bg-soft rounded-2xl border border-etsy-border p-8">
                 <h3 className="text-[22px] font-bold text-etsy-dark">
-                  We couldn&apos;t find any matches
+                  {t('shop.no_matches_title', "We couldn't find any matches")}
                 </h3>
                 <p className="text-[14px] text-etsy-gray mt-2 mb-6 max-w-[42ch]">
-                  Try adjusting your search query, checking for spelling errors, or clearing the selected filters.
+                  {t('shop.no_matches_desc', "Try adjusting your search query, checking for spelling errors, or clearing the selected filters.")}
                 </p>
                 <button
                   onClick={clearAllFilters}
                   className="bg-etsy-orange hover:bg-etsy-orange-dark text-white text-[14px] font-bold px-6 py-2.5 rounded-full transition-colors"
                 >
-                  Clear all filters
+                  {t('shop.clear_filters', 'Clear all filters')}
                 </button>
               </div>
             )}

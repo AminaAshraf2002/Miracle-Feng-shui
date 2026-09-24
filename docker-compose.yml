@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Local Development PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: miracle_feng_shui_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-miracle_feng_shui}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-miracle_feng_shui}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Optional Full-Stack App Container
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: miracle_feng_shui_app
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/miracle_feng_shui?sslmode=disable
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-miracle_feng_shui_super_secure_secret_key_32chars_long!}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_placeholder_key}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-rzp_test_placeholder_secret}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-rzp_test_webhook_secret}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local

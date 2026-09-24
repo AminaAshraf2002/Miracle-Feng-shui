@@ -3,8 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { products } from '@/lib/placeholder-data';
+import { printIsolatedTaxInvoice, downloadStandaloneTaxInvoice } from '@/lib/invoice';
+import { useLocale } from '@/context/CurrencyContext';
 
 export default function MyOrdersPage() {
+  const { formatPrice } = useLocale();
   const [activeTab, setActiveTab] = useState<'all' | 'in-progress' | 'completed'>('all');
   const [storedOrder, setStoredOrder] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
@@ -153,7 +156,7 @@ export default function MyOrdersPage() {
                       Total
                     </span>
                     <span className="font-semibold text-[#111111]">
-                      ₹ {order.total.toLocaleString('en-IN')}
+                      {formatPrice(order.total)}
                     </span>
                   </div>
 
@@ -172,7 +175,23 @@ export default function MyOrdersPage() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => window.print()}
+                      onClick={() =>
+                        printIsolatedTaxInvoice({
+                          orderId: order.id,
+                          orderDate: order.date,
+                          customerName: storedOrder?.customerName || 'Valued Customer',
+                          deliveryAddress: order.shippingAddress,
+                          paymentMethod: order.paymentMethod,
+                          paymentStatus: 'Paid',
+                          totalAmount: order.total,
+                          items: order.items.map((it: any) => ({
+                            name: it.product?.title || it.product?.name || it.title || 'Feng Shui Sacred Item',
+                            quantity: it.quantity || 1,
+                            price: it.product?.price || it.price || 0,
+                            maker: it.product?.maker || order.shopName,
+                          })),
+                        })
+                      }
                       className="font-medium text-[#111111] hover:underline cursor-pointer text-[12px]"
                     >
                       View invoice
@@ -242,7 +261,7 @@ export default function MyOrdersPage() {
                           </Link>
                           <div className="flex items-center gap-3 text-[13px] pt-0.5">
                             <span className="font-semibold text-[#111111]">
-                              ₹ {(it.product.price * it.quantity).toLocaleString('en-IN')}
+                              {formatPrice(it.product.price * it.quantity)}
                             </span>
                             <span className="text-gray-400">&bull;</span>
                             <span className="text-gray-500">Qty: {it.quantity}</span>
@@ -292,7 +311,23 @@ export default function MyOrdersPage() {
                     <span className="text-gray-300">|</span>
                     <button
                       type="button"
-                      onClick={() => window.print()}
+                      onClick={() =>
+                        downloadStandaloneTaxInvoice({
+                          orderId: order.id,
+                          orderDate: order.date,
+                          customerName: storedOrder?.customerName || 'Valued Customer',
+                          deliveryAddress: order.shippingAddress,
+                          paymentMethod: order.paymentMethod,
+                          paymentStatus: 'Paid',
+                          totalAmount: order.total,
+                          items: order.items.map((it: any) => ({
+                            name: it.product?.title || it.product?.name || it.title || 'Feng Shui Sacred Item',
+                            quantity: it.quantity || 1,
+                            price: it.product?.price || it.price || 0,
+                            maker: it.product?.maker || order.shopName,
+                          })),
+                        })
+                      }
                       className="text-gray-600 hover:text-[#111111] hover:underline cursor-pointer"
                     >
                       Download Invoice (PDF)

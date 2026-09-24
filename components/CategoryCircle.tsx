@@ -1,8 +1,14 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { CategoryCircleInfo } from '@/lib/placeholder-data';
+import { useLocale } from '@/context/CurrencyContext';
+import { translateCategory } from '@/lib/translations';
 
 export function CategoryCircle({ category }: { category: CategoryCircleInfo }) {
+  const { language } = useLocale();
+
   return (
     <Link
       href={`/shop?category=${encodeURIComponent(category.slug)}`}
@@ -22,9 +28,10 @@ export function CategoryCircle({ category }: { category: CategoryCircleInfo }) {
           }}
         />
       </div>
-      <span className="text-[13.5px] sm:text-[14.5px] md:text-[15px] font-semibold text-etsy-dark mt-2.5 sm:mt-3 leading-snug block line-clamp-1">
-        {category.name}
+      <span style={{ fontWeight: 400 }} className="text-[13px] sm:text-[14px] font-normal text-etsy-dark mt-2.5 sm:mt-3 leading-snug block line-clamp-1">
+        {translateCategory(category.name, language)}
       </span>
     </Link>
   );
 }
+
