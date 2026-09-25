@@ -7,6 +7,7 @@ import { Product } from '@/lib/placeholder-data';
 export type CartItem = {
   id: string; // unique item id combining product id and variations
   product: Product;
+  productId?: string;
   quantity: number;
   selectedVariations?: Record<string, string>;
   personalizationText?: string;
@@ -120,6 +121,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Deduplicate and consolidate cart items helper
+  const consolidateItems = (rawItems: CartItem[]): CartItem[] => {
+    const map = new Map<string, CartItem>();
+    for (const item of rawItems) {
+      const prodId = item.product?.id || item.productId || item.id;
+      const varKey = item.selectedVariations
+        ? Object.entries(item.selectedVariations)
+            .map(([k, v]) => `${k}:${v}`)
+            .sort()
+            .join('|')
+        : '';
+      const pText = item.personalizationText || '';
+      const key = `${prodId}-${varKey}-${pText}`;
+
+      const existing = map.get(key);
+      if (existing) {
+        map.set(key, {
+          ...existing,
+          quantity: existing.quantity + item.quantity,
+        });
+      } else {
+        map.set(key, { ...item });
+      }
+    }
+    return Array.from(map.values());
+  };
+
   // Fetch persisted cart and favorites from DB when authenticated
   useEffect(() => {
     if (status === 'authenticated' || userLoggedIn) {
@@ -127,7 +155,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         .then((res) => (res.ok ? res.json() : null))
         .then((resData) => {
           if (resData?.data?.items && Array.isArray(resData.data.items)) {
-            setItems(resData.data.items);
+            setItems(consolidateItems(resData.data.items));
           }
         })
         .catch(() => {});
@@ -244,22 +272,41 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           .sort()
           .join('|')
       : '';
-    const itemId = `${product.id}-${varKey}-${personalizationText || ''}`;
+    const pText = personalizationText || '';
+    const fallbackItemId = `${product.id}-${varKey}-${pText}`;
 
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === itemId);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === itemId
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+      const matchIndex = prev.findIndex((item) => {
+        const itemProdId = item.product?.id || item.productId;
+        const itemVarKey = item.selectedVariations
+          ? Object.entries(item.selectedVariations)
+              .map(([k, v]) => `${k}:${v}`)
+              .sort()
+              .join('|')
+          : '';
+        const itemPText = item.personalizationText || '';
+        return (
+          (itemProdId === product.id || item.id === fallbackItemId) &&
+          itemVarKey === varKey &&
+          itemPText === pText
         );
+      });
+
+      if (matchIndex > -1) {
+        const updated = [...prev];
+        updated[matchIndex] = {
+          ...updated[matchIndex],
+          quantity: updated[matchIndex].quantity + quantity,
+        };
+        return updated;
       }
+
       return [
         ...prev,
         {
-          id: itemId,
+          id: fallbackItemId,
           product,
+          productId: product.id,
           quantity,
           selectedVariations,
           personalizationText,
@@ -268,7 +315,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       ];
     });
 
-    // Persist to backend
+    // Persist to backend and update state with consolidated response
     fetch('/api/cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -278,23 +325,41 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         selectedVariations,
         personalizationText,
       }),
-    }).catch((err) => {
-      console.error('Failed to sync cart item to DB:', err);
-    });
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((resData) => {
+        if (resData?.data?.items && Array.isArray(resData.data.items)) {
+          setItems(consolidateItems(resData.data.items));
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to sync cart item to DB:', err);
+      });
 
     return true;
   }, [status, userLoggedIn, showGuestToast]);
 
   const removeItem = useCallback((itemId: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== itemId));
+    setItems((prev) =>
+      prev.filter(
+        (item) => item.id !== itemId && item.productId !== itemId && item.product?.id !== itemId
+      )
+    );
 
     const isAuthed = status === 'authenticated' || userLoggedIn;
     if (isAuthed) {
       fetch(`/api/cart/${encodeURIComponent(itemId)}`, {
         method: 'DELETE',
-      }).catch((err) => {
-        console.error('Failed to delete cart item from DB:', err);
-      });
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((resData) => {
+          if (resData?.data?.items && Array.isArray(resData.data.items)) {
+            setItems(consolidateItems(resData.data.items));
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to delete cart item from DB:', err);
+        });
     }
   }, [status, userLoggedIn]);
 
@@ -304,7 +369,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, quantity } : item))
+      prev.map((item) =>
+        item.id === itemId || item.productId === itemId || item.product?.id === itemId
+          ? { ...item, quantity }
+          : item
+      )
     );
 
     const isAuthed = status === 'authenticated' || userLoggedIn;
@@ -313,9 +382,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity }),
-      }).catch((err) => {
-        console.error('Failed to update cart item in DB:', err);
-      });
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((resData) => {
+          if (resData?.data?.items && Array.isArray(resData.data.items)) {
+            setItems(consolidateItems(resData.data.items));
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to update cart item in DB:', err);
+        });
     }
   }, [removeItem, status, userLoggedIn]);
 
