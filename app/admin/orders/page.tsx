@@ -77,7 +77,7 @@ export default function AdminOrdersPage() {
       )}
 
       {/* Search Bar Only */}
-      <div className="bg-white px-5 py-3.5 rounded-full border border-gray-200/80 shadow-xs flex items-center gap-3 text-xs">
+      <div className="bg-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl sm:rounded-full border border-gray-200/80 shadow-xs flex items-center gap-3 text-xs">
         <div className="relative w-full sm:w-72">
           <i className="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
           <input
@@ -90,10 +90,9 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-
       {/* Luxury Noir Salon-Style Hero Page Banner with Right-Side Fade Image */}
-      <div className="rounded-3xl bg-[#161619] p-6 sm:p-8 text-white shadow-xl border border-white/10 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 min-h-[190px]">
-        {/* Right-Side Photo with Seamless Noir Blend Gradient (matching reference screenshot) */}
+      <div className="rounded-2xl sm:rounded-3xl bg-[#161619] p-5 sm:p-7 md:p-8 text-white shadow-xl border border-white/10 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-5 min-h-[160px] sm:min-h-[190px]">
+        {/* Right-Side Photo with Seamless Noir Blend Gradient */}
         <div className="absolute right-0 top-0 bottom-0 w-full sm:w-3/5 lg:w-1/2 pointer-events-none overflow-hidden select-none">
           <img
             src="/images/feng_shui_hero_banner.jpg"
@@ -117,8 +116,8 @@ export default function AdminOrdersPage() {
         </div>
 
         <div className="relative z-10">
-          {/* Date Pill Badge (matching reference screenshot) */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.08] border border-white/15 text-white/90 text-[10.5px] font-mono tracking-[0.16em] uppercase font-semibold mb-2.5 shadow-2xs backdrop-blur-xs">
+          {/* Date Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-white/90 text-[10px] sm:text-[10.5px] font-mono tracking-[0.14em] uppercase font-semibold mb-2 shadow-2xs backdrop-blur-xs">
             <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' }).toUpperCase()}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </div>
@@ -140,7 +139,7 @@ export default function AdminOrdersPage() {
         <div className="relative z-10 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 md:pb-0">
           <a
             href="/admin"
-            className="px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-xs font-semibold flex items-center gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
+            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
           >
             <i className="fa-regular fa-user text-xs text-white/80" />
             <span>Dashboard</span>
@@ -149,7 +148,7 @@ export default function AdminOrdersPage() {
           <a
             href="/admin/orders"
             style={{ backgroundColor: '#FFFFFF', color: '#111111' }}
-            className="px-4 py-2 rounded-full bg-white text-black text-xs font-bold flex items-center gap-2 shadow-md no-underline whitespace-nowrap"
+            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white text-black text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 shadow-md no-underline whitespace-nowrap"
           >
             <i className="fa-solid fa-bag-shopping text-xs text-black" />
             <span>My Orders ({orders.length})</span>
@@ -157,7 +156,7 @@ export default function AdminOrdersPage() {
 
           <a
             href="/admin/products"
-            className="px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-xs font-semibold flex items-center gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
+            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
           >
             <i className="fa-solid fa-boxes-stacked text-xs text-white/80" />
             <span>Catalog</span>
@@ -165,7 +164,7 @@ export default function AdminOrdersPage() {
 
           <a
             href="/admin/categories"
-            className="px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-xs font-semibold flex items-center gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
+            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
           >
             <i className="fa-solid fa-tags text-xs text-white/80" />
             <span>Categories</span>
@@ -173,7 +172,7 @@ export default function AdminOrdersPage() {
 
           <a
             href="/admin/homepage"
-            className="px-4 py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-xs font-semibold flex items-center gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
+            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-xs text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all no-underline shadow-2xs whitespace-nowrap"
           >
             <i className="fa-solid fa-layer-group text-xs text-white/80" />
             <span>Sections</span>
@@ -182,20 +181,20 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Main 2-Column Wink Layout: Left Status Sidebar + Right Order Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: Vertical Status Pills Sidebar (Exact Wink Reference) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+        {/* LEFT COLUMN / MOBILE TOP: Status Filters & Financial Overview */}
         <aside className="lg:col-span-3 flex flex-col gap-3">
-          <div className="bg-white p-4 rounded-3xl border border-gray-200/80 shadow-xs flex flex-col gap-2">
-            <span className="text-[10.5px] font-bold text-gray-400 uppercase tracking-wider px-2 pt-1">
+          {/* Status Filter Container */}
+          <div className="bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-200/80 shadow-xs flex flex-col gap-2">
+            <span className="text-[10px] sm:text-[10.5px] font-bold text-gray-400 uppercase tracking-wider px-1 sm:px-2 pt-0.5">
               Order Status Filter
             </span>
 
-            {/* Status Pills Stack */}
-            <div className="flex flex-col gap-2 mt-1">
+            {/* Mobile: Horizontal scrollable pills. Desktop: Vertical stack */}
+            <div className="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:pb-0">
               {statusList.map((st) => {
                 const count = st === 'All' ? orders.length : orders.filter((o) => o.status === st).length;
                 const isSel = selectedStatus === st;
-                // Label mappings to reflect the Wink aesthetic
                 const label =
                   st === 'All'
                     ? 'All Orders'
@@ -232,13 +231,13 @@ export default function AdminOrdersPage() {
                         ? { backgroundColor: '#111111', color: '#FFFFFF', borderColor: '#111111' }
                         : { backgroundColor: '#FFFFFF', color: '#374151', borderColor: '#E5E7EB' }
                     }
-                    className={`w-full px-5 py-3 rounded-full text-xs font-semibold flex items-center justify-between transition-all cursor-pointer border ${
+                    className={`shrink-0 lg:w-full px-3.5 lg:px-5 py-2 lg:py-3 rounded-full text-xs font-semibold flex items-center justify-between gap-2.5 transition-all cursor-pointer border whitespace-nowrap ${
                       isSel
                         ? 'bg-[#111111] text-white border-[#111111] shadow-xs'
                         : 'bg-white text-gray-700 border-gray-200/90 hover:border-gray-400'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2">
                       <i className={`${statusIcon} text-xs ${isSel ? 'text-white' : 'text-gray-400'}`} />
                       <span className="font-semibold">{label}</span>
                     </div>
@@ -258,34 +257,36 @@ export default function AdminOrdersPage() {
             </div>
           </div>
 
-          {/* Quick Balance Mini Cards in Left Sidebar */}
-          <div className="bg-white p-4 rounded-3xl border border-gray-200/80 shadow-xs flex flex-col gap-3">
-            <span className="text-[10.5px] font-bold text-gray-400 uppercase tracking-wider px-2">
+          {/* Financial Summary: 2-col on mobile, stacked on desktop */}
+          <div className="bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-200/80 shadow-xs flex flex-col gap-2.5 sm:gap-3">
+            <span className="text-[10px] sm:text-[10.5px] font-bold text-gray-400 uppercase tracking-wider px-1 sm:px-2">
               Financial Summary
             </span>
 
-            <div className="bg-gray-50/70 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10.5px] font-semibold text-emerald-700 block uppercase tracking-wider">
-                Settled (In-Hand)
-              </span>
-              <div className="text-lg font-bold text-gray-900 mt-0.5">
-                ₹{settledBalance.toLocaleString('en-IN')}
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
+              <div className="bg-gray-50/70 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border border-gray-100">
+                <span className="text-[9.5px] sm:text-[10.5px] font-semibold text-emerald-700 block uppercase tracking-wider">
+                  Settled (In-Hand)
+                </span>
+                <div className="text-base sm:text-lg font-bold text-gray-900 mt-0.5 truncate">
+                  ₹{settledBalance.toLocaleString('en-IN')}
+                </div>
+                <span className="text-[9.5px] sm:text-[10px] text-gray-400 block mt-0.5 truncate">
+                  Delivered + Online
+                </span>
               </div>
-              <span className="text-[10px] text-gray-400 block mt-0.5">
-                Delivered + Razorpay online
-              </span>
-            </div>
 
-            <div className="bg-gray-50/70 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10.5px] font-semibold text-gray-500 block uppercase tracking-wider">
-                Pending COD
-              </span>
-              <div className="text-lg font-bold text-gray-900 mt-0.5">
-                ₹{pendingBalance.toLocaleString('en-IN')}
+              <div className="bg-gray-50/70 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border border-gray-100">
+                <span className="text-[9.5px] sm:text-[10.5px] font-semibold text-gray-500 block uppercase tracking-wider">
+                  Pending COD
+                </span>
+                <div className="text-base sm:text-lg font-bold text-gray-900 mt-0.5 truncate">
+                  ₹{pendingBalance.toLocaleString('en-IN')}
+                </div>
+                <span className="text-[9.5px] sm:text-[10px] text-gray-400 block mt-0.5 truncate">
+                  Awaiting delivery
+                </span>
               </div>
-              <span className="text-[10px] text-gray-400 block mt-0.5">
-                Awaiting cash delivery
-              </span>
             </div>
           </div>
         </aside>
@@ -293,7 +294,7 @@ export default function AdminOrdersPage() {
         {/* RIGHT COLUMN: Stream of Wink Order Cards */}
         <div className="lg:col-span-9 flex flex-col gap-4">
           {filteredOrders.length === 0 ? (
-            <div className="bg-white rounded-3xl p-12 text-center border border-gray-200/80 shadow-xs">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-center border border-gray-200/80 shadow-xs">
               <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
                 <i className="fa-solid fa-box-open text-lg" />
               </div>
@@ -309,29 +310,29 @@ export default function AdminOrdersPage() {
               return (
                 <div
                   key={ord.id}
-                  className="bg-white rounded-3xl p-5 sm:p-7 border border-gray-200/80 shadow-xs hover:shadow-sm transition-all"
+                  className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-7 border border-gray-200/80 shadow-xs hover:shadow-sm transition-all"
                 >
                   {/* Card Header: Order ID + Tracking Path + Estimated Arrival / Status */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-gray-100 gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-5 border-b border-gray-100 gap-3 sm:gap-4">
                     {/* Order ID & Customer */}
-                    <div>
-                      <span className="text-[10.5px] font-semibold text-gray-400 uppercase tracking-wider block">
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-[10.5px] font-semibold text-gray-400 uppercase tracking-wider block">
                         Order ID
                       </span>
                       <div className="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2 mt-0.5">
-                        <i className="fa-solid fa-bag-shopping text-sm text-gray-700" />
-                        <span>{ord.orderNumber}</span>
+                        <i className="fa-solid fa-bag-shopping text-sm text-gray-700 shrink-0" />
+                        <span className="truncate">{ord.orderNumber}</span>
                       </div>
-                      <div className="text-xs text-gray-500 mt-1 flex items-center gap-1.5">
-                        <i className="fa-regular fa-user text-[11px] text-gray-400" />
+                      <div className="text-xs text-gray-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                        <i className="fa-regular fa-user text-[11px] text-gray-400 shrink-0" />
                         <span className="font-semibold text-gray-800">{ord.customerName}</span>
                         <span>&bull;</span>
-                        <span>{ord.phone}</span>
+                        <span className="font-mono text-gray-600">{ord.phone}</span>
                       </div>
                     </div>
 
-                    {/* Dotted Tracking Route (From Wink Reference) */}
-                    <div className="hidden md:flex items-center gap-2.5 text-xs text-gray-600 bg-gray-50/80 px-4 py-2 rounded-full border border-gray-100">
+                    {/* Dotted Tracking Route (Desktop) */}
+                    <div className="hidden md:flex items-center gap-2.5 text-xs text-gray-600 bg-gray-50/80 px-4 py-2 rounded-full border border-gray-100 shrink-0">
                       <span className="flex items-center gap-1.5 font-semibold text-gray-700">
                         <i className="fa-solid fa-building text-gray-400 text-xs" />
                         <span>Miracle Temple</span>
@@ -346,12 +347,12 @@ export default function AdminOrdersPage() {
                     </div>
 
                     {/* Estimated Arrival & Status Badge */}
-                    <div className="sm:text-right flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
-                      <span className="text-[11px] text-gray-400 font-medium block">
-                        Estimated arrival: {ord.date}
+                    <div className="flex items-center sm:items-end justify-between sm:justify-center sm:flex-col gap-2 shrink-0 pt-1 sm:pt-0">
+                      <span className="text-[10.5px] sm:text-[11px] text-gray-400 font-medium block">
+                        Est: {ord.date}
                       </span>
                       <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold ${
                           statusBadgeStyle[ord.status]
                         }`}
                       >
@@ -368,26 +369,26 @@ export default function AdminOrdersPage() {
                   </div>
 
                   {/* Items List Inside Order Card */}
-                  <div className="flex flex-col gap-2.5 my-5">
+                  <div className="flex flex-col gap-2.5 my-4 sm:my-5">
                     {ord.items.map((item, idx) => (
                       <div
                         key={idx}
-                        className="bg-gray-50/60 border border-gray-100 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-4"
+                        className="bg-gray-50/60 border border-gray-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3"
                       >
-                        <div className="flex items-center gap-3.5 min-w-0">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
                           <img
                             src={item.image || '/images/miracle.jpeg'}
                             alt={item.productName}
-                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border border-gray-200/80 bg-white shrink-0 shadow-2xs"
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover border border-gray-200/80 bg-white shrink-0 shadow-2xs"
                           />
-                          <div className="min-w-0">
-                            <h4 className="font-bold text-gray-900 text-xs sm:text-sm truncate">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-bold text-gray-900 text-xs sm:text-sm truncate" title={item.productName}>
                               {item.productName}
                             </h4>
-                            <div className="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                              <span>₹{item.price.toLocaleString('en-IN')}</span>
+                            <div className="text-[11px] sm:text-xs text-gray-500 mt-0.5 sm:mt-1 flex items-center gap-2 flex-wrap">
+                              <span className="font-semibold text-gray-800">₹{item.price.toLocaleString('en-IN')}</span>
                               <span>x{item.quantity}</span>
-                              <span className="px-2 py-0.5 rounded-md bg-white border border-gray-200 text-[10px] font-semibold text-gray-600">
+                              <span className="px-1.5 py-0.5 rounded bg-white border border-gray-200 text-[9.5px] sm:text-[10px] font-semibold text-gray-600">
                                 M / Consecrated
                               </span>
                             </div>
@@ -404,21 +405,23 @@ export default function AdminOrdersPage() {
                   </div>
 
                   {/* Card Footer: Total Amount + Action Buttons */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-gray-100 gap-3">
-                    <div className="text-xs sm:text-sm text-gray-600 font-medium">
-                      <span>Total: </span>
-                      <span className="text-base sm:text-lg font-bold text-gray-900">
-                        ₹{ord.totalAmount.toLocaleString('en-IN')}
-                      </span>
-                      <span className="text-gray-400 ml-1">
-                        ({totalItemsCount} {totalItemsCount === 1 ? 'item' : 'items'})
-                      </span>
-                      <span className="ml-2.5 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-gray-100 text-gray-600 uppercase tracking-wide">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-3.5 sm:pt-4 border-t border-gray-100 gap-3">
+                    <div className="text-xs sm:text-sm text-gray-600 font-medium flex items-center justify-between sm:justify-start flex-wrap gap-1.5">
+                      <div>
+                        <span>Total: </span>
+                        <span className="text-sm sm:text-base md:text-lg font-bold text-gray-900">
+                          ₹{ord.totalAmount.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-gray-400 ml-1 text-xs">
+                          ({totalItemsCount} {totalItemsCount === 1 ? 'item' : 'items'})
+                        </span>
+                      </div>
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[10.5px] font-semibold bg-gray-100 text-gray-600 uppercase tracking-wide">
                         {ord.paymentMethod}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 justify-end">
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-between sm:justify-end w-full sm:w-auto">
                       {/* Status Selector Dropdown */}
                       <select
                         value={ord.status}
@@ -426,7 +429,7 @@ export default function AdminOrdersPage() {
                           updateOrderStatus(ord.id, e.target.value as OrderStatus);
                           showToast(`Order ${ord.orderNumber} updated to ${e.target.value}`);
                         }}
-                        className="text-xs font-semibold px-3 py-2 rounded-full border border-gray-200 bg-white cursor-pointer hover:border-gray-400 focus:outline-hidden text-gray-700"
+                        className="text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border border-gray-200 bg-white cursor-pointer hover:border-gray-400 focus:outline-hidden text-gray-700 flex-1 sm:flex-initial min-w-[110px]"
                       >
                         <option value="Pending">Pending</option>
                         <option value="Processing">Processing (On Deliver)</option>
@@ -443,7 +446,7 @@ export default function AdminOrdersPage() {
                             confirmOrder(ord.id);
                             showToast(`✓ Order ${ord.orderNumber} confirmed & ready to pack!`);
                           }}
-                          className="px-4 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-full transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          className="px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-full transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
                           title="Confirm this order"
                         >
                           <i className="fa-solid fa-check text-[10px]" />
@@ -456,7 +459,7 @@ export default function AdminOrdersPage() {
                         type="button"
                         onClick={() => setViewingOrder(ord)}
                         style={{ backgroundColor: '#111111', color: '#FFFFFF' }}
-                        className="px-6 sm:px-7 py-2 text-xs font-bold bg-[#111111] hover:bg-black text-white rounded-full shadow-xs transition-all cursor-pointer"
+                        className="px-4 sm:px-6 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold bg-[#111111] hover:bg-black text-white rounded-full shadow-xs transition-all cursor-pointer whitespace-nowrap"
                       >
                         Details
                       </button>
@@ -470,7 +473,7 @@ export default function AdminOrdersPage() {
                             showToast('Order removed.');
                           }
                         }}
-                        className="p-2 text-gray-400 hover:text-black rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                        className="p-1.5 sm:p-2 text-gray-400 hover:text-black rounded-full hover:bg-gray-100 transition-colors cursor-pointer shrink-0"
                         title="Delete Order"
                       >
                         <i className="fa-solid fa-trash text-xs" />

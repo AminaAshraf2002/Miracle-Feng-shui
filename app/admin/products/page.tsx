@@ -610,8 +610,8 @@ export default function AdminProductsPage() {
 
       {/* Products Table */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden w-full">
-        <div className="w-full overflow-hidden">
-          <table className="w-full table-fixed text-left text-xs">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[620px] table-fixed text-left text-xs">
             <colgroup>
               <col className="w-[36%]" />
               <col className="w-[14%]" />
