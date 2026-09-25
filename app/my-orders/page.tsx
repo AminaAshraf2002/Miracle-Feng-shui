@@ -479,25 +479,14 @@ export default function MyOrdersPage() {
                             </div>
 
                             {/* Clean Action Buttons */}
-                            <div className="flex flex-row sm:flex-col items-center sm:items-stretch gap-2 w-full sm:w-[160px] pt-1 sm:pt-0 shrink-0">
+                            <div className="flex flex-row sm:flex-col items-center sm:items-stretch gap-2 w-full sm:w-[140px] pt-1 sm:pt-0 shrink-0">
                               <Link
                                 href={productUrl}
                                 style={{ color: '#ffffff', backgroundColor: '#111111' }}
-                                className="flex-1 sm:flex-none text-center px-4 py-2.5 bg-[#111111] hover:bg-black text-white text-[13px] font-semibold rounded-xl transition-all shadow-xs no-underline flex items-center justify-center"
+                                className="w-full text-center px-4 py-2.5 bg-[#111111] hover:bg-black text-white text-[13px] font-semibold rounded-xl transition-all shadow-xs no-underline flex items-center justify-center"
                               >
                                 Buy again
                               </Link>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  alert(
-                                    `Review for "${it.title || it.name}": Thank you for being a valued customer! Feedback recorded.`
-                                  )
-                                }
-                                className="flex-1 sm:flex-none text-center px-4 py-2 border border-gray-200 hover:border-gray-400 text-[#111111] text-[12.5px] font-medium rounded-xl transition-colors bg-white cursor-pointer"
-                              >
-                                Write a review
-                              </button>
                             </div>
                           </div>
                         );
