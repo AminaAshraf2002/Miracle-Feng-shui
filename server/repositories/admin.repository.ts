@@ -8,6 +8,20 @@ import {
 
 export const adminRepository = {
   async getDashboardStats() {
+    // Automatically purge old demo seed orders if present
+    try {
+      await prisma.order.deleteMany({
+        where: {
+          OR: [
+            { orderNumber: 'MFS-82914' },
+            { user: { email: 'admin@miraclefengshui.com' } },
+          ],
+        },
+      });
+    } catch {
+      // ignore if already deleted
+    }
+
     const [
       orders,
       usersCount,
@@ -18,13 +32,15 @@ export const adminRepository = {
       prisma.order.findMany({
         where: {
           status: { not: 'CANCELLED' },
+          orderNumber: { not: 'MFS-82914' },
+          user: { role: 'CUSTOMER' },
         },
         select: {
           total: true,
           status: true,
         },
       }),
-      prisma.user.count(),
+      prisma.user.count({ where: { role: 'CUSTOMER' } }),
       prisma.product.count({ where: { isActive: true } }),
       prisma.product.findMany({
         where: {
@@ -35,6 +51,10 @@ export const adminRepository = {
         orderBy: { stock: 'asc' },
       }),
       prisma.order.findMany({
+        where: {
+          orderNumber: { not: 'MFS-82914' },
+          user: { role: 'CUSTOMER' },
+        },
         take: 5,
         orderBy: { createdAt: 'desc' },
         include: {
@@ -242,7 +262,10 @@ export const adminRepository = {
   },
 
   async findAllOrders(filters?: { status?: OrderStatus; search?: string }) {
-    const where: Prisma.OrderWhereInput = {};
+    const where: Prisma.OrderWhereInput = {
+      orderNumber: { not: 'MFS-82914' },
+      user: { role: 'CUSTOMER' },
+    };
 
     if (filters?.status) {
       where.status = filters.status;
