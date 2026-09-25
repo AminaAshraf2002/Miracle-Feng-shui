@@ -918,15 +918,307 @@ export function Header() {
         </div>
       )}
 
-      {/* EXACT ETSY AUTH MODAL */}
+      {/* AUTH MODAL */}
       {showAuthModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-50 overflow-y-auto bg-[#F0F1F5] md:bg-black/55 md:flex md:items-center md:justify-center md:p-4 md:backdrop-blur-xs animate-in fade-in"
           onClick={() => setShowAuthModal(false)}
         >
-          {/* Modal Card */}
+          {/* ══════════════════════════════════════════════════════════════════════
+              MOBILE VIEW (< md): Exact same design as Admin Login
+              Cover Image: feng_shui_sacred_finds.jpg | Caption: Pure White
+              ══════════════════════════════════════════════════════════════════════ */}
           <div
-            className="bg-white rounded-[24px] max-w-[445px] w-full px-7 sm:px-9 py-6 sm:py-7 shadow-2xl relative text-center animate-in zoom-in-95 my-auto border border-gray-100/80 max-h-[95vh] overflow-y-auto"
+            className="md:hidden min-h-screen w-full flex flex-col bg-[#F0F1F5]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Cover Banner */}
+            <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-[#161619] flex-shrink-0">
+              <img
+                src="/images/feng_shui_sacred_finds.jpg"
+                alt="Miracle Feng Shui"
+                className="w-full h-full object-cover brightness-[0.65] contrast-[1.1]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+              {/* Floating '< Back' Pill Button */}
+              <button
+                type="button"
+                onClick={() => setShowAuthModal(false)}
+                className="absolute top-5 left-4 z-20 inline-flex items-center gap-1.5 bg-black/60 hover:bg-black text-white text-xs font-semibold px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/20 transition-all shadow-md cursor-pointer"
+              >
+                <i className="fa-solid fa-chevron-left text-[10px]" />
+                <span>Back</span>
+              </button>
+
+              {/* Brand Pill Badge */}
+              <div className="absolute top-5 right-4 z-20 flex items-center gap-2 bg-black/50 backdrop-blur-md border border-white/15 px-3 py-1 rounded-full">
+                <img src="/images/miracle.jpeg" alt="Logo" className="w-4 h-4 rounded-full object-cover" />
+                <span className="text-[10.5px] font-semibold text-white/90">Miracle Feng Shui</span>
+              </div>
+
+              {/* Bottom text inside banner (White font color, NO yellow) */}
+              <div className="absolute bottom-10 left-6 z-10">
+                <span className="inline-block text-[10px] uppercase font-bold tracking-widest text-white/90 mb-0.5">
+                  {isRegisterMode ? 'Member Registration' : 'Member Sanctuary'}
+                </span>
+              </div>
+            </div>
+
+            {/* Sliding White Sheet with rounded-t-[32px] */}
+            <div className="relative z-10 -mt-7 bg-white rounded-t-[32px] shadow-2xl px-6 pt-7 pb-8 flex-1 flex flex-col justify-between">
+              <div>
+                {/* Brand Logo above title */}
+                <div className="flex justify-center mb-3">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-100 shadow-md">
+                    <img src="/images/miracle.jpeg" alt="Miracle Feng Shui" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+
+                {/* Title & Subtitle matching Admin Bebas Neue styling */}
+                <h1
+                  style={{ fontFamily: "'Bebas Neue', 'Montserrat', sans-serif" }}
+                  className="text-3xl sm:text-4xl text-gray-900 tracking-wide font-normal mb-1 text-center leading-none"
+                >
+                  {isRegisterMode ? 'Create Your Account' : 'Welcome Back'}
+                </h1>
+                <p className="text-xs text-gray-500 text-center mb-3 leading-relaxed">
+                  {isRegisterMode
+                    ? 'Join Miracle Feng Shui for orders & saved addresses'
+                    : 'Sign in to access your store orders & wishlist'}
+                </p>
+
+                {/* Mode Switcher */}
+                <div className="text-xs text-gray-600 mb-5 text-center">
+                  {isRegisterMode ? (
+                    <span>
+                      Already have an account?{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsRegisterMode(false);
+                          setAuthError('');
+                        }}
+                        className="text-black font-bold underline hover:text-[#e05638] transition-colors cursor-pointer"
+                      >
+                        Sign in
+                      </button>
+                    </span>
+                  ) : (
+                    <span>
+                      New to Miracle Feng Shui?{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsRegisterMode(true);
+                          setAuthError('');
+                        }}
+                        className="text-black font-bold underline hover:text-[#e05638] transition-colors cursor-pointer"
+                      >
+                        Create an account
+                      </button>
+                    </span>
+                  )}
+                </div>
+
+                {/* Error Alert */}
+                {authError && (
+                  <div className="bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 mb-4 animate-in fade-in">
+                    <i className="fa-solid fa-circle-exclamation shrink-0" />
+                    <span>{authError}</span>
+                  </div>
+                )}
+
+                {/* Customer Form matching Admin layout */}
+                <form onSubmit={handleAuthSubmit} className="space-y-4 text-left">
+                  {/* Email with floating label */}
+                  <div className="relative">
+                    <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-700 z-10">
+                      Email <span className="text-rose-600">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        required
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:border-black transition-all"
+                      />
+                      <i className="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* First Name (Visible in Register Mode) */}
+                  {isRegisterMode && (
+                    <div className="relative">
+                      <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-700 z-10">
+                        First name <span className="text-rose-600">*</span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          placeholder="Your full name"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:border-black transition-all"
+                        />
+                        <i className="fa-regular fa-user absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Password with floating label & eye toggle */}
+                  <div className="relative">
+                    <label className="absolute -top-2.5 left-3.5 bg-white px-1.5 text-[11px] font-bold text-gray-700 z-10">
+                      Password <span className="text-rose-600">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:border-black transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 cursor-pointer transition-colors"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        <i className={`fa-regular ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-xs`} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember / Stay signed in */}
+                  {!isRegisterMode && (
+                    <div className="flex items-center justify-between pt-0.5">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="mobile-stay-signed-in"
+                          checked={staySignedIn}
+                          onChange={(e) => setStaySignedIn(e.target.checked)}
+                          className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
+                        />
+                        <label htmlFor="mobile-stay-signed-in" className="text-xs text-gray-600 font-medium cursor-pointer select-none">
+                          Remember this device
+                        </label>
+                      </div>
+                      <button
+                        type="button"
+                        className="text-xs text-gray-500 hover:text-black hover:underline cursor-pointer"
+                        onClick={() => {
+                          setShowAuthModal(false);
+                          router.push('/forgot-password');
+                        }}
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Sign In / Register button matching Admin styling */}
+                  <button
+                    type="submit"
+                    disabled={isAuthSubmitting}
+                    style={{ backgroundColor: '#111111', color: '#ffffff' }}
+                    className="w-full py-3.5 px-5 rounded-xl text-xs sm:text-sm font-bold tracking-wider uppercase bg-[#111111] hover:bg-black text-white flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-60 active:scale-[0.99] mt-1"
+                  >
+                    {isAuthSubmitting ? (
+                      <>
+                        <i className="fa-solid fa-circle-notch fa-spin text-xs" />
+                        <span>Processing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{isRegisterMode ? 'Create Account' : 'Sign In'}</span>
+                        <i className="fa-solid fa-arrow-right text-xs" />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                {/* Social logins */}
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200" />
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-white px-3 text-gray-400 font-medium">or continue with</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('user@gmail.com');
+                      setUserLoggedIn(true);
+                      setShowAuthModal(false);
+                    }}
+                    className="flex-1 h-11 rounded-xl border border-gray-200 hover:border-black flex items-center justify-center transition-colors bg-gray-50 hover:bg-white cursor-pointer"
+                    title="Continue with Google"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('user@facebook.com');
+                      setUserLoggedIn(true);
+                      setShowAuthModal(false);
+                    }}
+                    className="flex-1 h-11 rounded-xl border border-gray-200 hover:border-black flex items-center justify-center transition-colors bg-gray-50 hover:bg-white cursor-pointer"
+                    title="Continue with Facebook"
+                  >
+                    <svg className="w-5 h-5 text-[#1877F2] fill-current" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('user@icloud.com');
+                      setUserLoggedIn(true);
+                      setShowAuthModal(false);
+                    }}
+                    className="flex-1 h-11 rounded-xl border border-gray-200 hover:border-black flex items-center justify-center transition-colors bg-gray-50 hover:bg-white cursor-pointer"
+                    title="Continue with Apple"
+                  >
+                    <svg className="w-5 h-5 fill-current text-black" viewBox="0 0 24 24">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.82.93-2.88-.91.04-2.01.61-2.66 1.37-.57.65-1.07 1.73-.94 2.76 1.02.08 2.05-.49 2.67-1.25z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Bottom Terms */}
+              <div className="text-center mt-5">
+                <p className="text-[11px] text-gray-400 leading-tight">
+                  By continuing, you agree to our{' '}
+                  <a href="#" className="underline text-gray-700 hover:text-black">Terms of Use</a>{' '}
+                  and{' '}
+                  <a href="#" className="underline text-gray-700 hover:text-black">Privacy Policy</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════════════
+              DESKTOP VIEW (>= md): Classic Elegance Modal Card
+              ══════════════════════════════════════════════════════════════════════ */}
+          <div
+            className="hidden md:block bg-white rounded-[24px] max-w-[445px] w-full px-7 sm:px-9 py-6 sm:py-7 shadow-2xl relative text-center animate-in zoom-in-95 my-auto border border-gray-100/80 max-h-[95vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Close Button */}
@@ -1012,7 +1304,7 @@ export function Header() {
                 </div>
               )}
 
-              {/* Password with Show/Hide Eye Icon (Needed for both Register and Sign in) */}
+              {/* Password with Show/Hide Eye Icon */}
               <div>
                 <label className="text-[13.5px] font-medium text-[#222222] block mb-1">
                   Password<span className="text-[#A61A11] ml-0.5">*</span>
@@ -1039,7 +1331,7 @@ export function Header() {
                 </div>
               </div>
 
-              {/* Stay Signed In (Sign in mode) */}
+              {/* Stay Signed In */}
               {!isRegisterMode && (
                 <div className="flex items-center justify-between pt-0.5">
                   <div className="flex items-center gap-2">
@@ -1075,7 +1367,7 @@ export function Header() {
                 </div>
               )}
 
-              {/* Submit Button (Register in Create Mode / Sign in in Login Mode) */}
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isAuthSubmitting}
@@ -1096,9 +1388,8 @@ export function Header() {
               </div>
             </div>
 
-            {/* 3 Pill / Oval Social Login Buttons */}
+            {/* 3 Social Buttons */}
             <div className="flex items-center justify-between gap-3">
-              {/* Google */}
               <button
                 type="button"
                 onClick={() => {
@@ -1111,26 +1402,12 @@ export function Header() {
                 title="Continue with Google"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                  />
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                 </svg>
               </button>
-
-              {/* Facebook */}
               <button
                 type="button"
                 onClick={() => {
@@ -1146,8 +1423,6 @@ export function Header() {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </button>
-
-              {/* Apple */}
               <button
                 type="button"
                 onClick={() => {
