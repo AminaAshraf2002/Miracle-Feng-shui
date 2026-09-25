@@ -1,4 +1,5 @@
 import PDFDocument from 'pdfkit';
+import { calculateOrderTax } from '../../lib/tax';
 
 export interface InvoiceItem {
   id?: string;
@@ -199,48 +200,110 @@ export class InvoiceService {
             .stroke();
         });
 
-        // 4. TOTALS SUMMARY BLOCK
-        const totalAmountVal = Number(order.totalAmount) || items.reduce((acc, it) => acc + ((Number(it.price) || 0) * (Number(it.quantity) || 1)), 0);
-        const totalsY = Math.max(currentY + 10, 320);
+        // 4. TOTALS SUMMARY BLOCK & DYNAMIC GST/VAT CALCULATION
+        const taxBreakdown = calculateOrderTax(
+          items.map((it) => ({
+            name: it.title || it.productName || 'Consecrated Feng Shui Item',
+            price: Number(it.price) || 0,
+            quantity: Number(it.quantity) || 1,
+          })),
+          {
+            country: order.address?.toLowerCase().includes('uae') || order.address?.toLowerCase().includes('dubai') || order.address?.toLowerCase().includes('emirates') ? 'AE' : 'IN',
+            state: order.state || (order.address?.toLowerCase().includes('maharashtra') ? 'Maharashtra' : ''),
+            city: order.city,
+            pincode: order.pincode,
+            address: order.address,
+          }
+        );
 
+        const currSym = taxBreakdown.currencySymbol || 'INR';
+        const totalAmountVal = taxBreakdown.totalGrossAmount || Number(order.totalAmount) || 0;
+        let totalsY = Math.max(currentY + 10, 320);
+
+        // Subtotal (Gross)
         doc
           .fillColor('#666666')
           .fontSize(8.5)
           .font('Helvetica')
-          .text('Subtotal:', 360, totalsY, { width: 100, align: 'right' })
+          .text('Subtotal:', 340, totalsY, { width: 120, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#222222')
-          .text(`INR ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+          .text(`${currSym} ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
 
+        totalsY += 14;
+        // Taxable Base
         doc
           .font('Helvetica')
           .fillColor('#666666')
-          .text('Shipping & Handling:', 360, totalsY + 14, { width: 100, align: 'right' })
+          .text('Taxable Base Amount:', 340, totalsY, { width: 120, align: 'right' })
+          .font('Helvetica-Bold')
+          .fillColor('#222222')
+          .text(`${currSym} ${taxBreakdown.totalTaxableAmount.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+
+        // GST / VAT rows
+        if (taxBreakdown.cgstTotal !== undefined && taxBreakdown.sgstTotal !== undefined) {
+          totalsY += 14;
+          doc
+            .font('Helvetica')
+            .fillColor('#666666')
+            .text('CGST (9%):', 340, totalsY, { width: 120, align: 'right' })
+            .font('Helvetica-Bold')
+            .fillColor('#222222')
+            .text(`${currSym} ${taxBreakdown.cgstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+
+          totalsY += 14;
+          doc
+            .font('Helvetica')
+            .fillColor('#666666')
+            .text('SGST (9%):', 340, totalsY, { width: 120, align: 'right' })
+            .font('Helvetica-Bold')
+            .fillColor('#222222')
+            .text(`${currSym} ${taxBreakdown.sgstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+        } else if (taxBreakdown.igstTotal !== undefined) {
+          totalsY += 14;
+          doc
+            .font('Helvetica')
+            .fillColor('#666666')
+            .text('IGST (18%):', 340, totalsY, { width: 120, align: 'right' })
+            .font('Helvetica-Bold')
+            .fillColor('#222222')
+            .text(`${currSym} ${taxBreakdown.igstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+        } else if (taxBreakdown.vatTotal !== undefined) {
+          totalsY += 14;
+          doc
+            .font('Helvetica')
+            .fillColor('#666666')
+            .text('UAE VAT (5%):', 340, totalsY, { width: 120, align: 'right' })
+            .font('Helvetica-Bold')
+            .fillColor('#222222')
+            .text(`${currSym} ${taxBreakdown.vatTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+        }
+
+        totalsY += 14;
+        // Shipping
+        doc
+          .font('Helvetica')
+          .fillColor('#666666')
+          .text('Shipping & Handling:', 340, totalsY, { width: 120, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#15803d')
-          .text('FREE', 470, totalsY + 14, { width: 70, align: 'right' });
+          .text('FREE', 470, totalsY, { width: 70, align: 'right' });
 
-        doc
-          .font('Helvetica')
-          .fillColor('#666666')
-          .text('GST (18% Included):', 360, totalsY + 28, { width: 100, align: 'right' })
-          .font('Helvetica-Bold')
-          .fillColor('#222222')
-          .text(`INR ${Math.round(totalAmountVal * 0.18 / 1.18).toLocaleString('en-IN')}`, 470, totalsY + 28, { width: 70, align: 'right' });
-
+        totalsY += 16;
         doc
           .strokeColor('#E1E3DF')
           .lineWidth(1)
-          .moveTo(360, totalsY + 44)
-          .lineTo(550, totalsY + 44)
+          .moveTo(340, totalsY)
+          .lineTo(550, totalsY)
           .stroke();
 
+        totalsY += 6;
         doc
           .fillColor('#140D1F')
           .fontSize(11)
           .font('Helvetica-Bold')
-          .text('Grand Total:', 360, totalsY + 50, { width: 100, align: 'right' })
-          .text(`INR ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY + 50, { width: 70, align: 'right' });
+          .text('Grand Total:', 340, totalsY, { width: 120, align: 'right' })
+          .text(`${currSym} ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
 
         // 5. LEGAL NOTICE & FOOTER
         let footerY = Math.max(totalsY + 80, 680);
