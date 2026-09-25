@@ -3,7 +3,6 @@
 import React, { useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { sampleReviews } from '@/lib/placeholder-data';
 import { useCart } from '@/context/CartContext';
 import { useStore } from '@/context/StoreContext';
 import { useLocale } from '@/context/CurrencyContext';
@@ -527,7 +526,7 @@ export default function ProductDetailPage({
               }`}
             >
               <i className="fa-solid fa-star text-[13px]" />
-              <span>Reviews ({sampleReviews.length})</span>
+              <span>Rating &amp; Reviews</span>
             </button>
           </div>
 
@@ -640,35 +639,31 @@ export default function ProductDetailPage({
 
             {activeTab === 'reviews' && (
               <div className="space-y-6">
-                <div className="flex items-center gap-3 pb-5 border-b border-gray-100">
-                  <div className="flex items-center gap-0.5 text-[#E59819]">
-                    {[...Array(5)].map((_, i) => (
-                      <i key={i} className="fa-solid fa-star text-[14px] leading-none" />
-                    ))}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1 text-[#E59819]">
+                      {[...Array(5)].map((_, i) => (
+                        <i key={i} className="fa-solid fa-star text-[16px] leading-none" />
+                      ))}
+                    </div>
+                    <span className="font-bold text-[18px] text-[#111111]">
+                      {product.rating || 5.0} out of 5
+                    </span>
+                    <span className="text-gray-300">|</span>
+                    <span className="text-[13px] text-gray-500 font-medium">
+                      Authentic Sanctified Rating
+                    </span>
                   </div>
-                  <span className="font-bold text-[16px] text-[#111111]">
-                    {product.rating || 4.9} out of 5
-                  </span>
-                  <span className="text-[12.5px] text-gray-500">
-                    Based on {sampleReviews.length} verified sanctified buyer experiences
-                  </span>
                 </div>
 
-                <div className="space-y-4">
-                  {sampleReviews.map((rev) => (
-                    <div key={rev.id} className="border-b border-gray-100 pb-5 last:border-0 space-y-2 text-[13px]">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[#111111]">{rev.author}</span>
-                        <span className="text-[11px] text-gray-400">{rev.date}</span>
-                      </div>
-                      <div className="flex items-center gap-0.5 text-[#E59819]">
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <i key={i} className="fa-solid fa-star text-[11.5px] leading-none" />
-                        ))}
-                      </div>
-                      <p className="text-gray-700 italic leading-relaxed">&ldquo;{rev.comment}&rdquo;</p>
-                    </div>
-                  ))}
+                <div className="bg-[#FAF9F5] border border-gray-200/80 rounded-2xl p-6 sm:p-8 text-center space-y-2.5">
+                  <div className="w-12 h-12 rounded-full bg-white text-amber-600 flex items-center justify-center mx-auto shadow-2xs border border-gray-200/60">
+                    <i className="fa-solid fa-certificate text-lg" />
+                  </div>
+                  <h5 className="font-bold text-[#111111] text-[15px]">Consecrated &amp; Authenticated</h5>
+                  <p className="text-[13px] text-gray-500 max-w-md mx-auto leading-relaxed">
+                    Each sacred item is spiritually consecrated before dispatch. Verified customers receive an official Certificate of Authenticity and Tax Invoice with their delivery.
+                  </p>
                 </div>
               </div>
             )}

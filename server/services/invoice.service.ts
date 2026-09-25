@@ -126,7 +126,7 @@ export class InvoiceService {
         doc
           .text(`Phone: ${order.phone || 'N/A'}`, 320, buyerAddressY + 2)
           .text(`Email: ${order.email || 'N/A'}`, 320, buyerAddressY + 14)
-          .text(`Payment: ${order.paymentMethod} (${order.paymentStatus || 'Confirmed'})`, 320, buyerAddressY + 26);
+          .text(`Payment: ${order.paymentMethod || 'Online Payment'} (${order.paymentStatus || 'Confirmed'})`, 320, buyerAddressY + 26);
 
         // 3. LINE ITEMS TABLE
         const tableTop = Math.max(doc.y + 20, 215);
@@ -154,10 +154,19 @@ export class InvoiceService {
           .stroke();
 
         let currentY = tableTop + 28;
+        const items = order.items && order.items.length > 0 ? order.items : [
+          {
+            title: 'Consecrated Feng Shui Sacred Item',
+            price: Number(order.totalAmount) || 2433,
+            quantity: 1,
+          },
+        ];
 
-        order.items.forEach((item, index) => {
+        items.forEach((item, index) => {
           const itemTitle = item.title || item.productName || 'Consecrated Feng Shui Item';
-          const lineTotal = item.price * item.quantity;
+          const itemPrice = Number(item.price) || 0;
+          const itemQty = Number(item.quantity) || 1;
+          const lineTotal = itemPrice * itemQty;
 
           doc
             .fillColor('#666666')
@@ -174,8 +183,8 @@ export class InvoiceService {
 
           doc
             .font('Helvetica')
-            .text(`${item.quantity}`, 360, currentY, { width: 40, align: 'center' })
-            .text(`INR ${item.price.toLocaleString('en-IN')}`, 410, currentY, { width: 60, align: 'right' })
+            .text(`${itemQty}`, 360, currentY, { width: 40, align: 'center' })
+            .text(`INR ${itemPrice.toLocaleString('en-IN')}`, 410, currentY, { width: 60, align: 'right' })
             .font('Helvetica-Bold')
             .text(`INR ${lineTotal.toLocaleString('en-IN')}`, 480, currentY, { width: 60, align: 'right' });
 
@@ -191,7 +200,8 @@ export class InvoiceService {
         });
 
         // 4. TOTALS SUMMARY BLOCK
-        const totalsY = currentY + 10;
+        const totalAmountVal = Number(order.totalAmount) || items.reduce((acc, it) => acc + ((Number(it.price) || 0) * (Number(it.quantity) || 1)), 0);
+        const totalsY = Math.max(currentY + 10, 320);
 
         doc
           .fillColor('#666666')
@@ -200,7 +210,7 @@ export class InvoiceService {
           .text('Subtotal:', 360, totalsY, { width: 100, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#222222')
-          .text(`INR ${order.totalAmount.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
+          .text(`INR ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
 
         doc
           .font('Helvetica')
@@ -216,7 +226,7 @@ export class InvoiceService {
           .text('GST (18% Included):', 360, totalsY + 28, { width: 100, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#222222')
-          .text(`INR ${Math.round(order.totalAmount * 0.18 / 1.18).toLocaleString('en-IN')}`, 470, totalsY + 28, { width: 70, align: 'right' });
+          .text(`INR ${Math.round(totalAmountVal * 0.18 / 1.18).toLocaleString('en-IN')}`, 470, totalsY + 28, { width: 70, align: 'right' });
 
         doc
           .strokeColor('#E1E3DF')
@@ -230,10 +240,14 @@ export class InvoiceService {
           .fontSize(11)
           .font('Helvetica-Bold')
           .text('Grand Total:', 360, totalsY + 50, { width: 100, align: 'right' })
-          .text(`INR ${order.totalAmount.toLocaleString('en-IN')}`, 470, totalsY + 50, { width: 70, align: 'right' });
+          .text(`INR ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY + 50, { width: 70, align: 'right' });
 
         // 5. LEGAL NOTICE & FOOTER
-        const footerY = 700;
+        let footerY = Math.max(totalsY + 80, 680);
+        if (footerY > 740) {
+          doc.addPage();
+          footerY = 700;
+        }
 
         doc
           .strokeColor('#E1E3DF')

@@ -60,27 +60,27 @@ export default function AdminProductsPage() {
     }
   }, []);
 
-  // Form State
-  const initialForm: Omit<Product, 'id'> = {
+  // Clean Form State for Adding New Products
+  const emptyProductForm: Omit<Product, 'id'> = {
     name: '',
     maker: 'Miracle Feng Shui Studio',
-    price: 999,
-    originalPrice: 1499,
-    discount: '33% off',
-    stock: 50,
+    price: 0,
+    originalPrice: undefined,
+    discount: '',
+    stock: undefined,
     bestseller: false,
     etsyPick: false,
     freeShipping: true,
     rating: 5,
-    reviewCount: 1,
+    reviewCount: 0,
     category: 'Feng Shui Decor',
-    images: ['https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80'],
+    images: [],
     description: '',
-    itemDetails: ['Handcrafted with authentic sacred blessing', 'Purified with sandalwood incense before delivery'],
+    itemDetails: [],
   };
 
   const [selectedStockFilter, setSelectedStockFilter] = useState<'All' | 'Low' | 'OutOfStock' | 'InStock'>('All');
-  const [formData, setFormData] = useState<Omit<Product, 'id'>>(initialForm);
+  const [formData, setFormData] = useState<Omit<Product, 'id'>>(emptyProductForm);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -238,7 +238,7 @@ export default function AdminProductsPage() {
 
   const openAddModal = () => {
     setEditingProduct(null);
-    setFormData(initialForm);
+    setFormData(emptyProductForm);
     setModalOpen(true);
   };
 
@@ -248,7 +248,7 @@ export default function AdminProductsPage() {
       name: prod.name,
       maker: prod.maker || 'Miracle Feng Shui Studio',
       price: prod.price,
-      originalPrice: prod.originalPrice || prod.price,
+      originalPrice: prod.originalPrice || undefined,
       discount: prod.discount || '',
       stock: prod.stock !== undefined ? prod.stock : 50,
       bestseller: !!prod.bestseller,
@@ -257,22 +257,42 @@ export default function AdminProductsPage() {
       rating: prod.rating || 5,
       reviewCount: prod.reviewCount || 1,
       category: prod.category || 'Feng Shui Decor',
-      images: prod.images?.length ? prod.images : ['https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80'],
+      images: prod.images?.length ? prod.images : [],
       description: prod.description || '',
-      itemDetails: prod.itemDetails?.length ? prod.itemDetails : ['Temple blessed authentic talisman'],
+      itemDetails: prod.itemDetails?.length ? prod.itemDetails : [],
     });
     setModalOpen(true);
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim()) return;
+    if (!formData.name.trim()) {
+      showToast('Please enter a product title');
+      return;
+    }
+    if (!formData.price || formData.price <= 0) {
+      showToast('Please enter a valid selling price');
+      return;
+    }
+
+    const payload: Omit<Product, 'id'> = {
+      ...formData,
+      name: formData.name.trim(),
+      maker: formData.maker.trim() || 'Miracle Feng Shui Studio',
+      price: Number(formData.price),
+      originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
+      discount: formData.discount ? formData.discount.trim() : '',
+      stock: formData.stock !== undefined ? Number(formData.stock) : 50,
+      images: formData.images && formData.images.length > 0 ? formData.images : ['/images/miracle.jpeg'],
+      description: formData.description ? formData.description.trim() : '',
+      itemDetails: formData.itemDetails?.length ? formData.itemDetails : ['Temple blessed authentic talisman', 'Purified with sandalwood incense before delivery'],
+    };
 
     if (editingProduct) {
-      updateProduct(editingProduct.id, formData);
+      updateProduct(editingProduct.id, payload);
       showToast('Product updated successfully!');
     } else {
-      addProduct(formData);
+      addProduct(payload);
       showToast('New product added to catalog!');
     }
     setModalOpen(false);
@@ -829,9 +849,10 @@ export default function AdminProductsPage() {
                     type="number"
                     required
                     min={1}
-                    value={formData.price}
+                    placeholder="e.g. 999"
+                    value={formData.price && formData.price > 0 ? formData.price : ''}
                     onChange={(e) =>
-                      setFormData({ ...formData, price: Number(e.target.value) })
+                      setFormData({ ...formData, price: e.target.value === '' ? 0 : Number(e.target.value) })
                     }
                     className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-black"
                   />
@@ -843,9 +864,10 @@ export default function AdminProductsPage() {
                   <input
                     type="number"
                     min={1}
-                    value={formData.originalPrice || ''}
+                    placeholder="e.g. 1499"
+                    value={formData.originalPrice ? formData.originalPrice : ''}
                     onChange={(e) =>
-                      setFormData({ ...formData, originalPrice: Number(e.target.value) })
+                      setFormData({ ...formData, originalPrice: e.target.value === '' ? undefined : Number(e.target.value) })
                     }
                     className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-black"
                   />
@@ -856,7 +878,7 @@ export default function AdminProductsPage() {
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. 30% off"
+                    placeholder="e.g. 33% off"
                     value={formData.discount || ''}
                     onChange={(e) =>
                       setFormData({ ...formData, discount: e.target.value })
@@ -873,11 +895,12 @@ export default function AdminProductsPage() {
                     type="number"
                     min={0}
                     required
-                    value={formData.stock !== undefined ? formData.stock : 50}
+                    placeholder="e.g. 50"
+                    value={formData.stock !== undefined ? formData.stock : ''}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        stock: Math.max(0, parseInt(e.target.value) || 0),
+                        stock: e.target.value === '' ? undefined : Math.max(0, parseInt(e.target.value) || 0),
                       })
                     }
                     className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-black"
@@ -911,6 +934,7 @@ export default function AdminProductsPage() {
                   </label>
                   <input
                     type="text"
+                    placeholder="e.g. Miracle Feng Shui Studio"
                     value={formData.maker}
                     onChange={(e) =>
                       setFormData({ ...formData, maker: e.target.value })
@@ -924,13 +948,11 @@ export default function AdminProductsPage() {
               <div>
                 <ImageUploadField
                   label="Product Image"
-                  required
                   value={formData.images[0] || ''}
-                  onChange={(url) => setFormData({ ...formData, images: [url] })}
+                  onChange={(url) => setFormData({ ...formData, images: url ? [url] : [] })}
                   helpText="Upload product image file (PNG, JPG, or WEBP)."
                 />
               </div>
-
 
               {/* Description */}
               <div>
@@ -939,11 +961,11 @@ export default function AdminProductsPage() {
                 </label>
                 <textarea
                   rows={3}
-                  value={formData.description}
+                  value={formData.description || ''}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  placeholder="Blessed by Taoist masters to invite continuous wealth and good fortune..."
+                  placeholder="Enter product description, spiritual blessing details, materials..."
                   className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 focus:outline-hidden focus:border-black"
                 />
               </div>

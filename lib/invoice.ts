@@ -383,29 +383,81 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
 
 export function printIsolatedTaxInvoice(data: TaxInvoiceData): void {
   if (typeof window === 'undefined') return;
-  const invoiceHtml = generateTaxInvoiceHTML(data);
-  const printWindow = window.open('', '_blank');
-  if (printWindow) {
-    printWindow.document.open();
-    printWindow.document.write(invoiceHtml);
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => {
-      printWindow.print();
-    }, 400);
-  }
+
+  const orderNum = data.orderId || 'MFS-100000';
+  const query = new URLSearchParams({
+    customerName: data.customerName || 'Valued Customer',
+    total: String(data.totalAmount || 0),
+    address: data.deliveryAddress || '',
+    paymentMethod: data.paymentMethod || 'Online Payment',
+    itemTitle: data.items?.[0]?.name || 'Consecrated Feng Shui Item',
+    view: '1',
+  }).toString();
+
+  // Opens genuine PDF directly in browser / iOS Safari reader
+  window.open(`/api/orders/${encodeURIComponent(orderNum)}/invoice?${query}`, '_blank');
 }
 
-export function downloadStandaloneTaxInvoice(data: TaxInvoiceData): void {
+export async function downloadStandaloneTaxInvoice(data: TaxInvoiceData): Promise<void> {
   if (typeof window === 'undefined') return;
-  const invoiceHtml = generateTaxInvoiceHTML(data);
-  const blob = new Blob([invoiceHtml], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
+
+  const orderNum = data.orderId || 'MFS-100000';
+  const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  try {
+    // 1. Attempt POST to API endpoint to receive verified PDF binary
+    const res = await fetch(`/api/orders/${encodeURIComponent(orderNum)}/invoice?download=1`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      const blob = await res.blob();
+      const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+      const url = URL.createObjectURL(pdfBlob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Tax-Invoice-${orderNum}.pdf`;
+
+      if (isMobile) {
+        link.target = '_blank';
+      }
+
+      document.body.appendChild(link);
+      link.click();
+
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 4000);
+      return;
+    }
+  } catch (err) {
+    console.warn('PDF POST generation failed, falling back to direct PDF GET endpoint:', err);
+  }
+
+  // 2. Direct fallback GET request for genuine PDF
+  const query = new URLSearchParams({
+    customerName: data.customerName || 'Valued Customer',
+    total: String(data.totalAmount || 0),
+    address: data.deliveryAddress || '',
+    paymentMethod: data.paymentMethod || 'Online Payment',
+    itemTitle: data.items?.[0]?.name || 'Consecrated Feng Shui Item',
+    download: '1',
+  }).toString();
+
+  const getUrl = `/api/orders/${encodeURIComponent(orderNum)}/invoice?${query}`;
   const link = document.createElement('a');
-  link.href = url;
-  link.download = `Tax-Invoice-${data.orderId}.html`;
+  link.href = getUrl;
+  link.download = `Tax-Invoice-${orderNum}.pdf`;
+  if (isMobile) {
+    link.target = '_blank';
+  }
   document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    document.body.removeChild(link);
+  }, 2000);
 }

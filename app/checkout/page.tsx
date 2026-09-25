@@ -215,12 +215,14 @@ export default function CheckoutPage() {
           throw new Error(data.error || 'Failed to place COD order');
         }
 
+        const placedOrder = data.data;
+        const orderNum = placedOrder?.orderNumber || placedOrder?.id || '';
         if (typeof window !== 'undefined') {
-          sessionStorage.setItem('last_order', JSON.stringify(data.data));
+          sessionStorage.setItem('last_order', JSON.stringify(placedOrder));
         }
 
         if (clearCart) clearCart();
-        router.push('/order-confirmation');
+        router.push(orderNum ? `/order-confirmation?orderNumber=${encodeURIComponent(orderNum)}` : '/order-confirmation');
         return;
       }
 
@@ -242,11 +244,13 @@ export default function CheckoutPage() {
       if (!scriptLoaded || !(window as any).Razorpay) {
         // Fallback demo simulator if external Razorpay CDN is unreachable
         console.warn('Razorpay SDK unavailable; fallback to direct confirmation');
+        const fallbackOrder = orderData.data;
+        const fallbackNum = fallbackOrder?.orderNumber || fallbackOrder?.orderId || orderId;
         if (typeof window !== 'undefined') {
-          sessionStorage.setItem('last_order', JSON.stringify(orderData.data));
+          sessionStorage.setItem('last_order', JSON.stringify(fallbackOrder));
         }
         if (clearCart) clearCart();
-        router.push('/order-confirmation');
+        router.push(fallbackNum ? `/order-confirmation?orderNumber=${encodeURIComponent(fallbackNum)}` : '/order-confirmation');
         return;
       }
 
@@ -283,12 +287,14 @@ export default function CheckoutPage() {
               throw new Error(verifyData.error || 'Payment verification failed');
             }
 
+            const verifiedOrder = verifyData.data;
+            const verifiedNum = verifiedOrder?.orderNumber || verifiedOrder?.id || orderId;
             if (typeof window !== 'undefined') {
-              sessionStorage.setItem('last_order', JSON.stringify(verifyData.data));
+              sessionStorage.setItem('last_order', JSON.stringify(verifiedOrder));
             }
 
             if (clearCart) clearCart();
-            router.push('/order-confirmation');
+            router.push(verifiedNum ? `/order-confirmation?orderNumber=${encodeURIComponent(verifiedNum)}` : '/order-confirmation');
           } catch (err: any) {
             setCheckoutError(err.message || 'Payment verification error');
             setIsProcessing(false);

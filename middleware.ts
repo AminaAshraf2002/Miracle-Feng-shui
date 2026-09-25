@@ -16,14 +16,18 @@ export async function middleware(req: NextRequest) {
   });
 
   const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/api/admin');
+  const isInvoiceRoute = pathname.includes('/invoice');
+  const isOrderDetailRoute = pathname.startsWith('/api/orders/') && !pathname.includes('/status');
   const isProtectedCustomerRoute =
-    pathname === '/checkout' ||
-    pathname.startsWith('/my-orders') ||
-    pathname.startsWith('/orders') ||
-    pathname.startsWith('/api/cart') ||
-    pathname.startsWith('/api/orders') ||
-    pathname.startsWith('/api/favorites') ||
-    pathname.startsWith('/api/addresses');
+    !isInvoiceRoute &&
+    !isOrderDetailRoute &&
+    (pathname === '/checkout' ||
+      pathname.startsWith('/my-orders') ||
+      pathname.startsWith('/orders') ||
+      pathname.startsWith('/api/cart') ||
+      pathname.startsWith('/api/orders') ||
+      pathname.startsWith('/api/favorites') ||
+      pathname.startsWith('/api/addresses'));
 
   // Admin route protection: must have role === 'ADMIN' or verified admin cookie
   if (isAdminRoute) {
