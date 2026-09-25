@@ -1,5 +1,5 @@
 import PDFDocument from 'pdfkit';
-import { calculateOrderTax } from '../../lib/tax';
+import { calculateOrderTax, TAX_CONFIG } from '../../lib/tax';
 
 export interface InvoiceItem {
   id?: string;
@@ -101,12 +101,11 @@ export class InvoiceService {
           .fillColor('#222222')
           .fontSize(9)
           .font('Helvetica-Bold')
-          .text('Miracle Feng Shui Pvt. Ltd.', 45, colTop + 12)
+          .text(TAX_CONFIG.seller.legalName, 45, colTop + 12)
           .font('Helvetica')
-          .text('108 Harmony Pavilion, Lotus Walk', 45, colTop + 24)
-          .text('Mumbai, Maharashtra 400053, India', 45, colTop + 36)
-          .text('Email: care.miraclefengshui@gmail.com', 45, colTop + 48)
-          .text('GSTIN: 27AAECM1080F1Z2', 45, colTop + 60);
+          .text(TAX_CONFIG.seller.address, 45, colTop + 24, { width: 250 })
+          .text(`Email: ${TAX_CONFIG.seller.email}`, 45, colTop + 48)
+          .text(`GSTIN: ${TAX_CONFIG.seller.gstin}`, 45, colTop + 60);
 
         // Buyer Block
         doc
