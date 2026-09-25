@@ -197,55 +197,6 @@ async function main() {
   }
   console.log('✅ Sample reviews seeded');
 
-  // 7. Seed Sample Orders
-  const existingOrder = await prisma.order.findUnique({
-    where: { orderNumber: 'MFS-82914' },
-  });
-
-  if (!existingOrder && firstProd && secondProd) {
-    await prisma.order.create({
-      data: {
-        orderNumber: 'MFS-82914',
-        userId: admin.id,
-        status: 'PROCESSING',
-        paymentMethod: 'RAZORPAY',
-        paymentStatus: 'PAID',
-        total: 5472,
-        shippingAddress: {
-          name: 'Verified Customer',
-          phone: '+91 98765 43210',
-          line1: 'B-583 Adjacent Park Plaza, Sushant Lok Phase-I',
-          city: 'Gurgaon',
-          state: 'Haryana',
-          pincode: '122009',
-          country: 'India',
-        },
-
-        courier: 'BlueDart Express',
-        trackingNumber: 'IND984210984IN',
-        items: {
-          create: [
-            {
-              productId: firstProd.id,
-              title: firstProd.title,
-              price: firstProd.price,
-              quantity: 1,
-              image: firstProd.images[0] || '',
-            },
-            {
-              productId: secondProd.id,
-              title: secondProd.title,
-              price: secondProd.price,
-              quantity: 1,
-              image: secondProd.images[0] || '',
-            },
-          ],
-        },
-      },
-    });
-    console.log('✅ Sample initial orders seeded');
-  }
-
   console.log('🎉 Seeding completed successfully!');
 }
 
