@@ -75,355 +75,167 @@ export default function AdminLoginPage() {
     setError('');
   };
 
-  const montserrat = "'Montserrat', sans-serif";
-  const bebas = "'Bebas Neue', cursive, sans-serif";
-
   return (
     <div
-      style={{
-        minHeight: '100vh',
-        background: '#EFEFEF',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem 1.5rem',
-        fontFamily: montserrat,
-      }}
+      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      className="min-h-screen bg-[#F0F1F5] flex items-center justify-center p-4 sm:p-6 md:p-8"
     >
-      {/* Card wrapper */}
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '960px',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          borderRadius: '20px',
-          overflow: 'hidden',
-          background: '#ffffff',
-          boxShadow: '0 8px 48px rgba(0,0,0,0.10)',
-        }}
-      >
+      {/* Responsive Card Container */}
+      <div className="w-full max-w-md md:max-w-4xl bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden grid grid-cols-1 md:grid-cols-2 my-auto animate-in fade-in zoom-in-95 duration-200">
 
-        {/* ── LEFT: White Form Panel ── */}
-        <div
-          style={{
-            background: '#ffffff',
-            padding: '1.5rem 2.5rem 1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 0,
-          }}
-        >
+        {/* ── LEFT: Form Panel ── */}
+        <div className="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
           {/* Brand logo */}
-          <Link href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.2rem' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '50%', overflow: 'hidden', border: '1px solid #e5e5e5', flexShrink: 0 }}>
-              <img src="/images/miracle.jpeg" alt="Miracle Feng Shui" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-5 no-underline">
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 shrink-0">
+              <img src="/images/miracle.jpeg" alt="Miracle Feng Shui" className="w-full h-full object-cover" />
             </div>
-            <span style={{ fontFamily: montserrat, fontWeight: 700, fontSize: '0.82rem', color: '#111', letterSpacing: '0.01em' }}>
+            <span className="font-bold text-sm text-gray-900 tracking-tight">
               Miracle Feng Shui
             </span>
           </Link>
 
           {/* Heading */}
           <h1
-            style={{
-              fontFamily: bebas,
-              fontSize: '2.8rem',
-              color: '#111111',
-              fontWeight: 400,
-              letterSpacing: '0.04em',
-              lineHeight: 1.05,
-              margin: '0 0 0.25rem',
-            }}
+            style={{ fontFamily: "'Bebas Neue', 'Montserrat', sans-serif" }}
+            className="text-3xl sm:text-4xl text-gray-900 tracking-wide font-normal mb-1 leading-none"
           >
             Admin Sign In
           </h1>
-          <p style={{ fontFamily: montserrat, fontSize: '0.78rem', color: '#888', fontWeight: 400, margin: '0 0 1rem' }}>
+          <p className="text-xs text-gray-500 mb-5 leading-relaxed">
             Access your store dashboard &amp; management tools
           </p>
 
-          {/* Error */}
+          {/* Error Alert */}
           {error && (
-            <div
-              style={{
-                background: '#fff5f5',
-                border: '1px solid #fecaca',
-                color: '#dc2626',
-                padding: '0.65rem 1rem',
-                borderRadius: '10px',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                marginBottom: '1.25rem',
-                fontFamily: montserrat,
-              }}
-            >
-              <i className="fa-solid fa-circle-exclamation" style={{ flexShrink: 0 }} />
-              {error}
+            <div className="bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 mb-4 animate-in fade-in">
+              <i className="fa-solid fa-circle-exclamation shrink-0" />
+              <span>{error}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
-
+          <form onSubmit={handleLogin} className="space-y-4 text-left">
             {/* Email */}
             <div>
-              <label style={{ display: 'block', fontFamily: montserrat, fontSize: '0.75rem', fontWeight: 600, color: '#222', marginBottom: '0.4rem' }}>
-                Email<span style={{ color: '#dc2626' }}>*</span>
+              <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                Email<span className="text-rose-600">*</span>
               </label>
-              <div style={{ position: 'relative' }}>
+              <div className="relative">
                 <input
                   type="text"
                   required
                   placeholder="admin@miraclefengshui.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  style={{
-                    width: '100%',
-                    background: '#F8F8F8',
-                    border: '1.5px solid #E8E8E8',
-                    borderRadius: '10px',
-                    padding: '0.72rem 2.5rem 0.72rem 1rem',
-                    fontSize: '0.83rem',
-                    color: '#111',
-                    fontFamily: montserrat,
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    transition: 'border-color 0.2s, background 0.2s',
-                  }}
-                  onFocus={e => { e.target.style.borderColor = '#111'; e.target.style.background = '#fff'; }}
-                  onBlur={e => { e.target.style.borderColor = '#E8E8E8'; e.target.style.background = '#F8F8F8'; }}
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:border-black transition-all"
                 />
-                <i className="fa-regular fa-envelope" style={{ position: 'absolute', right: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: '#bbb', fontSize: '0.75rem', pointerEvents: 'none' }} />
+                <i className="fa-regular fa-envelope absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label style={{ display: 'block', fontFamily: montserrat, fontSize: '0.75rem', fontWeight: 600, color: '#222', marginBottom: '0.4rem' }}>
-                Password<span style={{ color: '#dc2626' }}>*</span>
+              <label className="block text-xs font-bold text-gray-700 mb-1.5">
+                Password<span className="text-rose-600">*</span>
               </label>
-              <div style={{ position: 'relative' }}>
+              <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    background: '#F8F8F8',
-                    border: '1.5px solid #E8E8E8',
-                    borderRadius: '10px',
-                    padding: '0.72rem 2.5rem 0.72rem 1rem',
-                    fontSize: '0.83rem',
-                    color: '#111',
-                    fontFamily: montserrat,
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    transition: 'border-color 0.2s, background 0.2s',
-                  }}
-                  onFocus={e => { e.target.style.borderColor = '#111'; e.target.style.background = '#fff'; }}
-                  onBlur={e => { e.target.style.borderColor = '#E8E8E8'; e.target.style.background = '#F8F8F8'; }}
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:border-black transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#bbb', cursor: 'pointer', padding: '0.25rem', fontSize: '0.75rem' }}
-                  aria-label={showPassword ? 'Hide' : 'Show'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-1 cursor-pointer transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  <i className={`fa-regular ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} />
+                  <i className={`fa-regular ${showPassword ? 'fa-eye-slash' : 'fa-eye'} text-xs`} />
                 </button>
               </div>
             </div>
 
-            {/* Sign In button — black pill like reference */}
+            {/* Sign In button */}
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: '100%',
-                background: loading ? '#444' : '#111111',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '10px',
-                padding: '0.9rem 1.5rem',
-                fontSize: '0.82rem',
-                fontFamily: montserrat,
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                cursor: loading ? 'default' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
-                marginTop: '0.1rem',
-                transition: 'background 0.2s',
-                opacity: loading ? 0.7 : 1,
-              }}
-              onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#333'; }}
-              onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#111111'; }}
+              style={{ backgroundColor: '#111111', color: '#ffffff' }}
+              className="w-full py-3 px-5 rounded-xl text-xs sm:text-sm font-bold tracking-wider uppercase bg-[#111111] hover:bg-black text-white flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-60 mt-1"
             >
               {loading ? (
-                <><i className="fa-solid fa-circle-notch fa-spin" /><span>Signing in...</span></>
+                <>
+                  <i className="fa-solid fa-circle-notch fa-spin text-xs" />
+                  <span>Signing in...</span>
+                </>
               ) : (
-                <><span>Sign In</span><i className="fa-solid fa-arrow-right" style={{ fontSize: '0.7rem' }} /></>
+                <>
+                  <span>Sign In</span>
+                  <i className="fa-solid fa-arrow-right text-xs" />
+                </>
               )}
             </button>
           </form>
 
-          {/* Demo box */}
-          <div
-            style={{
-              marginTop: '1rem',
-              background: '#F8F8F8',
-              border: '1.5px solid #E8E8E8',
-              borderRadius: '10px',
-              padding: '0.75rem 1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '0.75rem',
-            }}
-          >
+          {/* Demo credentials box */}
+          <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center justify-between gap-3">
             <div>
-              <span style={{ fontFamily: montserrat, fontWeight: 600, fontSize: '0.72rem', color: '#111', display: 'block', marginBottom: '0.15rem' }}>
-                Demo credentials
-              </span>
-              <span style={{ fontFamily: montserrat, fontSize: '0.68rem', color: '#999' }}>
-                admin@miraclefengshui.com · admin
-              </span>
+              <span className="block font-bold text-[11px] text-gray-900">Demo credentials</span>
+              <span className="block text-[10.5px] text-gray-500 font-mono">admin@miraclefengshui.com &bull; admin</span>
             </div>
             <button
               type="button"
               onClick={handleFillDemo}
-              style={{
-                background: '#fff',
-                border: '1.5px solid #ddd',
-                borderRadius: '8px',
-                padding: '0.38rem 0.8rem',
-                fontFamily: montserrat,
-                fontWeight: 600,
-                fontSize: '0.68rem',
-                color: '#555',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'border-color 0.2s, color 0.2s',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#111'; (e.currentTarget as HTMLButtonElement).style.color = '#111'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#ddd'; (e.currentTarget as HTMLButtonElement).style.color = '#555'; }}
+              className="bg-white border border-gray-300 hover:border-black text-gray-700 hover:text-black px-2.5 py-1.5 rounded-lg text-[10.5px] font-bold transition-colors cursor-pointer shrink-0 shadow-2xs"
             >
               Auto-fill
             </button>
           </div>
 
           {/* Back link */}
-          <div style={{ marginTop: '1.5rem' }}>
+          <div className="mt-5">
             <Link
               href="/"
-              style={{ fontFamily: montserrat, fontSize: '0.75rem', fontWeight: 500, color: '#aaa', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', transition: 'color 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#111')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#aaa')}
+              className="text-xs font-semibold text-gray-400 hover:text-black inline-flex items-center gap-1.5 transition-colors no-underline"
             >
-              <i className="fa-solid fa-arrow-left" style={{ fontSize: '0.65rem' }} />
-              Back to store
+              <i className="fa-solid fa-arrow-left text-[10px]" />
+              <span>Back to store</span>
             </Link>
           </div>
         </div>
 
-        {/* ── RIGHT: Image Panel ── */}
-        <div
-          style={{
-            position: 'relative',
-            overflow: 'hidden',
-            minHeight: '360px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            borderRadius: '0 20px 20px 0',
-          }}
-        >
-          {/* Image */}
+        {/* ── RIGHT: Image Panel (Hidden on small mobile, visible on tablet/desktop) ── */}
+        <div className="hidden md:flex relative overflow-hidden min-h-[420px] flex-col justify-end p-8 bg-[#161619] text-white">
           <img
-            src="https://images.squarespace-cdn.com/content/v1/6465e9f0c32fb30720d59d36/1724123773365-097MNMLASST7ODU3GX9L/feng-shui-front-door-mirror-tips.jpg"
+            src="/images/feng_shui_hero_banner.jpg"
             alt="Feng Shui sanctuary"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
+            className="absolute inset-0 w-full h-full object-cover brightness-[0.6] contrast-[1.1]"
           />
-          {/* Gradient overlay — dark at bottom like reference */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.05) 100%)',
-            }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-          {/* Bottom content */}
-          <div style={{ position: 'relative', zIndex: 2, padding: '2rem 2rem 2.25rem' }}>
+          <div className="relative z-10 space-y-2.5">
             <h2
-              style={{
-                fontFamily: bebas,
-                fontSize: '2.4rem',
-                color: '#ffffff',
-                fontWeight: 400,
-                letterSpacing: '0.04em',
-                lineHeight: 1.1,
-                margin: '0 0 0.6rem',
-              }}
+              style={{ fontFamily: "'Bebas Neue', 'Montserrat', sans-serif" }}
+              className="text-3xl lg:text-4xl text-white tracking-wide font-normal leading-none"
             >
               Your Admin<br />Sanctuary Awaits
             </h2>
-            <p
-              style={{
-                fontFamily: montserrat,
-                fontSize: '0.76rem',
-                color: 'rgba(255,255,255,0.65)',
-                fontWeight: 400,
-                lineHeight: 1.7,
-                margin: '0 0 1.25rem',
-                maxWidth: '260px',
-              }}
-            >
+            <p className="text-xs text-white/70 leading-relaxed max-w-xs">
               Manage products, harmonize your catalog, and oversee fulfillment in one clean workspace.
             </p>
 
-            {/* Pill badges — like reference */}
-            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-              {[
-                { icon: 'fa-circle-check', label: 'Products & Orders' },
-                { icon: 'fa-layer-group', label: 'Layout Manager' },
-              ].map(badge => (
-                <div
-                  key={badge.label}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    background: 'rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(255,255,255,0.18)',
-                    borderRadius: '999px',
-                    padding: '0.4rem 0.9rem',
-                    fontFamily: montserrat,
-                    fontSize: '0.68rem',
-                    fontWeight: 600,
-                    color: 'rgba(255,255,255,0.75)',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  <i className={`fa-solid ${badge.icon}`} style={{ fontSize: '0.6rem' }} />
-                  {badge.label}
-                </div>
-              ))}
+            <div className="flex gap-2 flex-wrap pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10.5px] font-semibold text-white/85 backdrop-blur-xs">
+                <i className="fa-solid fa-circle-check text-emerald-400 text-[10px]" />
+                <span>Products &amp; Orders</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10.5px] font-semibold text-white/85 backdrop-blur-xs">
+                <i className="fa-solid fa-layer-group text-amber-300 text-[10px]" />
+                <span>Layout Manager</span>
+              </div>
             </div>
           </div>
         </div>
