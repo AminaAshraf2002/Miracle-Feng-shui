@@ -67,6 +67,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Sync NextAuth session with local user status
   useEffect(() => {
+    if (status === 'loading') return; // Don't clear anything during session hydration
     if (status === 'authenticated' && session?.user) {
       setUserLoggedInState(true);
       try {
@@ -75,15 +76,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error(e);
       }
     } else if (status === 'unauthenticated') {
-      setUserLoggedInState(false);
-      setItems([]);
-      setFavorites([]);
-      try {
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(false));
-        localStorage.removeItem(CART_STORAGE_KEY);
-        localStorage.removeItem(FAV_STORAGE_KEY);
-      } catch (e) {
-        console.error(e);
+      // Only clear if we were previously logged in (explicit logout)
+      const prevAuth = (() => { try { return localStorage.getItem(USER_STORAGE_KEY) === 'true'; } catch { return false; } })();
+      if (prevAuth) {
+        setUserLoggedInState(false);
+        setItems([]);
+        setFavorites([]);
+        try {
+          localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(false));
+          localStorage.removeItem(CART_STORAGE_KEY);
+          localStorage.removeItem(FAV_STORAGE_KEY);
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   }, [status, session]);

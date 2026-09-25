@@ -142,6 +142,9 @@ export const orderRepository = {
         items: {
           include: { product: true },
         },
+        user: {
+          select: { id: true, name: true, email: true, phone: true },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });

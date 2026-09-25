@@ -129,7 +129,7 @@ export default function OrderConfirmationPage() {
     order?.fullName ||
     (typeof order?.shippingAddress === 'object' ? order?.shippingAddress?.name : undefined) ||
     session?.user?.name ||
-    (session?.user?.email ? session.user.email.split('@')[0] : 'leila');
+    (session?.user?.email ? session.user.email.split('@')[0] : 'Valued Customer');
 
   const customerEmail =
     order?.email ||
@@ -157,9 +157,9 @@ export default function OrderConfirmationPage() {
         }, ${shippingAddrObj.city || ''}, ${shippingAddrObj.state || ''} - ${
           shippingAddrObj.pincode || ''
         }, ${shippingAddrObj.country || 'India'}`
-      : 'infopark-1, kochi, Kerala - 686005, India';
+      : 'Address provided at checkout';
 
-  const totalAmount = order?.totalAmount ?? order?.total ?? 1845;
+  const totalAmount = order?.totalAmount ?? order?.total ?? 0;
 
   const paymentMethod =
     order?.paymentMethod === 'COD' || order?.paymentMethod === 'Cash on Delivery'

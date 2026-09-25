@@ -21,7 +21,7 @@ export default function ProductDetailPage({
   const { products } = useStore();
   const { country, formatPrice, t, language } = useLocale();
 
-  const product = products.find((p) => p.id === id) || products[0];
+  const product = products.find((p) => p.id === id || (p as any).slug === id) || products[0];
   const localizedTitle = translateProductTitle(product.name, language, product.id);
   const localizedDescription = translateProductDescription(product.description, language, product.id);
 

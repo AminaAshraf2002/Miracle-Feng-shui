@@ -522,7 +522,7 @@ const SECTIONS_KEY = 'mfs_sections_v2';
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [sections, setSections] = useState<HomeSectionConfig[]>(defaultSections);
-  const [orders, setOrders] = useState<StoreOrder[]>(sampleOrders);
+  const [orders, setOrders] = useState<StoreOrder[]>([]);
   const [categoriesList, setCategoriesList] = useState<
     Array<{
       id: string;
