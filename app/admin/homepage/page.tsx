@@ -1056,8 +1056,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 1: ADD / EDIT HERO SLIDE */}
       {/* ========================================================================= */}
       {slideModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 {slideModal.slide?.id ? 'Edit Hero Slide' : 'Add New Hero Slide'}
@@ -1144,8 +1144,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 2: ADD / EDIT PROSPERITY CARD */}
       {/* ========================================================================= */}
       {prosperityModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 {prosperityModal.card?.id ? 'Edit Prosperity Card' : 'Add Prosperity Card'}
@@ -1246,8 +1246,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 3: ADD / EDIT SPECIAL GIFT ITEM */}
       {/* ========================================================================= */}
       {specialGiftModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 {specialGiftModal.item?.id ? 'Edit Gift Category' : 'Add Gift Category'}
@@ -1348,8 +1348,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 4: ADD / EDIT GUIDE CARD */}
       {/* ========================================================================= */}
       {guideModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 {guideModal.card?.id ? 'Edit Guide Card' : 'Add Guide Card'}
@@ -1476,8 +1476,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 5: ADD / EDIT BLOG ARTICLE */}
       {/* ========================================================================= */}
       {blogModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 {blogModal.post?.id ? 'Edit Blog Article' : 'Add Blog Article'}
@@ -1605,8 +1605,8 @@ export default function AdminHomepageManager() {
       {/* MODAL 6: EDIT SECTION LAYOUT TITLES */}
       {/* ========================================================================= */}
       {editingSection && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 sm:my-10 animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-gray-100">
               <h3 className="font-bold text-lg text-gray-900">
                 Edit Section &bull; {editingSection.name}
