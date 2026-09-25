@@ -1,3 +1,6 @@
+import { calculateOrderTax } from './tax';
+import { TAX_CONFIG } from './tax/config';
+
 export interface TaxInvoiceData {
   orderId: string;
   orderDate: string;
@@ -5,6 +8,10 @@ export interface TaxInvoiceData {
   customerEmail?: string;
   customerPhone?: string;
   deliveryAddress: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
   paymentMethod: string;
   paymentStatus: string;
   totalAmount: number;
@@ -12,6 +19,7 @@ export interface TaxInvoiceData {
     name: string;
     quantity: number;
     price: number;
+    hsnCode?: string;
     maker?: string;
   }>;
 }
@@ -24,24 +32,50 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
     customerEmail,
     customerPhone,
     deliveryAddress,
+    city,
+    state,
+    country = 'India',
+    pincode,
     paymentMethod,
     paymentStatus,
     totalAmount,
     items,
   } = data;
 
-  const itemsRows = items
+  // Run through our standalone Tax Calculation Module
+  const taxBreakdown = calculateOrderTax(
+    items.map((it) => ({
+      name: it.name,
+      price: it.price,
+      quantity: it.quantity,
+      hsnCode: it.hsnCode,
+    })),
+    {
+      country,
+      state: state || (deliveryAddress.includes('Maharashtra') ? 'Maharashtra' : ''),
+      city,
+      pincode,
+      address: deliveryAddress,
+    }
+  );
+
+  const isUAE = taxBreakdown.country === 'AE';
+  const currencySymbol = taxBreakdown.currencySymbol;
+
+  const itemsRows = taxBreakdown.items
     .map(
       (it, idx) => `
       <tr style="border-bottom: 1px solid #e5e7eb;">
-        <td style="padding: 12px 14px; color: #4b5563; font-size: 13px;">${idx + 1}</td>
-        <td style="padding: 12px 14px;">
-          <div style="font-weight: 600; color: #111827; font-size: 13.5px;">${it.name}</div>
-          <div style="font-size: 11.5px; color: #6b7280; margin-top: 2px;">Sold by: ${it.maker || 'Miracle Feng Shui'}</div>
+        <td style="padding: 10px 12px; color: #4b5563; font-size: 12.5px;">${idx + 1}</td>
+        <td style="padding: 10px 12px;">
+          <div style="font-weight: 600; color: #111827; font-size: 13px;">${it.name}</div>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 1px;">HSN: ${it.hsnCode}</div>
         </td>
-        <td style="padding: 12px 14px; text-align: center; color: #374151; font-size: 13px;">${it.quantity}</td>
-        <td style="padding: 12px 14px; text-align: right; color: #374151; font-size: 13px;">₹${it.price.toLocaleString('en-IN')}</td>
-        <td style="padding: 12px 14px; text-align: right; font-weight: 600; color: #111827; font-size: 13.5px;">₹${(it.price * it.quantity).toLocaleString('en-IN')}</td>
+        <td style="padding: 10px 12px; text-align: center; color: #374151; font-size: 12.5px;">${it.quantity}</td>
+        <td style="padding: 10px 12px; text-align: right; color: #374151; font-size: 12.5px;">${currencySymbol}${it.taxableAmount.toLocaleString()}</td>
+        <td style="padding: 10px 12px; text-align: center; color: #374151; font-size: 12px;">${it.taxRate}%</td>
+        <td style="padding: 10px 12px; text-align: right; color: #374151; font-size: 12.5px;">${currencySymbol}${it.taxAmount.toLocaleString()}</td>
+        <td style="padding: 10px 12px; text-align: right; font-weight: 600; color: #111827; font-size: 13px;">${currencySymbol}${it.grossAmount.toLocaleString()}</td>
       </tr>
     `
     )
@@ -63,10 +97,10 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
       -webkit-font-smoothing: antialiased;
     }
     .invoice-wrapper {
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto;
       background: #ffffff;
-      padding: 40px;
+      padding: 36px;
       border: 1px solid #e5e7eb;
       border-radius: 12px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -76,18 +110,18 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
       justify-content: space-between;
       align-items: flex-start;
       border-bottom: 2px solid #111827;
-      padding-bottom: 24px;
-      margin-bottom: 28px;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
     }
     .brand-title {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 22px;
+      font-weight: 800;
       letter-spacing: -0.5px;
       color: #111827;
       text-transform: uppercase;
     }
     .brand-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: #4b5563;
       margin-top: 4px;
       line-height: 1.5;
@@ -96,8 +130,8 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
       text-align: right;
     }
     .tax-badge h2 {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 800;
       color: #111827;
       letter-spacing: 0.5px;
     }
@@ -109,74 +143,78 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
     .meta-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 28px;
-      padding: 16px 20px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
+      gap: 20px;
+      margin-bottom: 24px;
+      font-size: 12.5px;
     }
-    .meta-col h4 {
+    .meta-box {
+      background: #f9fafb;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid #f3f4f6;
+    }
+    .meta-box h4 {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #6b7280;
+      color: #9ca3af;
       margin-bottom: 6px;
       font-weight: 700;
     }
-    .meta-col p {
-      font-size: 13.5px;
-      color: #111827;
-      line-height: 1.45;
+    .meta-box p {
+      color: #374151;
+      line-height: 1.5;
     }
-    table {
+    .meta-box strong {
+      color: #111827;
+    }
+    .items-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
-    th {
+    .items-table th {
       background: #f3f4f6;
-      padding: 10px 14px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #374151;
+      padding: 9px 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border-top: 1px solid #e5e7eb;
+      color: #4b5563;
+      font-weight: 700;
       border-bottom: 1px solid #e5e7eb;
     }
-    .totals-area {
+    .totals-container {
       display: flex;
       justify-content: flex-end;
-      margin-top: 16px;
-      margin-bottom: 32px;
+      margin-top: 12px;
+      margin-bottom: 28px;
     }
     .totals-box {
-      width: 300px;
+      width: 320px;
     }
     .totals-row {
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
+      padding: 5px 0;
+      font-size: 12.5px;
       color: #4b5563;
     }
     .totals-row.grand-total {
       border-top: 2px solid #111827;
       border-bottom: 2px solid #111827;
-      margin-top: 8px;
-      padding: 10px 0;
-      font-size: 16px;
-      font-weight: 700;
+      margin-top: 6px;
+      padding: 8px 0;
+      font-size: 15px;
+      font-weight: 800;
       color: #111827;
     }
     .footer {
       border-top: 1px solid #e5e7eb;
-      padding-top: 20px;
+      padding-top: 16px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      font-size: 11.5px;
+      font-size: 11px;
       color: #6b7280;
     }
     .auth-sign {
@@ -184,13 +222,13 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
     }
     .auth-sign-box {
       border-bottom: 1px dashed #9ca3af;
-      width: 160px;
-      height: 40px;
+      width: 140px;
+      height: 35px;
       margin-left: auto;
       margin-bottom: 4px;
     }
     .print-bar {
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto 16px auto;
       display: flex;
       justify-content: flex-end;
@@ -207,19 +245,9 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
       cursor: pointer;
     }
     @media print {
-      body {
-        background: #ffffff !important;
-        padding: 0 !important;
-      }
-      .print-bar {
-        display: none !important;
-      }
-      .invoice-wrapper {
-        border: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        max-width: 100% !important;
-      }
+      body { background: #ffffff !important; padding: 0 !important; }
+      .print-bar { display: none !important; }
+      .invoice-wrapper { border: none !important; box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
     }
   </style>
 </head>
@@ -230,47 +258,51 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
   <div class="invoice-wrapper">
     <div class="header">
       <div>
-        <div class="brand-title">Miracle Feng Shui</div>
+        <div class="brand-title">${TAX_CONFIG.seller.brandName}</div>
         <div class="brand-sub">
-          Official Retail & Tax Invoice<br />
-          GSTIN: 07AABCM8291Q1ZX &bull; CIN: U52100DL2024PTC123456<br />
-          Level 4, DLF Cyber City, Gurugram, Haryana 122002<br />
-          Email: care@miraclefengshui.com &bull; Web: www.miraclefengshui.com
+          <strong>${TAX_CONFIG.seller.legalName}</strong><br />
+          ${isUAE ? `UAE TRN: ${TAX_CONFIG.seller.uaeTrn}<br />${TAX_CONFIG.seller.uaeOfficeAddress}` : `GSTIN: ${TAX_CONFIG.seller.gstin} &bull; PAN: ${TAX_CONFIG.seller.pan}<br />${TAX_CONFIG.seller.address}`}<br />
+          Email: ${TAX_CONFIG.seller.email} &bull; Phone: ${TAX_CONFIG.seller.phone}
         </div>
       </div>
       <div class="tax-badge">
-        <h2>TAX INVOICE</h2>
+        <h2>${isUAE ? 'TAX INVOICE (VAT)' : 'TAX INVOICE (GST)'}</h2>
         <p>Original for Recipient</p>
-        <p style="margin-top: 6px; font-weight: 600; color: #111827;">Invoice #: INV-${orderId}</p>
+        <p style="margin-top: 4px; font-weight: 700; color: #111827;">Invoice #: INV-${orderId}</p>
         <p>Date: ${orderDate}</p>
       </div>
     </div>
 
     <div class="meta-grid">
-      <div class="meta-col">
-        <h4>Billed & Shipped To:</h4>
+      <div class="meta-box">
+        <h4>Billed &amp; Shipped To:</h4>
         <p><strong>${customerName}</strong></p>
         <p>${deliveryAddress}</p>
+        ${city || state ? `<p>${city ? city + ', ' : ''}${state || ''} ${pincode ? '- ' + pincode : ''}</p>` : ''}
         ${customerPhone ? `<p>Phone: ${customerPhone}</p>` : ''}
         ${customerEmail ? `<p>Email: ${customerEmail}</p>` : ''}
+        <p>Place of Supply: <strong>${state || (isUAE ? 'United Arab Emirates' : 'India')}</strong></p>
       </div>
-      <div class="meta-col">
-        <h4>Order Summary:</h4>
-        <p><strong>Order ID:</strong> #${orderId}</p>
-        <p><strong>Order Date:</strong> ${orderDate}</p>
-        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-        <p><strong>Payment Status:</strong> ${paymentStatus}</p>
+      <div class="meta-box">
+        <h4>Order &amp; Payment Details:</h4>
+        <p>Order Reference: <strong>${orderId}</strong></p>
+        <p>Payment Mode: <strong>${paymentMethod}</strong></p>
+        <p>Payment Status: <strong style="color: #059669;">${paymentStatus}</strong></p>
+        <p>Tax Regime: <strong>${taxBreakdown.taxTitle}</strong></p>
+        <p>Prices: <strong>Inclusive of All Applicable Taxes</strong></p>
       </div>
     </div>
 
-    <table>
+    <table class="items-table">
       <thead>
         <tr>
           <th style="text-align: left; width: 40px;">#</th>
           <th style="text-align: left;">Item Description</th>
-          <th style="text-align: center; width: 60px;">Qty</th>
-          <th style="text-align: right; width: 110px;">Unit Price</th>
-          <th style="text-align: right; width: 120px;">Amount</th>
+          <th style="text-align: center; width: 50px;">Qty</th>
+          <th style="text-align: right; width: 110px;">Taxable Base</th>
+          <th style="text-align: center; width: 60px;">Rate</th>
+          <th style="text-align: right; width: 90px;">Tax</th>
+          <th style="text-align: right; width: 110px;">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -278,37 +310,70 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
       </tbody>
     </table>
 
-    <div class="totals-area">
+    <div class="totals-container">
       <div class="totals-box">
         <div class="totals-row">
-          <span>Subtotal</span>
-          <span>₹${totalAmount.toLocaleString('en-IN')}</span>
+          <span>Total Taxable Base Amount:</span>
+          <span>${currencySymbol}${taxBreakdown.totalTaxableAmount.toLocaleString()}</span>
         </div>
+
+        ${
+          taxBreakdown.cgstTotal !== undefined && taxBreakdown.sgstTotal !== undefined
+            ? `
+          <div class="totals-row">
+            <span>CGST (9%):</span>
+            <span>${currencySymbol}${taxBreakdown.cgstTotal.toLocaleString()}</span>
+          </div>
+          <div class="totals-row">
+            <span>SGST (9%):</span>
+            <span>${currencySymbol}${taxBreakdown.sgstTotal.toLocaleString()}</span>
+          </div>
+        `
+            : ''
+        }
+
+        ${
+          taxBreakdown.igstTotal !== undefined
+            ? `
+          <div class="totals-row">
+            <span>IGST (18%):</span>
+            <span>${currencySymbol}${taxBreakdown.igstTotal.toLocaleString()}</span>
+          </div>
+        `
+            : ''
+        }
+
+        ${
+          taxBreakdown.vatTotal !== undefined
+            ? `
+          <div class="totals-row">
+            <span>UAE VAT (5%):</span>
+            <span>${currencySymbol}${taxBreakdown.vatTotal.toLocaleString()}</span>
+          </div>
+        `
+            : ''
+        }
+
         <div class="totals-row">
-          <span>Shipping & Handling</span>
-          <span style="color: #15803d; font-weight: 600;">FREE</span>
+          <span>Shipping &amp; Consecration Fee:</span>
+          <span style="color: #059669; font-weight: 600;">FREE</span>
         </div>
-        <div class="totals-row">
-          <span>GST (18% inclusive)</span>
-          <span>₹${Math.round((totalAmount * 18) / 118).toLocaleString('en-IN')}</span>
-        </div>
+
         <div class="totals-row grand-total">
-          <span>Total Amount</span>
-          <span>₹${totalAmount.toLocaleString('en-IN')}</span>
+          <span>Total Amount Payable:</span>
+          <span>${currencySymbol}${taxBreakdown.totalGrossAmount.toLocaleString()}</span>
         </div>
       </div>
     </div>
 
     <div class="footer">
       <div>
-        <p><strong>Thank you for choosing Miracle Feng Shui!</strong></p>
-        <p style="margin-top: 3px;">All sacred items are authenticated and energized for harmony and wealth.</p>
-        <p style="margin-top: 2px;">This is a computer-generated invoice and requires no physical signature.</p>
+        <p>• All sacred talismans and cures are consecrated and authenticity certified.</p>
+        <p>• This is a computer-generated tax invoice and requires no physical signature.</p>
       </div>
       <div class="auth-sign">
         <div class="auth-sign-box"></div>
-        <p>Authorized Signatory</p>
-        <p>Miracle Feng Shui Pvt. Ltd.</p>
+        <p>Authorized Signatory<br /><strong>${TAX_CONFIG.seller.brandName}</strong></p>
       </div>
     </div>
   </div>
@@ -319,29 +384,15 @@ export function generateTaxInvoiceHTML(data: TaxInvoiceData): string {
 export function printIsolatedTaxInvoice(data: TaxInvoiceData): void {
   if (typeof window === 'undefined') return;
   const invoiceHtml = generateTaxInvoiceHTML(data);
-  const iframe = document.createElement('iframe');
-  iframe.style.position = 'fixed';
-  iframe.style.right = '0';
-  iframe.style.bottom = '0';
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = 'none';
-  document.body.appendChild(iframe);
-
-  const doc = iframe.contentWindow?.document;
-  if (doc) {
-    doc.open();
-    doc.write(invoiceHtml);
-    doc.close();
-    iframe.contentWindow?.focus();
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    printWindow.document.open();
+    printWindow.document.write(invoiceHtml);
+    printWindow.document.close();
+    printWindow.focus();
     setTimeout(() => {
-      iframe.contentWindow?.print();
-      setTimeout(() => {
-        if (document.body.contains(iframe)) {
-          document.body.removeChild(iframe);
-        }
-      }, 1500);
-    }, 300);
+      printWindow.print();
+    }, 400);
   }
 }
 
@@ -352,7 +403,7 @@ export function downloadStandaloneTaxInvoice(data: TaxInvoiceData): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `Invoice-${data.orderId}.html`;
+  link.download = `Tax-Invoice-${data.orderId}.html`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
