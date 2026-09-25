@@ -220,22 +220,12 @@ export class InvoiceService {
         const totalAmountVal = taxBreakdown.totalGrossAmount || Number(order.totalAmount) || 0;
         let totalsY = Math.max(currentY + 10, 320);
 
-        // Subtotal (Gross)
+        // Subtotal (Taxable Base Amount)
         doc
           .fillColor('#666666')
           .fontSize(8.5)
           .font('Helvetica')
-          .text('Subtotal:', 340, totalsY, { width: 120, align: 'right' })
-          .font('Helvetica-Bold')
-          .fillColor('#222222')
-          .text(`${currSym} ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
-
-        totalsY += 14;
-        // Taxable Base
-        doc
-          .font('Helvetica')
-          .fillColor('#666666')
-          .text('Taxable Base Amount:', 340, totalsY, { width: 120, align: 'right' })
+          .text('Subtotal (Taxable Base):', 320, totalsY, { width: 140, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#222222')
           .text(`${currSym} ${taxBreakdown.totalTaxableAmount.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
@@ -246,7 +236,7 @@ export class InvoiceService {
           doc
             .font('Helvetica')
             .fillColor('#666666')
-            .text('CGST (9%):', 340, totalsY, { width: 120, align: 'right' })
+            .text('CGST (9%):', 320, totalsY, { width: 140, align: 'right' })
             .font('Helvetica-Bold')
             .fillColor('#222222')
             .text(`${currSym} ${taxBreakdown.cgstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
@@ -255,7 +245,7 @@ export class InvoiceService {
           doc
             .font('Helvetica')
             .fillColor('#666666')
-            .text('SGST (9%):', 340, totalsY, { width: 120, align: 'right' })
+            .text('SGST (9%):', 320, totalsY, { width: 140, align: 'right' })
             .font('Helvetica-Bold')
             .fillColor('#222222')
             .text(`${currSym} ${taxBreakdown.sgstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
@@ -264,7 +254,7 @@ export class InvoiceService {
           doc
             .font('Helvetica')
             .fillColor('#666666')
-            .text('IGST (18%):', 340, totalsY, { width: 120, align: 'right' })
+            .text('IGST (18%):', 320, totalsY, { width: 140, align: 'right' })
             .font('Helvetica-Bold')
             .fillColor('#222222')
             .text(`${currSym} ${taxBreakdown.igstTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
@@ -273,7 +263,7 @@ export class InvoiceService {
           doc
             .font('Helvetica')
             .fillColor('#666666')
-            .text('UAE VAT (5%):', 340, totalsY, { width: 120, align: 'right' })
+            .text('UAE VAT (5%):', 320, totalsY, { width: 140, align: 'right' })
             .font('Helvetica-Bold')
             .fillColor('#222222')
             .text(`${currSym} ${taxBreakdown.vatTotal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
@@ -284,7 +274,7 @@ export class InvoiceService {
         doc
           .font('Helvetica')
           .fillColor('#666666')
-          .text('Shipping & Handling:', 340, totalsY, { width: 120, align: 'right' })
+          .text('Shipping & Handling:', 320, totalsY, { width: 140, align: 'right' })
           .font('Helvetica-Bold')
           .fillColor('#15803d')
           .text('FREE', 470, totalsY, { width: 70, align: 'right' });
@@ -302,7 +292,7 @@ export class InvoiceService {
           .fillColor('#140D1F')
           .fontSize(11)
           .font('Helvetica-Bold')
-          .text('Grand Total:', 340, totalsY, { width: 120, align: 'right' })
+          .text('Grand Total:', 320, totalsY, { width: 140, align: 'right' })
           .text(`${currSym} ${totalAmountVal.toLocaleString('en-IN')}`, 470, totalsY, { width: 70, align: 'right' });
 
         // 5. LEGAL NOTICE & FOOTER
