@@ -7,6 +7,14 @@ import { useSession } from 'next-auth/react';
 import { useCart } from '@/context/CartContext';
 import { useLocale } from '@/context/CurrencyContext';
 import { translateProductTitle } from '@/lib/translations';
+import {
+  SavedAddress,
+  AddressType,
+  getSavedAddresses,
+  saveAddress,
+  getPrimaryAddress,
+  setPrimaryAddress,
+} from '@/lib/address';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -16,6 +24,13 @@ export default function CheckoutPage() {
 
   // Active Checkout Step: 1 = Address, 2 = Payment, 3 = Review
   const [step, setStep] = useState<1 | 2 | 3>(1);
+
+  // Saved Addresses State
+  const [savedAddressesList, setSavedAddressesList] = useState<SavedAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+  const [addressType, setAddressType] = useState<AddressType>('Home');
+  const [isPrimaryLocation, setIsPrimaryLocation] = useState(false);
 
   // Address Form State - clean empty initial states with placeholders
   const [email, setEmail] = useState('');
@@ -27,6 +42,43 @@ export default function CheckoutPage() {
   const [pincode, setPincode] = useState('');
   const [stateName, setStateName] = useState(activeCountry === 'UAE' ? 'Dubai' : 'Haryana');
   const [phoneNumber, setPhoneNumber] = useState('');
+
+  // Load Saved Addresses on mount & select Primary by default
+  useEffect(() => {
+    const list = getSavedAddresses();
+    setSavedAddressesList(list);
+    if (list.length > 0) {
+      const primary = list.find((a) => a.isPrimary) || list[0];
+      setSelectedAddressId(primary.id);
+      setFullName(primary.name);
+      setPhoneNumber(primary.phone);
+      setStreetAddress(primary.line1);
+      setAptSuite(primary.line2 || '');
+      setCity(primary.city);
+      setStateName(primary.state);
+      setPincode(primary.pincode);
+      setCountry(primary.country || (activeCountry === 'UAE' ? 'United Arab Emirates' : 'India'));
+      setAddressType(primary.type || 'Home');
+      setShowNewAddressForm(false);
+    } else {
+      setShowNewAddressForm(true);
+      setIsPrimaryLocation(true); // First address is ALWAYS primary
+    }
+  }, [activeCountry]);
+
+  const selectSavedAddress = (addr: SavedAddress) => {
+    setSelectedAddressId(addr.id);
+    setFullName(addr.name);
+    setPhoneNumber(addr.phone);
+    setStreetAddress(addr.line1);
+    setAptSuite(addr.line2 || '');
+    setCity(addr.city);
+    setStateName(addr.state);
+    setPincode(addr.pincode);
+    setCountry(addr.country || (activeCountry === 'UAE' ? 'United Arab Emirates' : 'India'));
+    setAddressType(addr.type || 'Home');
+    setShowNewAddressForm(false);
+  };
 
   // Sync country and state with global locale context
   useEffect(() => {
@@ -70,7 +122,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (session?.user) {
       if (session.user.email) setEmail(session.user.email);
-      if (session.user.name) setFullName(session.user.name);
+      if (session.user.name && !fullName) setFullName(session.user.name);
     }
   }, [session]);
 
@@ -92,6 +144,23 @@ export default function CheckoutPage() {
 
   const handleAddressSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Auto-save address to address book with Primary and Type preferences
+    const { addresses: updated } = saveAddress({
+      id: selectedAddressId && !showNewAddressForm ? selectedAddressId : undefined,
+      name: fullName,
+      phone: phoneNumber,
+      line1: streetAddress,
+      line2: aptSuite || undefined,
+      city,
+      state: stateName,
+      pincode,
+      country,
+      type: addressType,
+      isPrimary: isPrimaryLocation || savedAddressesList.length === 0,
+    });
+    setSavedAddressesList(updated);
+
     setStep(2);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -303,222 +372,328 @@ export default function CheckoutPage() {
             </div>
 
             <h1 className="text-[22px] sm:text-[24px] font-bold text-center text-[#222222] mb-6">
-              {t('checkout.enter_address', 'Enter an address')}
+              {t('checkout.enter_address', 'Delivery Address')}
             </h1>
 
-            <form onSubmit={handleAddressSubmit} className="space-y-4 text-left">
-              {/* Full Name & Email Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {t('checkout.full_name', 'Full name')} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder={t('checkout.full_name', 'Enter your full name')}
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                  />
+            {/* SAVED LOCATIONS SELECTOR (If addresses exist) */}
+            {savedAddressesList.length > 0 && (
+              <div className="mb-6 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                    Select a Saved Delivery Location
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowNewAddressForm(!showNewAddressForm);
+                      if (!showNewAddressForm) {
+                        setStreetAddress('');
+                        setAptSuite('');
+                        setCity('');
+                        setPincode('');
+                        setIsPrimaryLocation(false);
+                      }
+                    }}
+                    className="text-xs font-bold text-[#F1641E] hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <i className={`fa-solid ${showNewAddressForm ? 'fa-xmark' : 'fa-plus'} text-[11px]`} />
+                    <span>{showNewAddressForm ? 'Use Saved Address' : 'Add New Location'}</span>
+                  </button>
                 </div>
 
-                <div>
-                  <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {t('checkout.email', 'Email address')} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                  />
-                </div>
+                {!showNewAddressForm && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {savedAddressesList.map((addr) => {
+                      const isSel = selectedAddressId === addr.id;
+                      return (
+                        <div
+                          key={addr.id}
+                          onClick={() => selectSavedAddress(addr)}
+                          className={`p-4 rounded-2xl border-2 transition-all cursor-pointer text-left relative ${
+                            isSel
+                              ? 'border-[#111111] bg-[#FAF9F5] shadow-xs'
+                              : 'border-gray-200 hover:border-gray-300 bg-white'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-1.5 mb-2 flex-wrap">
+                            <div className="flex items-center gap-1.5">
+                              {addr.isPrimary && (
+                                <span className="bg-[#111111] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider inline-flex items-center gap-1">
+                                  <i className="fa-solid fa-star text-[8px] text-amber-400" />
+                                  <span>Primary</span>
+                                </span>
+                              )}
+                              <span
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                  addr.type === 'Office'
+                                    ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                    : addr.type === 'Other'
+                                    ? 'bg-gray-100 text-gray-700 border-gray-200'
+                                    : 'bg-blue-50 text-blue-700 border-blue-200'
+                                }`}
+                              >
+                                {addr.type || 'Home'}
+                              </span>
+                            </div>
+                            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${isSel ? 'border-black bg-black' : 'border-gray-300'}`}>
+                              {isSel && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                            </div>
+                          </div>
+
+                          <p className="font-bold text-gray-900 text-xs truncate">{addr.name}</p>
+                          <p className="text-xs text-gray-600 mt-0.5 line-clamp-2 leading-relaxed">
+                            {addr.line1}
+                            {addr.line2 ? `, ${addr.line2}` : ''}, {addr.city}, {addr.state} - {addr.pincode}
+                          </p>
+                          <p className="text-[11px] text-gray-500 mt-1">{addr.phone}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
+            )}
 
-              {/* Street Address */}
-              <div>
-                <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                  {t('checkout.street_address', 'Street address')} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="House / Flat no., Building name, Street"
-                  value={streetAddress}
-                  onChange={(e) => setStreetAddress(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                />
-              </div>
-
-              {/* Apt / Suite / Landmark */}
-              <div>
-                <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                  {t('checkout.apt_suite', 'Apt / Suite / Landmark')} <span className="text-[11.5px] text-gray-500 font-normal">(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Apartment, suite, unit, building, floor, etc."
-                  value={aptSuite}
-                  onChange={(e) => setAptSuite(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                />
-              </div>
-
-              {/* City, State & Pincode Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* ADDRESS FORM (When adding new or no saved addresses) */}
+            {(showNewAddressForm || savedAddressesList.length === 0) && (
+              <form onSubmit={handleAddressSubmit} className="space-y-4 text-left">
+                {/* Location Type Picker */}
                 <div>
-                  <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {t('checkout.city', 'City')} <span className="text-red-500">*</span>
+                  <label className="text-[13px] font-bold text-[#222222] block mb-1.5">
+                    Location Badge Type *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder={t('checkout.city', 'City / Area')}
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {country === 'United Arab Emirates' ? 'Emirate' : 'State'} <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={stateName}
-                      onChange={(e) => setStateName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#F1641E] cursor-pointer"
-                    >
-                      {country === 'United Arab Emirates' ? (
-                        <>
-                          <option value="Dubai">Dubai</option>
-                          <option value="Abu Dhabi">Abu Dhabi</option>
-                          <option value="Sharjah">Sharjah</option>
-                          <option value="Ajman">Ajman</option>
-                          <option value="Ras Al Khaimah">Ras Al Khaimah</option>
-                          <option value="Fujairah">Fujairah</option>
-                          <option value="Umm Al Quwain">Umm Al Quwain</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="Haryana">Haryana</option>
-                          <option value="Delhi">Delhi</option>
-                          <option value="Maharashtra">Maharashtra</option>
-                          <option value="Karnataka">Karnataka</option>
-                          <option value="Tamil Nadu">Tamil Nadu</option>
-                          <option value="Uttar Pradesh">Uttar Pradesh</option>
-                          <option value="Gujarat">Gujarat</option>
-                          <option value="West Bengal">West Bengal</option>
-                          <option value="Rajasthan">Rajasthan</option>
-                          <option value="Kerala">Kerala</option>
-                          <option value="Telangana">Telangana</option>
-                          <option value="Punjab">Punjab</option>
-                          <option value="Andhra Pradesh">Andhra Pradesh</option>
-                          <option value="Madhya Pradesh">Madhya Pradesh</option>
-                          <option value="Bihar">Bihar</option>
-                          <option value="Odisha">Odisha</option>
-                          <option value="Assam">Assam</option>
-                          <option value="Goa">Goa</option>
-                          <option value="Other">Other</option>
-                        </>
-                      )}
-                    </select>
-                    <i className="fa-solid fa-chevron-down text-[11px] text-gray-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['Home', 'Office', 'Other'] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setAddressType(t)}
+                        style={addressType === t ? { backgroundColor: '#111111', color: '#ffffff', borderColor: '#111111' } : { backgroundColor: '#ffffff', color: '#374151', borderColor: '#E5E7EB' }}
+                        className="py-2 px-3 rounded-xl border text-xs font-bold transition-all cursor-pointer"
+                      >
+                        {t}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
+                {/* Full Name & Email Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {t('checkout.full_name', 'Full name')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={t('checkout.full_name', 'Enter your full name')}
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {t('checkout.email', 'Email address')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="name@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                    />
+                  </div>
+                </div>
+
+                {/* Street Address */}
                 <div>
                   <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {country === 'United Arab Emirates' ? 'PO Box / Makani / Postal Code' : 'Pincode'} <span className="text-red-500">*</span>
+                    {t('checkout.street_address', 'Street address')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder={country === 'United Arab Emirates' ? 'e.g. 00000 or Makani No.' : '6-digit Pincode'}
-                    value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
+                    placeholder="House / Flat no., Building name, Street"
+                    value={streetAddress}
+                    onChange={(e) => setStreetAddress(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
                   />
                 </div>
-              </div>
 
-              {/* Country & Phone number Row (India & UAE only per client requirement) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Apt / Suite / Landmark */}
                 <div>
                   <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {t('checkout.country', 'Country / Region')} <span className="text-red-500">*</span>
+                    {t('checkout.apt_suite', 'Apt / Suite / Landmark')} <span className="text-[11.5px] text-gray-500 font-normal">(optional)</span>
                   </label>
-                  <div className="relative">
-                    <select
-                      value={country}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setCountry(val);
-                        if (val === 'United Arab Emirates') {
-                          setActiveCountry('UAE');
-                          setStateName('Dubai');
-                        } else {
-                          setActiveCountry('India');
-                          setStateName('Haryana');
-                        }
-                      }}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#F1641E] cursor-pointer"
-                    >
-                      <option value="India">🇮🇳 India (INR ₹)</option>
-                      <option value="United Arab Emirates">🇦🇪 United Arab Emirates (AED د.إ)</option>
-                    </select>
-                    <i className="fa-solid fa-chevron-down text-[11px] text-gray-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Apartment, suite, unit, building, floor, etc."
+                    value={aptSuite}
+                    onChange={(e) => setAptSuite(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                  />
+                </div>
+
+                {/* City, State & Pincode Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {t('checkout.city', 'City')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={t('checkout.city', 'City / Area')}
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {country === 'United Arab Emirates' ? 'Emirate' : 'State'} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={stateName}
+                        onChange={(e) => setStateName(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#F1641E] cursor-pointer"
+                      >
+                        {country === 'United Arab Emirates' ? (
+                          <>
+                            <option value="Dubai">Dubai</option>
+                            <option value="Abu Dhabi">Abu Dhabi</option>
+                            <option value="Sharjah">Sharjah</option>
+                            <option value="Ajman">Ajman</option>
+                            <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                            <option value="Fujairah">Fujairah</option>
+                            <option value="Umm Al Quwain">Umm Al Quwain</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Other">Other</option>
+                          </>
+                        )}
+                      </select>
+                      <i className="fa-solid fa-chevron-down text-[11px] text-gray-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {country === 'United Arab Emirates' ? 'PO Box / Makani / Postal Code' : 'Pincode'} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={country === 'United Arab Emirates' ? 'e.g. 00000 or Makani No.' : '6-digit Pincode'}
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <label className="text-[13px] font-bold text-[#222222] block mb-1">
-                    {t('checkout.phone', 'Phone number')} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder={country === 'United Arab Emirates' ? '+971 50 123 4567' : '+91 98765 43210'}
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                  />
+                {/* Country & Phone number Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {t('checkout.country', 'Country')} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={country}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setCountry(val);
+                          setActiveCountry(val === 'United Arab Emirates' ? 'UAE' : 'India');
+                          setStateName(val === 'United Arab Emirates' ? 'Dubai' : 'Haryana');
+                        }}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#F1641E] cursor-pointer"
+                      >
+                        <option value="India">🇮🇳 India</option>
+                        <option value="United Arab Emirates">🇦🇪 United Arab Emirates</option>
+                      </select>
+                      <i className="fa-solid fa-chevron-down text-[11px] text-gray-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[13px] font-bold text-[#222222] block mb-1">
+                      {t('checkout.phone_number', 'Phone number')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder={country === 'United Arab Emirates' ? '+971 50 123 4567' : '+91 98765 43210'}
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E1E3DF] text-[14px] text-[#222222] focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Legal Consent Disclaimer */}
-              <p className="text-[11.5px] text-[#595959] leading-relaxed pt-1">
-                By choosing &ldquo;Continue,&rdquo; you agree to Miracle feng shui&apos;s Privacy Policy and consent to receiving order confirmations via SMS or WhatsApp. Message and data rates may apply.
-              </p>
+                {/* Primary Location Toggle */}
+                <div className="pt-1">
+                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-gray-800">
+                    <input
+                      type="checkbox"
+                      checked={savedAddressesList.length === 0 ? true : isPrimaryLocation}
+                      disabled={savedAddressesList.length === 0}
+                      onChange={(e) => setIsPrimaryLocation(e.target.checked)}
+                      className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                    />
+                    <span>Set as my Primary Delivery Location</span>
+                  </label>
+                </div>
 
-              {/* 3-Step Progress Bar Indicator */}
-              <div className="pt-3 flex items-center justify-between gap-1.5 border-t border-[#E1E3DF]">
-                <div className="h-1.5 flex-1 rounded-full bg-[#222222]" />
-                <div className="h-1.5 flex-1 rounded-full bg-[#E1E3DF]" />
-                <div className="h-1.5 flex-1 rounded-full bg-[#E1E3DF]" />
-              </div>
+                {/* Continue to Payment CTA */}
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    style={{ backgroundColor: '#222222', color: '#FFFFFF' }}
+                    className="w-full py-3.5 rounded-full bg-[#222222] hover:bg-black text-white text-[15px] font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
+                  >
+                    {t('checkout.continue_to_payment', 'Continue to payment')}
+                  </button>
+                </div>
+              </form>
+            )}
 
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-2">
-                <Link
-                  href="/cart"
-                  className="px-6 py-2.5 rounded-full border border-[#222222] hover:bg-[#F5F5F1] text-[14px] font-bold text-[#222222] transition-colors"
-                >
-                  {t('modal.cancel', 'Cancel')}
-                </Link>
+            {/* When using a selected saved address (form hidden) */}
+            {!showNewAddressForm && savedAddressesList.length > 0 && (
+              <form onSubmit={handleAddressSubmit} className="pt-2">
                 <button
                   type="submit"
                   style={{ backgroundColor: '#222222', color: '#FFFFFF' }}
-                  className="px-8 py-2.5 rounded-full bg-[#222222] hover:bg-black text-white text-[14px] font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
+                  className="w-full py-3.5 rounded-full bg-[#222222] hover:bg-black text-white text-[15px] font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
                 >
-                  {t('checkout.continue_payment', 'Continue to payment')}
+                  {t('checkout.continue_to_payment', 'Deliver to this Location')}
                 </button>
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         )}
 

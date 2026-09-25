@@ -9,6 +9,7 @@ import { products } from '@/lib/placeholder-data';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useLocale } from '@/context/CurrencyContext';
 import { Country, Currency, Language, translateCategory } from '@/lib/translations';
+import AddressManagerModal from '@/components/AddressManagerModal';
 
 export function Header() {
   const router = useRouter();
@@ -1291,87 +1292,16 @@ export function Header() {
 
       {/* 1. DELIVERY ADDRESSES MODAL */}
       {showAddressModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto animate-in fade-in"
-          onClick={() => setShowAddressModal(false)}
-        >
-          <div
-            className="bg-white rounded-[24px] max-w-lg w-full p-6 sm:p-7 shadow-2xl relative my-auto border border-gray-100 animate-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setShowAddressModal(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-black cursor-pointer"
-            >
-              <i className="fa-solid fa-xmark text-[16px]" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-5 text-left">
-              <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-                <i className="fa-solid fa-location-dot text-[18px]" />
-              </div>
-              <div>
-                <h2 className="text-[20px] font-bold text-[#222222]">
-                  Delivery Addresses
-                </h2>
-                <p className="text-[12.5px] text-[#595959]">
-                  Manage your primary and alternate shipping locations
-                </p>
-              </div>
-            </div>
-
-            <form onSubmit={handleSaveAddress} className="space-y-4 text-left">
-              {/* Primary Address Card */}
-              <div className="bg-[#FAF9F5] p-4 rounded-2xl border-2 border-[#222222] relative space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="bg-[#222222] text-white text-[10.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    Default Address
-                  </span>
-                  <span className="text-[12px] font-semibold text-emerald-700 flex items-center gap-1">
-                    <i className="fa-solid fa-check text-[11px]" /> Verified
-                  </span>
-                </div>
-                <div>
-                  <label className="text-[12px] font-bold text-[#222222] block mb-1">
-                    Full Shipping Address:
-                  </label>
-                  <textarea
-                    rows={3}
-                    required
-                    value={userAddress}
-                    onChange={(e) => setUserAddress(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E1E3DF] text-[13.5px] text-[#222222] bg-white focus:outline-none focus:ring-2 focus:ring-[#F1641E]"
-                  />
-                </div>
-                <div className="flex gap-3 text-[12px] text-[#595959]">
-                  <span>Recipient: <strong>{userName}</strong></span>
-                  <span>•</span>
-                  <span>Contact: <strong>{userPhone}</strong></span>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E1E3DF]">
-                <button
-                  type="button"
-                  onClick={() => setShowAddressModal(false)}
-                  style={{ border: '1.5px solid #222222', color: '#222222', backgroundColor: '#FFFFFF' }}
-                  className="px-5 py-2 rounded-full hover:bg-[#F5F5F1] text-[13.5px] font-bold transition-colors cursor-pointer"
-                >
-                  Close
-                </button>
-                <button
-                  type="submit"
-                  style={{ backgroundColor: '#222222', color: '#FFFFFF' }}
-                  className="px-6 py-2 rounded-full hover:bg-black text-[13.5px] font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
-                >
-                  Save Address
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <AddressManagerModal
+          onClose={() => setShowAddressModal(false)}
+          onAddressSelect={(addr) => {
+            setUserAddress(`${addr.line1}${addr.line2 ? ', ' + addr.line2 : ''}, ${addr.city}, ${addr.state} - ${addr.pincode}`);
+            setSavedToast(true);
+            setTimeout(() => setSavedToast(false), 3000);
+          }}
+          userName={userName}
+          userPhone={userPhone}
+        />
       )}
 
       {/* 2. EDIT PROFILE MODAL */}
