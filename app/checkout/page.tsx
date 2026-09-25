@@ -657,13 +657,12 @@ export default function CheckoutPage() {
 
                 {/* Primary Location Toggle */}
                 <div className="pt-1">
-                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-gray-800">
+                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-gray-800 select-none">
                     <input
                       type="checkbox"
-                      checked={savedAddressesList.length === 0 ? true : isPrimaryLocation}
-                      disabled={savedAddressesList.length === 0}
+                      checked={isPrimaryLocation}
                       onChange={(e) => setIsPrimaryLocation(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                      className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer accent-[#111111]"
                     />
                     <span>Set as my Primary Delivery Location</span>
                   </label>

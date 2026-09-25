@@ -405,13 +405,12 @@ export default function AddressManagerModal({
 
             {/* Set As Primary Checkbox */}
             <div className="pt-1">
-              <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-gray-800">
+              <label className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-gray-800 select-none">
                 <input
                   type="checkbox"
-                  checked={addresses.length === 0 ? true : isPrimary}
-                  disabled={addresses.length === 0}
+                  checked={isPrimary}
                   onChange={(e) => setIsPrimary(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                  className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer accent-[#111111]"
                 />
                 <span>Set as my Primary Delivery Location</span>
               </label>
